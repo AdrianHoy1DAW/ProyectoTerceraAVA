@@ -3,6 +3,7 @@ package com.mordor.mordorLloguer;
 import java.awt.EventQueue;
 
 import com.alee.laf.WebLookAndFeel;
+import com.mordor.mordorLloguer.controlador.ControladorPrincipal;
 import com.mordor.mordorLloguer.view.VistaPrincipal;
 
 public class App {
@@ -16,7 +17,8 @@ public class App {
 				try {
 					WebLookAndFeel.install();
 					VistaPrincipal frame = new VistaPrincipal();
-					frame.setVisible(true);
+					ControladorPrincipal cp = new ControladorPrincipal(frame);
+					cp.go();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

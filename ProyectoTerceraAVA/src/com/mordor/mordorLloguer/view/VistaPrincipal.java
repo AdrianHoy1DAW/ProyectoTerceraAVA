@@ -22,6 +22,7 @@ public class VistaPrincipal extends JFrame {
 	private JButton buttonLogin;
 	private JMenuItem mntmPreferences;
 	private JMenuItem mntmExit;
+	private JDesktopPane desktopPane;
 
 
 
@@ -56,16 +57,61 @@ public class VistaPrincipal extends JFrame {
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		
 		buttonLogin = new JButton("");
+		buttonLogin.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/login.png")));
 		toolBar.add(buttonLogin);
 		
 		buttonnLogout = new JButton("");
+		buttonnLogout.setEnabled(false);
+		buttonnLogout.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/logout.png")));
 		toolBar.add(buttonnLogout);
 		
 		buttonClient = new JButton("");
+		buttonClient.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/badge.png")));
 		toolBar.add(buttonClient);
 		
-		JDesktopPane desktopPane = new JDesktopPane();
+		desktopPane = new JDesktopPane();
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 	}
 
+
+
+	public JPanel getContentPane() {
+		return contentPane;
+	}
+
+
+
+	public JButton getButtonnLogout() {
+		return buttonnLogout;
+	}
+
+
+
+	public JButton getButtonClient() {
+		return buttonClient;
+	}
+
+
+
+	public JButton getButtonLogin() {
+		return buttonLogin;
+	}
+
+
+
+	public JMenuItem getMntmPreferences() {
+		return mntmPreferences;
+	}
+
+
+
+	public JMenuItem getMntmExit() {
+		return mntmExit;
+	}
+
+
+
+	public JDesktopPane getDesktopPane() {
+		return desktopPane;
+	}
 }
