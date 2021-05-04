@@ -41,6 +41,7 @@ public class LoginView extends JInternalFrame {
 		
 		progressBar = new JProgressBar();
 		progressBar.setIndeterminate(true);
+		progressBar.setVisible(false);
 		getContentPane().add(progressBar, "cell 0 8,growx");
 		
 		btnLogin = new JButton("Login");
@@ -62,6 +63,14 @@ public class LoginView extends JInternalFrame {
 	public JPasswordField getTxtPassword() {
 		return txtPassword;
 	}
+
+
+	public JProgressBar getProgressBar() {
+		return progressBar;
+	}
+	
+	
+	
 	
 	
 

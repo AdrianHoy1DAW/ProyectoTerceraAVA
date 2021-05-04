@@ -63,6 +63,30 @@ public class Config {
 		
 	}
 	
+	public String getDriver() {
+		
+		return properties.getProperty("ORACLE_DB_DRIVER_CLASS");
+		
+	}
+	
+	public String getUrl() {
+		
+		return properties.getProperty("ORACLE_DB_URL");
+		
+	}
+	
+	public String getUsername() {
+		
+		return properties.getProperty("ORACLE_DB_USERNAME");
+		
+	}
+	
+	public String getPassword() {
+		
+		return properties.getProperty("ORACLE_DB_PASSWORD");
+		
+	}
+	
 	public void save() {
 		
 		try(FileOutputStream fos = new FileOutputStream(new File(appFile))) {

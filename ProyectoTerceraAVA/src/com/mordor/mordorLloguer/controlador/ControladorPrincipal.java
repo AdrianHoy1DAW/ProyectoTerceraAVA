@@ -6,12 +6,14 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.config.Config;
 import com.mordor.mordorLloguer.model.MyOracleDataBase;
@@ -40,7 +42,7 @@ public class ControladorPrincipal implements ActionListener {
 	
 	private void inicializar() {
 		
-	    loginView = new LoginView();
+		loginView = new LoginView();
 		
 		desktopPane = vista.getDesktopPane();
 		properties = new PropertiesView();
@@ -112,6 +114,7 @@ public class ControladorPrincipal implements ActionListener {
 	private void openPreferences() {
 		
 		if(estaAbierto(properties) == false) {
+			
 			addJInternalFrame(properties);
 			properties.getBtnSave().addActionListener(this);
 		
@@ -129,16 +132,43 @@ public class ControladorPrincipal implements ActionListener {
 	}
 
 	private void login() {
-		
-		if(modelo.authenticate(loginView.getTxtUsuario().getText(), String.valueOf(loginView.getTxtPassword().getPassword())) == true) {
-			JOptionPane.showMessageDialog(vista, "Login correcto","Información",JOptionPane.INFORMATION_MESSAGE);
-			vista.getButtonLogin().setEnabled(false);
-			vista.getButtonnLogout().setEnabled(true);
-			loginView.doDefaultCloseAction();
-		} else {
-			JOptionPane.showMessageDialog(vista, "Login incorrecto","Información",JOptionPane.INFORMATION_MESSAGE);
+		SwingWorker<Boolean,Void> task = new SwingWorker<Boolean,Void>() {
+
+			@Override
+			protected Boolean doInBackground() throws Exception {
+				loginView.getProgressBar().setVisible(true);
+				return modelo.authenticate(loginView.getTxtUsuario().getText(), String.valueOf(loginView.getTxtPassword().getPassword()));
+			}
 			
-		}
+			@Override
+			protected void done() {
+				loginView.getProgressBar().setVisible(false);
+				try {
+					boolean validado = get();
+					if(validado == true) {
+						JOptionPane.showMessageDialog(vista, "Login correcto","Información",JOptionPane.INFORMATION_MESSAGE);
+						vista.getButtonLogin().setEnabled(false);
+						vista.getButtonnLogout().setEnabled(true);
+						loginView.doDefaultCloseAction();
+					} else {
+						JOptionPane.showMessageDialog(vista, "Login incorrecto","Información",JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (InterruptedException e) {
+					
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					
+					e.printStackTrace();
+				}
+				
+
+				
+			}
+			
+			
+		};
+		
+		task.execute();
 		
 	}
 

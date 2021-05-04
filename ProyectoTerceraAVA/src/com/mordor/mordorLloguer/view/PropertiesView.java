@@ -14,6 +14,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import com.mordor.mordorLloguer.config.Config;
+
 public class PropertiesView extends JInternalFrame {
 	private JTextField txtUser;
 	private JPasswordField txtPass;
@@ -37,6 +39,7 @@ public class PropertiesView extends JInternalFrame {
 		
 		txtDriver = new JTextField();
 		txtDriver.setColumns(10);
+		txtDriver.setText(Config.getInstance().getDriver());
 		getContentPane().add(txtDriver, "cell 1 1,growx,aligny top");
 		
 		JLabel lblModifyUrl_1 = new JLabel("Modify URL");
@@ -44,6 +47,7 @@ public class PropertiesView extends JInternalFrame {
 		
 		txtUrl = new JTextField();
 		txtUrl.setColumns(10);
+		txtUrl.setText(Config.getInstance().getUrl());
 		getContentPane().add(txtUrl, "cell 1 3,growx,aligny top");
 		
 		JLabel lblModifyUrl = new JLabel("Modify User");
@@ -51,12 +55,14 @@ public class PropertiesView extends JInternalFrame {
 		
 		txtUser = new JTextField();
 		txtUser.setColumns(10);
+		txtUser.setText(Config.getInstance().getUsername());
 		getContentPane().add(txtUser, "cell 1 5,growx,aligny top");
 		
 		JLabel lblModifyPassword = new JLabel("Modify Password");
 		getContentPane().add(lblModifyPassword, "cell 0 9,alignx left,aligny center");
 		
 		txtPass = new JPasswordField();
+		txtPass.setText(Config.getInstance().getPassword());
 		getContentPane().add(txtPass, "cell 1 9,growx,aligny top");
 		
 		btnSave = new JButton("Save");
