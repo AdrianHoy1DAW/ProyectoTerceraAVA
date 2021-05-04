@@ -13,6 +13,7 @@ import javax.swing.JToolBar;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JSeparator;
 
 public class VistaPrincipal extends JFrame {
 
@@ -31,7 +32,7 @@ public class VistaPrincipal extends JFrame {
 	 */
 	public VistaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 678, 499);
+		setBounds(100, 100, 850, 637);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);

@@ -1,14 +1,22 @@
 package com.mordor.mordorLloguer.controlador;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
+import com.mordor.mordorLloguer.config.Config;
 import com.mordor.mordorLloguer.model.MyOracleDataBase;
 import com.mordor.mordorLloguer.view.LoginView;
+import com.mordor.mordorLloguer.view.PropertiesView;
 import com.mordor.mordorLloguer.view.VistaPrincipal;
 
 public class ControladorPrincipal implements ActionListener {
@@ -16,12 +24,15 @@ public class ControladorPrincipal implements ActionListener {
 	private VistaPrincipal vista;
 	private MyOracleDataBase modelo;
 	private LoginView loginView;
+	private static JDesktopPane desktopPane;
+	private PropertiesView properties;
 	
 	
-	public ControladorPrincipal(VistaPrincipal vista) {
+	public ControladorPrincipal(VistaPrincipal vista, MyOracleDataBase modelo) {
 		
 		
 		this.vista = vista;
+		this.modelo = modelo;
 		
 		inicializar();
 		
@@ -29,16 +40,22 @@ public class ControladorPrincipal implements ActionListener {
 	
 	private void inicializar() {
 		
-	    loginView = null;
-		modelo = new MyOracleDataBase();
+	    loginView = new LoginView();
+		
+		desktopPane = vista.getDesktopPane();
+		properties = new PropertiesView();
 		
 		//Action Listener
 		vista.getButtonLogin().addActionListener(this);
+		vista.getButtonnLogout().addActionListener(this);
+		vista.getMntmPreferences().addActionListener(this);
 		
 		
 		
 		//Action Command
 		vista.getButtonLogin().setActionCommand("Openlogin");
+		vista.getButtonnLogout().setActionCommand("Logout");
+		vista.getMntmPreferences().setActionCommand("Open preferences");
 		
 	}
 	
@@ -55,7 +72,59 @@ public class ControladorPrincipal implements ActionListener {
 			OpenLogin();
 		} else if(comand.equals("login")) {
 			login();
+		} else if(comand.equals("Logout")) {
+			logout();
+		} else if(comand.equals("Open preferences")) {
+			openPreferences();
+		} else if(comand.equals("Save properties")) {
+			saveProperties();
 		}
+		
+	}
+
+	private void saveProperties() {
+		
+		if(comprobarTexto(properties.getContentPane()) == true) {
+			JOptionPane.showMessageDialog(vista, "No has rellenado todos los campos", "Erros", JOptionPane.ERROR_MESSAGE);
+		} else {
+			Config.getInstance().setProperties(properties.getTxtDriver().getText(), properties.getTxtUrl().getText(), properties.getTxtUser().getText(), String.valueOf(properties.getTxtPass().getPassword()));
+		}
+		
+	}
+
+	private boolean comprobarTexto(Container cont) {
+		boolean empty = false;
+		for(Component c : cont.getComponents()) {
+			if(c instanceof JTextField) {
+				if(((JTextField)c).getText().equals("")) {
+					empty = true;
+				}
+			}
+			if(c instanceof JPasswordField) {
+				if((String.valueOf(((JPasswordField)c).getPassword()).equals(""))) {
+					empty = true;
+				}
+			}
+		}
+		return empty;
+	}
+
+	private void openPreferences() {
+		
+		if(estaAbierto(properties) == false) {
+			addJInternalFrame(properties);
+			properties.getBtnSave().addActionListener(this);
+		
+			
+			properties.getBtnSave().setActionCommand("Save properties");
+		}
+		
+	}
+
+	private void logout() {
+		
+		vista.getButtonLogin().setEnabled(true);
+		vista.getButtonnLogout().setEnabled(false);
 		
 	}
 
@@ -65,7 +134,7 @@ public class ControladorPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(vista, "Login correcto","Información",JOptionPane.INFORMATION_MESSAGE);
 			vista.getButtonLogin().setEnabled(false);
 			vista.getButtonnLogout().setEnabled(true);
-			
+			loginView.doDefaultCloseAction();
 		} else {
 			JOptionPane.showMessageDialog(vista, "Login incorrecto","Información",JOptionPane.INFORMATION_MESSAGE);
 			
@@ -77,9 +146,7 @@ public class ControladorPrincipal implements ActionListener {
 		
 		
 		if(estaAbierto(loginView) == false) {
-			loginView = new LoginView();
-			vista.getDesktopPane().add(loginView);
-			loginView.setVisible(true);
+			addJInternalFrame(loginView);
 			loginView.getBtnLogin().addActionListener(this);
 			loginView.getBtnLogin().setActionCommand("login");
 		} else {
@@ -89,20 +156,42 @@ public class ControladorPrincipal implements ActionListener {
 		
 	}
 	
-	private boolean estaAbierto(JInternalFrame internal) {
+	static void addJInternalFrame(JInternalFrame jif) {
+		
+		desktopPane.add(jif);
+		centrar(jif);
+		jif.setVisible(true);
+		try {
+			jif.setSelected(true);
+		} catch (PropertyVetoException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	static boolean estaAbierto(JInternalFrame internal) {
 		
 		boolean encontrado = false;
-		for(Component c : vista.getDesktopPane().getComponents()) {
-			
-			if(c instanceof JInternalFrame) {
-				if(((JInternalFrame)c).equals(internal)) {
-					encontrado = true;
-				}
-			}
-			
+		JInternalFrame[] frames = desktopPane.getAllFrames();
+		
+		for(JInternalFrame frame : frames) {
+			if(frame == internal) 
+				encontrado = true;
 		}
+			
+		
 		return encontrado;
 	}
+	
+	static void centrar(JInternalFrame jif) {
+		
+		Dimension deskSize = desktopPane.getSize();
+		Dimension ifSize = jif.getSize();
+		jif.setLocation((deskSize.width - ifSize.width)/ 2, (deskSize.height - ifSize.height)/2);
+		
+	}
+	
+	
 
 	
 }

@@ -16,7 +16,7 @@ import oracle.jdbc.datasource.impl.OracleDataSource;
 
 public class MyDataSource {
 
-	private static String defaultProperties = "db.properties";
+	private static String defaultProperties = "app.properties";
 
 	
 	public static DataSource getOracleDataSource() {
@@ -29,7 +29,7 @@ public class MyDataSource {
 
 		OracleDataSource oracleDS = null;
 
-		try(FileInputStream fis = new FileInputStream("db.properties");) {
+		try(FileInputStream fis = new FileInputStream("app.properties");) {
 
 		// Cargamos las propiedades
 
