@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -183,6 +185,16 @@ public class ControladorPrincipal implements ActionListener {
 			JOptionPane.showMessageDialog(vista, "Ya esta abierta la ventana de login","Error",JOptionPane.ERROR_MESSAGE);
 		}
 		
+		Action action = new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				login();
+			}
+		};
+		
+		loginView.getTxtUsuario().setAction(action);
+		loginView.getTxtPassword().setAction(action);
 		
 	}
 	
