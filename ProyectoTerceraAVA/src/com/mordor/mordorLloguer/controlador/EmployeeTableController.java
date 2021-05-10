@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
-import com.mordor.mordorLloguer.model.Empleado;
 import com.mordor.mordorLloguer.model.MyTableModel;
+import com.mordor.mordorLloguer.model.Empleado;
 import com.mordor.mordorLloguer.view.EmployeeTableView;
 
 public class EmployeeTableController implements ActionListener{
@@ -32,17 +32,20 @@ public class EmployeeTableController implements ActionListener{
 		vista.getComboBoxDatos().setActionCommand("Ordenar por datos");
 		vista.getComboBoxAsc().setActionCommand("Ordenar asc/desc");
 		
-		rellenarTabla();
+		
+		
+		
 		
 	}
 
-	private void rellenarTabla() {
+	public void rellenarTabla() {
 		
 		String[] header  =  {"DNI","NOMBRE","APELLIDOS","DOMICILIO","CP","EMAIL","FECHANAC","CARGO"};
 		ArrayList<Empleado> empleados = modelo.getEmpleados();
 		
-		MyEmployeeTableModel metm = new MyEmployeeTableModel(empleados,header);
 		
+		MyEmployeeTableModel metm = new MyEmployeeTableModel(empleados,header);
+		vista.getTable().setModel(metm);
 		
 	}
 
@@ -53,19 +56,42 @@ public class EmployeeTableController implements ActionListener{
 		
 	}
 	
-	private class MyEmployeeTableModel<T> extends MyTableModel {
-
+	private class MyEmployeeTableModel extends MyTableModel<Empleado> {
 		
-		public MyEmployeeTableModel(List data, String[] header) {
+		List<Empleado> data;
+		
+		public MyEmployeeTableModel(List<Empleado> data, String[] header) {
 			super(data, header);
+			this.data = data;
 			
 		}
 
 		@Override
 		public Object getValueAt(int row, int col) {
+			switch(col) {
+			case 0:
+				return data.get(row).getDNI();
+				
+			case 1:
+				return data.get(row).getNombre();
+				
+			case 2:
+				return data.get(row).getApellidos();
+			case 3:
+				return data.get(row).getDomicilio();
+			case 4:
+				return data.get(row).getCP();
+			case 5:
+				return data.get(row).getEmail();
+			case 6:
+				return data.get(row).getFechaNac();
+			case 7:
+				return data.get(row).getCargo();
+				
 			
-			
+			}
 			return null;
+			
 		}
 		
 	}

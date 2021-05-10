@@ -19,6 +19,7 @@ import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.config.Config;
 import com.mordor.mordorLloguer.model.MyOracleDataBase;
+import com.mordor.mordorLloguer.view.EmployeeTableView;
 import com.mordor.mordorLloguer.view.LoginView;
 import com.mordor.mordorLloguer.view.PropertiesView;
 import com.mordor.mordorLloguer.view.VistaPrincipal;
@@ -28,6 +29,8 @@ public class ControladorPrincipal implements ActionListener {
 	private VistaPrincipal vista;
 	private MyOracleDataBase modelo;
 	private LoginView loginView;
+	private EmployeeTableController employeeController;
+	private EmployeeTableView employeeView;
 	private static JDesktopPane desktopPane;
 	private PropertiesView properties;
 	
@@ -48,11 +51,15 @@ public class ControladorPrincipal implements ActionListener {
 		
 		desktopPane = vista.getDesktopPane();
 		properties = new PropertiesView();
+		employeeView = new EmployeeTableView();
+		
+		employeeController = new EmployeeTableController(employeeView, modelo);
 		
 		//Action Listener
 		vista.getButtonLogin().addActionListener(this);
 		vista.getButtonnLogout().addActionListener(this);
 		vista.getMntmPreferences().addActionListener(this);
+		vista.getButtonClient().addActionListener(this);
 		
 		
 		
@@ -60,6 +67,7 @@ public class ControladorPrincipal implements ActionListener {
 		vista.getButtonLogin().setActionCommand("Openlogin");
 		vista.getButtonnLogout().setActionCommand("Logout");
 		vista.getMntmPreferences().setActionCommand("Open preferences");
+		vista.getButtonClient().setActionCommand("Open ETable");
 		
 	}
 	
@@ -72,6 +80,8 @@ public class ControladorPrincipal implements ActionListener {
 		
 		String comand = arg0.getActionCommand();
 		
+		
+		
 		if(comand.equals("Openlogin")) {
 			OpenLogin();
 		} else if(comand.equals("login")) {
@@ -82,7 +92,16 @@ public class ControladorPrincipal implements ActionListener {
 			openPreferences();
 		} else if(comand.equals("Save properties")) {
 			saveProperties();
+		} else if(comand.equals("Open ETable")) {
+			openETable();
 		}
+		
+	}
+
+	private void openETable() {
+		
+		employeeController.rellenarTabla();
+		addJInternalFrame(employeeView);
 		
 	}
 
@@ -91,7 +110,10 @@ public class ControladorPrincipal implements ActionListener {
 		if(comprobarTexto(properties.getContentPane()) == true) {
 			JOptionPane.showMessageDialog(vista, "No has rellenado todos los campos", "Erros", JOptionPane.ERROR_MESSAGE);
 		} else {
-			Config.getInstance().setProperties(properties.getTxtDriver().getText(), properties.getTxtUrl().getText(), properties.getTxtUser().getText(), String.valueOf(properties.getTxtPass().getPassword()));
+			Config.getInstance().setDriver(properties.getTxtDriver().getText());
+			Config.getInstance().setUrl(properties.getTxtUrl().getText());
+			Config.getInstance().setUser(properties.getTxtUser().getText());
+			Config.getInstance().setPassword(String.valueOf(properties.getTxtPass().getPassword()));
 		}
 		
 	}

@@ -5,7 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
 public class Config {
 
@@ -15,6 +19,8 @@ public class Config {
 	private String appFile = "app.properties";
 	private Properties properties;
 	
+	private String key = "asdkfasdfhsagfhsdfgfhmkijug";
+	private Map<String,String> propiedadesSeguras;
 	
 	private Config() {
 		
@@ -46,21 +52,127 @@ public class Config {
 			e.printStackTrace();
 		}
 		
+		try {
+			checkEncriptedProperties();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	
+	private void checkEncriptedProperties() {
+		
+		propiedadesSeguras = new HashMap<String, String>();
+		propiedadesSeguras.put("ORACLE_DB_USERNAME", "IS_ORACLE_DB_USERNAME_ENCRYPTED");
+		propiedadesSeguras.put("ORACLE_DB_PASSWORD", "IS_ORACLE_DB_PASSWORD_ENCRYPTED");
+		
+		for(String isEncripted : propiedadesSeguras.values()) {
+			if(!properties.containsKey(isEncripted))
+				properties.put(isEncripted, "false");
+		}
+		
+		for(String property:propiedadesSeguras.keySet()) {
+			encryptPropertyValue(property, propiedadesSeguras.get(property));
+		}
+		
+		save();
+			
+		
+	}
+	
+	private String encrypt(String tmpPwd) {
+
+		// Encrypt
+
+		StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+
+		encryptor.setPassword(key);
+
+		String encryptedPassword = encryptor.encrypt(tmpPwd);
+
+		return encryptedPassword;
+
+		}
+	
+	private String decryptPropertyValue(String propertyKey) {
+
+		String encryptedPropertyValue = properties.getProperty(propertyKey);
+
+		StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+
+		encryptor.setPassword(key);
+
+		String decryptedPropertyValue = encryptor.decrypt(encryptedPropertyValue);
+
+		return decryptedPropertyValue;
+
+		}
+	
+	private void encryptPropertyValue(String propertyKey, String isPropertyKeyEncrypted) {
+
+		// Retrieve boolean properties value to see if password is already
+
+		// encrypted or not
+
+		String isEncrypted = properties.getProperty(isPropertyKeyEncrypted);
+
+		// Check if password is encrypted?
+
+		if (isEncrypted.equals("false")) {
+
+		String tmpPwd = properties.getProperty(propertyKey);
+
+		String encryptedPassword = encrypt(tmpPwd);
+
+		// Overwrite password with encrypted password in the properties file
+
+		// using Apache Commons Cinfiguration library
+
+		properties.setProperty(propertyKey, encryptedPassword);
+
+		// Set the boolean flag to true to indicate future encryption
+
+		// operation that password is already encrypted
+
+		properties.setProperty(isPropertyKeyEncrypted, "true");
+
+		// Save the properties file
+
+		save();
+
+		}
+
+		}
+
+
 	public static Config getInstance() {
 		return instance;
 	}
 	
-	public void setProperties(String driver, String url, String user, String password) {
-		
+
+	
+	public void setDriver(String driver) {
 		properties.setProperty("ORACLE_DB_DRIVER_CLASS", driver);
-		properties.setProperty("ORACLE_DB_URL", url);
-		properties.setProperty("ORACLE_DB_USERNAME", user);
-		properties.setProperty("ORACLE_DB_PASSWORD", password);
 		save();
-		
+	}
+	
+	public void setUrl(String url) {
+		properties.setProperty("ORACLE_DB_URL", url);
+		save();
+	}
+	
+	public void setUser(String user) {
+		properties.setProperty("ORACLE_DB_USERNAME", encrypt(user));
+		properties.put("IS_ORACLE_DB_USERNAME_ENCRYPTED",true);
+		save();
+	}
+	
+	public void setPassword(String password) {
+		properties.setProperty("ORACLE_DB_PASSWORD", encrypt(password));
+		properties.put("IS_ORACLE_DB_PASSWORD_ENCRYPTED",true);
+		save();
 	}
 	
 	public String getDriver() {
@@ -77,13 +189,15 @@ public class Config {
 	
 	public String getUsername() {
 		
-		return properties.getProperty("ORACLE_DB_USERNAME");
+		
+		return decryptPropertyValue("ORACLE_DB_USERNAME");
+		
 		
 	}
 	
 	public String getPassword() {
 		
-		return properties.getProperty("ORACLE_DB_PASSWORD");
+		return decryptPropertyValue("ORACLE_DB_PASSWORD");
 		
 	}
 	
@@ -91,7 +205,7 @@ public class Config {
 		
 		try(FileOutputStream fos = new FileOutputStream(new File(appFile))) {
 			
-			properties.store(fos, "Store new Color");
+			properties.store(fos, "Store new Access credentials");
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

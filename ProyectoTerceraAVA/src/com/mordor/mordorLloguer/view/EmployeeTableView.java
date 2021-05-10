@@ -30,6 +30,7 @@ public class EmployeeTableView extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public EmployeeTableView() {
+		setClosable(true);
 		setBounds(100, 100, 635, 443);
 		
 		JPanel panel = new JPanel();

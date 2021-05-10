@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-
+import com.mordor.mordorLloguer.config.Config;
 
 import oracle.jdbc.datasource.impl.OracleDataSource;
 
@@ -39,11 +39,11 @@ public class MyDataSource {
 
 		oracleDS = new OracleDataSource();
 
-		oracleDS.setURL(props.getProperty("ORACLE_DB_URL"));
+		oracleDS.setURL(Config.getInstance().getUrl());
 
-		oracleDS.setUser(props.getProperty("ORACLE_DB_USERNAME"));
+		oracleDS.setUser(Config.getInstance().getUsername());
 
-		oracleDS.setPassword(props.getProperty("ORACLE_DB_PASSWORD"));
+		oracleDS.setPassword(Config.getInstance().getPassword());
 
 		} catch (IOException e) {
 
