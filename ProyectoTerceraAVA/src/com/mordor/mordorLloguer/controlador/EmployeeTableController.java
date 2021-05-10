@@ -2,6 +2,7 @@ package com.mordor.mordorLloguer.controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class EmployeeTableController implements ActionListener{
 		vista.getComboBoxDatos().setActionCommand("Ordenar por datos");
 		vista.getComboBoxAsc().setActionCommand("Ordenar asc/desc");
 		
-		
+		rellenarTabla();
 		
 		
 		
@@ -58,7 +59,7 @@ public class EmployeeTableController implements ActionListener{
 	
 	private class MyEmployeeTableModel extends MyTableModel<Empleado> {
 		
-		List<Empleado> data;
+		private List<Empleado> data;
 		
 		public MyEmployeeTableModel(List<Empleado> data, String[] header) {
 			super(data, header);
@@ -94,6 +95,50 @@ public class EmployeeTableController implements ActionListener{
 			
 		}
 		
+		@Override
+		public Class<?> getColumnClass(int column) {
+			
+			switch(column) {
+			case 6: 
+				return Date.class;
+			default : 
+				return String.class;
+			}
+			
+		}
+		
+		@Override
+		public void setValueAt(Object Value, int row, int col) {
+			switch(col) {
+	
+			case 0:
+				data.get(row).setDNI(Value.toString());
+				break;
+			case 1:
+				data.get(row).setNombre(Value.toString());
+				break;
+			case 2:
+				data.get(row).setApellidos(Value.toString());
+				break;
+			case 3:
+				data.get(row).setDomicilio(Value.toString());
+				break;
+			case 4:
+				data.get(row).setCP(Value.toString());
+				break;
+			case 5:
+				data.get(row).setEmail(Value.toString());
+				break;
+			case 6:
+				data.get(row).setFechaNac(new java.sql.Date(((java.util.Date)Value).getTime()));
+				break;
+			case 7:
+				data.get(row).setCargo(Value.toString());
+			}
+			fireTableCellUpdated(row, col);
+		
+		
 	}
 	
-}
+	}
+}	

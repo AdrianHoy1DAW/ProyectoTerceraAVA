@@ -31,7 +31,7 @@ public class EmployeeTableView extends JInternalFrame {
 	 */
 	public EmployeeTableView() {
 		setClosable(true);
-		setBounds(100, 100, 635, 443);
+		setBounds(100, 100, 710, 489);
 		
 		JPanel panel = new JPanel();
 		
@@ -90,6 +90,11 @@ public class EmployeeTableView extends JInternalFrame {
 		panel_1.add(scrollPane);
 		
 		table = new WebTable();
+		table.setAutoResizeMode ( JTable.AUTO_RESIZE_LAST_COLUMN);
+        table.setVisibleRowCount ( 5 );
+        table.optimizeColumnWidths ( true );
+        table.setOptimizeRowHeight ( true );
+        table.setEditable ( true );
 		scrollPane.setViewportView(table);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		

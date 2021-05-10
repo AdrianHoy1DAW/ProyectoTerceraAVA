@@ -100,7 +100,7 @@ public class ControladorPrincipal implements ActionListener {
 
 	private void openETable() {
 		
-		employeeController.rellenarTabla();
+		
 		addJInternalFrame(employeeView);
 		
 	}
