@@ -9,14 +9,17 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JInternalFrame;
 import javax.swing.SwingWorker;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
+import com.alee.laf.table.editors.WebDateEditor;
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.MyTableModel;
 import com.mordor.mordorLloguer.model.Empleado;
 import com.mordor.mordorLloguer.view.EmployeeTableView;
 import com.mordor.mordorLloguer.view.JIFProcess;
 
-public class EmployeeTableController implements ActionListener{
+public class EmployeeTableController implements ActionListener,TableModelListener{
 
 	AlmacenDatosDB modelo;
 	EmployeeTableView vista;
@@ -43,7 +46,8 @@ public class EmployeeTableController implements ActionListener{
 		vista.getComboBoxDatos().setActionCommand("Ordenar por datos");
 		vista.getComboBoxAsc().setActionCommand("Ordenar asc/desc");
 		
-		
+
+
 		
 		
 		
@@ -56,42 +60,15 @@ public class EmployeeTableController implements ActionListener{
 	public void rellenarTabla() {
 		
 		String[] header  =  {"DNI","NOMBRE","APELLIDOS","DOMICILIO","CP","EMAIL","FECHANAC","CARGO"};
-		SwingWorker<ArrayList<Empleado>,Void> task = new SwingWorker<ArrayList<Empleado>,Void>() {
-
-			@Override
-			protected ArrayList<Empleado> doInBackground() throws Exception {
-				
-				ArrayList<Empleado> empleado = modelo.getEmpleados();
-				return empleado;
-			}
 			
-			@Override
-			protected void done() {
-				jif.dispose();
-				
-				if(!isCancelled() ) {
-					try {
-						empleados = get();
-						metm = new MyEmployeeTableModel(empleados,header);
-						vista.getTable().setModel(metm);
-						ControladorPrincipal.addJInternalFrame(vista);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					
-				}
-			}
-			
-		};
-		jif = new JIFProcess(task,"Rellenando tabla");
-		ControladorPrincipal.addJInternalFrame(jif);
-		task.execute();
+		metm = new MyEmployeeTableModel(empleados,header);
 		
+	
+		swingWorkerOrder("Creating Table");
+		
+		metm.addTableModelListener(this);
+		
+	
 
 		
 	}
@@ -109,6 +86,11 @@ public class EmployeeTableController implements ActionListener{
 	
 	private void ordenar() {
 		
+		swingWorkerOrder("Ordering Table");
+		
+	}
+
+	private void swingWorkerOrder(String msg) {
 		SwingWorker<ArrayList<Empleado>,Void> task = new SwingWorker<ArrayList<Empleado>,Void>() {
 
 			@Override
@@ -133,6 +115,10 @@ public class EmployeeTableController implements ActionListener{
 						empleados = get();
 						metm = new MyEmployeeTableModel(empleados,metm.getHeader());
 						vista.getTable().setModel(metm);
+						if(ControladorPrincipal.estaAbierto(vista)) {
+							
+						} else 
+							ControladorPrincipal.addJInternalFrame(vista);
 						
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -149,7 +135,7 @@ public class EmployeeTableController implements ActionListener{
 			
 		};
 		
-		jif = new JIFProcess(task,"Ordenando");
+		jif = new JIFProcess(task,msg);
 		ControladorPrincipal.addJInternalFrame(jif);
 		task.execute();
 		
@@ -165,8 +151,9 @@ public class EmployeeTableController implements ActionListener{
 			
 		}
 		
-		public void setData(List<Empleado> data) {
+		public void newData(List<Empleado> data) {
 			super.data = data;
+			
 		}
 
 		@Override
@@ -210,6 +197,17 @@ public class EmployeeTableController implements ActionListener{
 		}
 		
 		@Override
+		public boolean isCellEditable(int row, int column) {
+			
+			if(column == 0) {
+				return false;
+			} else {
+				return true;
+			}
+			
+		}
+		
+		@Override
 		public void setValueAt(Object Value, int row, int col) {
 			switch(col) {
 	
@@ -236,6 +234,7 @@ public class EmployeeTableController implements ActionListener{
 				break;
 			case 7:
 				data.get(row).setCargo(Value.toString());
+				break;
 			}
 			fireTableCellUpdated(row, col);
 		
@@ -246,5 +245,42 @@ public class EmployeeTableController implements ActionListener{
 			return super.HEADER;
 		}
 	
+	}
+
+	@Override
+	public void tableChanged(TableModelEvent arg0) {
+		System.out.println(arg0.getType());
+		if(arg0.getType() == TableModelEvent.UPDATE) {
+			SwingWorker<Empleado,Void> task = new SwingWorker<Empleado,Void>() {
+
+				@Override
+				protected Empleado doInBackground() throws Exception {
+					Empleado temporal = metm.get(arg0.getFirstRow());
+					return temporal;
+				}
+				
+				@Override
+				protected void done() {
+					jif.dispose();
+					
+					if(!isCancelled()) {
+						try {
+							modelo.updateEmpleado(get());
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				
+			};
+			jif = new JIFProcess(task,"Updating Employee");
+			ControladorPrincipal.addJInternalFrame(jif);
+			task.execute();
+		}
+		
 	}
 }	
