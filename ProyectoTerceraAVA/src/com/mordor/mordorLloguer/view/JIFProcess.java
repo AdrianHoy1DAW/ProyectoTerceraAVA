@@ -10,6 +10,10 @@ import javax.swing.JProgressBar;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingWorker;
+import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JIFProcess extends JInternalFrame {
 	private JProgressBar progressBar;
@@ -19,12 +23,19 @@ public class JIFProcess extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JIFProcess() {
+	public JIFProcess(SwingWorker task,String msg) {
 		setBounds(100, 100, 450, 300);
 		
 		JPanel panel = new JPanel();
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				task.cancel(true);
+			}
+		});
+		
+		JLabel label = new JLabel(msg);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -35,13 +46,18 @@ public class JIFProcess extends JInternalFrame {
 							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(174)
-							.addComponent(btnCancel)))
+							.addComponent(btnCancel))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(166)
+							.addComponent(label)))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(99)
+					.addGap(43)
+					.addComponent(label)
+					.addGap(41)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
 					.addComponent(btnCancel)
@@ -50,6 +66,7 @@ public class JIFProcess extends JInternalFrame {
 		panel.setLayout(new MigLayout("", "[grow,fill]", "[grow,fill][grow,fill]"));
 		
 		progressBar = new JProgressBar();
+		progressBar.setIndeterminate(true);
 		panel.add(progressBar, "cell 0 0,growx");
 		getContentPane().setLayout(groupLayout);
 
@@ -60,6 +77,4 @@ public class JIFProcess extends JInternalFrame {
 	public JProgressBar getProgressBar() {
 		return progressBar;
 	}
-	
-	
 }

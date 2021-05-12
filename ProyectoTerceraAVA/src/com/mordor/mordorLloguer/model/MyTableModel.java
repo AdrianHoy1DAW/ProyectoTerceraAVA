@@ -8,9 +8,9 @@ import javax.swing.table.AbstractTableModel;
 
 public abstract class MyTableModel<T> extends AbstractTableModel {
 
-	private final String HEADER[];
+	protected final String HEADER[];
 	
-	List<T> data;
+	protected List<T> data;
 	
 	public MyTableModel(List<T> data, String[] header) {
 		this.data = data;

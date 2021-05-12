@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public interface AlmacenDatosDB {
 
+	public final int ASCENDENTE = 1;
+	public final int DESCENDENTE = 2;
+	
 	public ArrayList<Empleado> getEmpleados();
 	public ArrayList<Empleado> getEmpleadoPorCP(String cp);
 	public ArrayList<Empleado> getEmpleadoPorCargo(String cargo);
@@ -11,6 +14,7 @@ public interface AlmacenDatosDB {
 	public boolean updateEmpleado(Empleado empleado);
 	public boolean deleteEmpleado(String DNI);
 	public boolean authenticate(String login ,String password);
+	public ArrayList<Empleado> getEmpleadosOrder(String order, int ad);
 	
 	
 }

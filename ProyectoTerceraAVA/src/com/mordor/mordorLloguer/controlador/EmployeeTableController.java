@@ -5,16 +5,26 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import javax.swing.JInternalFrame;
+import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.MyTableModel;
 import com.mordor.mordorLloguer.model.Empleado;
 import com.mordor.mordorLloguer.view.EmployeeTableView;
+import com.mordor.mordorLloguer.view.JIFProcess;
 
 public class EmployeeTableController implements ActionListener{
 
 	AlmacenDatosDB modelo;
 	EmployeeTableView vista;
+	ArrayList<Empleado> empleados;
+	MyEmployeeTableModel metm;
+	
+	JInternalFrame jif;
+	
 	
 	public EmployeeTableController(EmployeeTableView vista, AlmacenDatosDB modelo) {
 		
@@ -33,38 +43,130 @@ public class EmployeeTableController implements ActionListener{
 		vista.getComboBoxDatos().setActionCommand("Ordenar por datos");
 		vista.getComboBoxAsc().setActionCommand("Ordenar asc/desc");
 		
+		
+		
+		
+		
+	}
+	
+	public void go() {
 		rellenarTabla();
-		
-		
-		
 	}
 
 	public void rellenarTabla() {
 		
 		String[] header  =  {"DNI","NOMBRE","APELLIDOS","DOMICILIO","CP","EMAIL","FECHANAC","CARGO"};
-		ArrayList<Empleado> empleados = modelo.getEmpleados();
+		SwingWorker<ArrayList<Empleado>,Void> task = new SwingWorker<ArrayList<Empleado>,Void>() {
+
+			@Override
+			protected ArrayList<Empleado> doInBackground() throws Exception {
+				
+				ArrayList<Empleado> empleado = modelo.getEmpleados();
+				return empleado;
+			}
+			
+			@Override
+			protected void done() {
+				jif.dispose();
+				
+				if(!isCancelled() ) {
+					try {
+						empleados = get();
+						metm = new MyEmployeeTableModel(empleados,header);
+						vista.getTable().setModel(metm);
+						ControladorPrincipal.addJInternalFrame(vista);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+				}
+			}
+			
+		};
+		jif = new JIFProcess(task,"Rellenando tabla");
+		ControladorPrincipal.addJInternalFrame(jif);
+		task.execute();
 		
-		
-		MyEmployeeTableModel metm = new MyEmployeeTableModel(empleados,header);
-		vista.getTable().setModel(metm);
+
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
+		String comand = arg0.getActionCommand();
 		
+		if(comand.equals("Ordenar por datos")) {
+			ordenar();
+		}
 		
 	}
 	
+	private void ordenar() {
+		
+		SwingWorker<ArrayList<Empleado>,Void> task = new SwingWorker<ArrayList<Empleado>,Void>() {
+
+			@Override
+			protected ArrayList<Empleado> doInBackground() throws Exception {
+				ArrayList<Empleado> empleado = new ArrayList<>();
+				
+				if(String.valueOf(vista.getComboBoxAsc().getSelectedItem()) == "Ascendente") {
+					empleado = modelo.getEmpleadosOrder(String.valueOf(vista.getComboBoxDatos().getSelectedItem()), modelo.ASCENDENTE);
+				} else {
+					empleado = modelo.getEmpleadosOrder(String.valueOf(vista.getComboBoxDatos().getSelectedItem()), modelo.DESCENDENTE);
+				}
+				
+				return empleado;
+			
+			}
+			@Override
+			protected void done() {
+				jif.dispose();
+				
+				if(!isCancelled() ) {
+					try {
+						empleados = get();
+						metm = new MyEmployeeTableModel(empleados,metm.getHeader());
+						vista.getTable().setModel(metm);
+						
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+				}
+			}
+			
+			
+		};
+		
+		jif = new JIFProcess(task,"Ordenando");
+		ControladorPrincipal.addJInternalFrame(jif);
+		task.execute();
+		
+	}
+
 	private class MyEmployeeTableModel extends MyTableModel<Empleado> {
 		
-		private List<Empleado> data;
+		
 		
 		public MyEmployeeTableModel(List<Empleado> data, String[] header) {
 			super(data, header);
-			this.data = data;
 			
+			
+		}
+		
+		public void setData(List<Empleado> data) {
+			super.data = data;
 		}
 
 		@Override
@@ -139,6 +241,10 @@ public class EmployeeTableController implements ActionListener{
 		
 		
 	}
+		
+		public String[] getHeader() {
+			return super.HEADER;
+		}
 	
 	}
 }	

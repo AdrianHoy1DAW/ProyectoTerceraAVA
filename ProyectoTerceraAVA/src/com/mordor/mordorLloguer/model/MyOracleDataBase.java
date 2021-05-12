@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 public class MyOracleDataBase implements AlmacenDatosDB {
 
-	private ArrayList<Empleado> getCustomEmpleados(String where) {
+	private ArrayList<Empleado> getCustomEmpleados(String where, String order) {
 		
 		ArrayList<Empleado> empleados = new ArrayList<Empleado>();
 		
@@ -20,6 +20,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		String query = "SELECT * FROM EMPLEADO ";
 		if(where != null) 
 			query += "WHERE " + where;
+		if(order != null) {
+			query += "ORDER BY " + order;
+		}
 		
 		
 		
@@ -62,26 +65,26 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 	@Override
 	public ArrayList<Empleado> getEmpleados() {
 		
-		return getCustomEmpleados(null);
+		return getCustomEmpleados(null,null);
 
 	}
 
 	@Override
 	public ArrayList<Empleado> getEmpleadoPorCP(String cp) {
 	
-		return getCustomEmpleados("CP=" + cp);
+		return getCustomEmpleados("CP=" + cp,null);
 	}
 
 	@Override
 	public ArrayList<Empleado> getEmpleadoPorCargo(String cargo) {
 		
-		return getCustomEmpleados("cargo='" +cargo + "'");
+		return getCustomEmpleados("cargo='" +cargo + "'",null);
 	}
 	
 	@Override
 	public Empleado getEmpleadoPorDNI(String DNI) {
 		
-		ArrayList<Empleado> empleado = getCustomEmpleados("dni='"+DNI+"'");
+		ArrayList<Empleado> empleado = getCustomEmpleados("dni='"+DNI+"'",null);
 		if(empleado.size() != 0)
 			return empleado.get(0);
 		else
@@ -179,6 +182,19 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		
 		return registrado;
+	}
+
+	@Override
+	public ArrayList<Empleado> getEmpleadosOrder(String order, int ad) {
+		ArrayList<Empleado> empleados = new ArrayList<>();
+		
+		if (ad == AlmacenDatosDB.ASCENDENTE) {
+			empleados = getCustomEmpleados(null,order); 
+		} else {
+			empleados = getCustomEmpleados(null,order + " desc"); 
+		}
+		
+		return empleados;
 	}
 	
 }
