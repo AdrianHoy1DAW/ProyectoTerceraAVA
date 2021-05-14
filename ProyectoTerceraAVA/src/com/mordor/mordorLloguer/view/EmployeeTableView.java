@@ -18,11 +18,14 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import com.alee.laf.table.WebTable;
 
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 public class EmployeeTableView extends JInternalFrame {
 	private JComboBox<String> comboBoxDatos;
 	private WebTable table;
 	private JComboBox<String> comboBoxAsc;
+	private JButton btnAdd;
+	private JButton btnDelete;
 
 
 
@@ -30,6 +33,7 @@ public class EmployeeTableView extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public EmployeeTableView() {
+		setFrameIcon(new ImageIcon(EmployeeTableView.class.getResource("/com/mordor/mordorLloguer/assets/badge.png")));
 		setClosable(true);
 		setBounds(100, 100, 710, 489);
 		
@@ -61,9 +65,9 @@ public class EmployeeTableView extends JInternalFrame {
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
-		JButton btnAdd = new JButton("ADD");
+		btnAdd = new JButton("ADD");
 		
-		JButton btnDelete = new JButton("DELETE");
+		btnDelete = new JButton("DELETE");
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -90,6 +94,7 @@ public class EmployeeTableView extends JInternalFrame {
 		panel_1.add(scrollPane);
 		
 		table = new WebTable();
+		table.setRowHeight(30);
 		table.setAutoResizeMode ( JTable.AUTO_RESIZE_LAST_COLUMN);
         table.setVisibleRowCount ( 5 );
         table.optimizeColumnWidths ( true );
@@ -132,6 +137,19 @@ public class EmployeeTableView extends JInternalFrame {
 	public JComboBox<String> getComboBoxAsc() {
 		return comboBoxAsc;
 	}
+
+
+
+	public JButton getBtnAdd() {
+		return btnAdd;
+	}
+
+
+
+	public JButton getBtnDelete() {
+		return btnDelete;
+	}
+	
 	
 	
 }

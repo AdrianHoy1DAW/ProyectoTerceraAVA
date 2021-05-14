@@ -17,6 +17,7 @@ import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.MyTableModel;
 import com.mordor.mordorLloguer.model.Empleado;
 import com.mordor.mordorLloguer.view.EmployeeTableView;
+import com.mordor.mordorLloguer.view.JIFAddEmployee;
 import com.mordor.mordorLloguer.view.JIFProcess;
 
 public class EmployeeTableController implements ActionListener,TableModelListener{
@@ -25,6 +26,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 	EmployeeTableView vista;
 	ArrayList<Empleado> empleados;
 	MyEmployeeTableModel metm;
+	JIFAddEmployee addEmployee;
 	
 	JInternalFrame jif;
 	
@@ -42,13 +44,16 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		
 		vista.getComboBoxDatos().addActionListener(this);
 		vista.getComboBoxAsc().addActionListener(this);
+		vista.getBtnAdd().addActionListener(this);
+		vista.getBtnDelete().addActionListener(this);
 		
 		vista.getComboBoxDatos().setActionCommand("Ordenar por datos");
 		vista.getComboBoxAsc().setActionCommand("Ordenar asc/desc");
-		
+		vista.getBtnAdd().setActionCommand("Add employee");
+		vista.getBtnDelete().setActionCommand("Delete employee");
 
 
-		
+		addEmployee = new JIFAddEmployee();
 		
 		
 	}
@@ -80,13 +85,22 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		
 		if(comand.equals("Ordenar por datos")) {
 			ordenar();
+		} else if(comand.equals("Add employee")) {
+			addEmployee();
 		}
 		
 	}
 	
+	private void addEmployee() {
+		
+		ControladorPrincipal.addJInternalFrame(addEmployee);
+		
+	}
+
 	private void ordenar() {
 		
 		swingWorkerOrder("Ordering Table");
+		
 		
 	}
 
@@ -98,9 +112,9 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 				ArrayList<Empleado> empleado = new ArrayList<>();
 				
 				if(String.valueOf(vista.getComboBoxAsc().getSelectedItem()) == "Ascendente") {
-					empleado = modelo.getEmpleadosOrder(String.valueOf(vista.getComboBoxDatos().getSelectedItem()), modelo.ASCENDENTE);
+					empleado = modelo.getEmpleadosOrder(String.valueOf(vista.getComboBoxDatos().getSelectedItem()), AlmacenDatosDB.ASCENDENTE);
 				} else {
-					empleado = modelo.getEmpleadosOrder(String.valueOf(vista.getComboBoxDatos().getSelectedItem()), modelo.DESCENDENTE);
+					empleado = modelo.getEmpleadosOrder(String.valueOf(vista.getComboBoxDatos().getSelectedItem()), AlmacenDatosDB.DESCENDENTE);
 				}
 				
 				return empleado;
@@ -113,7 +127,8 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 				if(!isCancelled() ) {
 					try {
 						empleados = get();
-						metm = new MyEmployeeTableModel(empleados,metm.getHeader());
+						metm.newData(empleados);
+						
 						vista.getTable().setModel(metm);
 						if(ControladorPrincipal.estaAbierto(vista)) {
 							
@@ -249,7 +264,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		System.out.println(arg0.getType());
+		
 		if(arg0.getType() == TableModelEvent.UPDATE) {
 			SwingWorker<Empleado,Void> task = new SwingWorker<Empleado,Void>() {
 

@@ -113,7 +113,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 					"cargo='"+empleado.getCargo()+"' "+ 
 					"WHERE DNI='" + empleado.getDNI() +"'";
 
-	System.out.println(query);
+	
 	stmt.executeUpdate(query);
 
 	actualizado = (stmt.executeUpdate(query)==1)?true:false;
@@ -158,7 +158,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		boolean registrado = false;
 		DataSource ds = MyDataSource.getOracleDataSource();
-		String query = "Select count(*) FROM EMPLEADO WHERE DNI=? and password=?";
+		String query = "Select count(*) FROM EMPLEADO WHERE DNI=? and password=ENCRYPT_PASWD.encrypt_val(?)";
 		
 		try (Connection con = ds.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(query);) {

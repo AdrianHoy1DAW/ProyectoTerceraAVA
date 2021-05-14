@@ -14,6 +14,7 @@ import javax.swing.SwingWorker;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class JIFProcess extends JInternalFrame {
 	private JProgressBar progressBar;
@@ -24,6 +25,7 @@ public class JIFProcess extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public JIFProcess(SwingWorker task,String msg) {
+		setFrameIcon(new ImageIcon(JIFProcess.class.getResource("/com/mordor/mordorLloguer/assets/load.png")));
 		setBounds(100, 100, 450, 300);
 		
 		JPanel panel = new JPanel();
@@ -45,12 +47,13 @@ public class JIFProcess extends JInternalFrame {
 							.addContainerGap()
 							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(174)
-							.addComponent(btnCancel))
-						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(166)
 							.addComponent(label)))
 					.addContainerGap())
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(189, Short.MAX_VALUE)
+					.addComponent(btnCancel)
+					.addGap(170))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
