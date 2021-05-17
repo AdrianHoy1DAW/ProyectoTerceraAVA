@@ -34,6 +34,7 @@ public class JIFProcess extends JInternalFrame {
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				task.cancel(true);
+				dispose();
 			}
 		});
 		

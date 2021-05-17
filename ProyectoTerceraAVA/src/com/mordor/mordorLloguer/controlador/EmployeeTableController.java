@@ -87,10 +87,28 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 			ordenar();
 		} else if(comand.equals("Add employee")) {
 			addEmployee();
+		} else if(comand.equals("Delete employee")) {
+			deleteEmployee();
 		}
 		
 	}
 	
+	private void deleteEmployee() {
+		
+		int[] seleccionadas = vista.getTable().getSelectedRows();
+		ArrayList<Empleado> empleados = new ArrayList<>();
+		for(int i = 0; i < seleccionadas.length; i++) {
+			empleados.add(metm.get(seleccionadas[i]));
+			
+		}
+		
+		for(int i = 0; i < empleados.size(); i ++) {
+			metm.remove(empleados.get(i).getDNI());
+		}
+			
+		
+	}
+
 	private void addEmployee() {
 		
 		ControladorPrincipal.addJInternalFrame(addEmployee);
@@ -110,6 +128,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 			@Override
 			protected ArrayList<Empleado> doInBackground() throws Exception {
 				ArrayList<Empleado> empleado = new ArrayList<>();
+				
 				
 				if(String.valueOf(vista.getComboBoxAsc().getSelectedItem()) == "Ascendente") {
 					empleado = modelo.getEmpleadosOrder(String.valueOf(vista.getComboBoxDatos().getSelectedItem()), AlmacenDatosDB.ASCENDENTE);
@@ -256,6 +275,12 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		
 	}
 		
+		public void remove(String DNI) {
+			
+			delete(new Empleado(DNI));
+			
+		}
+		
 		public String[] getHeader() {
 			return super.HEADER;
 		}
@@ -295,6 +320,49 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 			jif = new JIFProcess(task,"Updating Employee");
 			ControladorPrincipal.addJInternalFrame(jif);
 			task.execute();
+		}
+		
+		if(arg0.getType() == TableModelEvent.DELETE) {
+			SwingWorker<String,Void> task = new SwingWorker<String,Void>() {
+
+				@Override
+				protected String doInBackground() throws Exception {
+					String temporal = metm.get(arg0.getFirstRow()).getDNI();
+					return temporal;
+				}
+				
+				@Override
+				protected void done() {
+					jif.dispose();
+					
+					if(!isCancelled()) {
+						try {
+						
+							modelo.deleteEmpleado(get());
+							metm.getData().remove(metm.get(arg0.getLastRow()));
+							
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				
+			};
+			
+			if(ControladorPrincipal.estaAbierto(jif) == true) {
+				
+			} else {
+				jif = new JIFProcess(task,"Deleting Employee");
+				ControladorPrincipal.addJInternalFrame(jif);
+			}
+			
+			task.execute();
+			
+			
 		}
 		
 	}

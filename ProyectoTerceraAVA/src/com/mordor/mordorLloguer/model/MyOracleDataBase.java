@@ -133,19 +133,25 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		boolean actualizado = false;
 		DataSource ds = MyDataSource.getOracleDataSource();
+		String query = "DELETE FROM EMPLEADO WHERE DNI = ?";
 		
 		try (Connection con = ds.getConnection();
-				Statement stmt = con.createStatement();) {
-			String query = "DELETE FROM EMPLEADO WHERE DNI = '" + DNI + "'";
+				PreparedStatement stmt = con.prepareStatement(query);) {
 			
 			
 			
 			
-			actualizado = (stmt.executeUpdate(query)==1)?true:false;
+		
+			stmt.setString(1, DNI);
+			
+			
+			actualizado = (stmt.executeUpdate()==1)?true:false;
+			
+
 			
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	

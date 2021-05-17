@@ -13,6 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 
 public class JIFAddEmployee extends JInternalFrame {
 	private JTextField textFieldDNI;
@@ -35,6 +36,7 @@ public class JIFAddEmployee extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public JIFAddEmployee() {
+		setFrameIcon(new ImageIcon(JIFAddEmployee.class.getResource("/com/mordor/mordorLloguer/assets/useraddalt.png")));
 		setClosable(true);
 		setBounds(100, 100, 647, 244);
 		getContentPane().setLayout(new MigLayout("", "[][181.00][][][grow][]", "[][][][][][][][][]"));

@@ -82,14 +82,23 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 	}
 	
 	public void delete(T emple) {
-		int pos = data.indexOf(emple);
-		data.remove(emple);
+		int pos = data.indexOf(emple);	
 		fireTableRowsDeleted(pos, pos);
 		
 		
 		
+		
+	}
+
+	public String[] getHEADER() {
+		return HEADER;
+	}
+
+	public List<T> getData() {
+		return data;
 	}
 	
 
+	
 	
 }
