@@ -211,7 +211,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 
 		DataSource ds = MyDataSource.getOracleDataSource();
 
-		String query = "INSERT INTO EMPLEADO (DNI,NOMBRE,APELLIDOS,DOMICILIO,CP,EMAIL,FECHANAC,CARGO,PASSWORD,CHANGEDTS,CHANGEDBY) VALUES (?,?,?,?,?,?,?,?,ENCRYPT_PASWD.encrypt_val(?),?,?)" ;
+		String query = "INSERT INTO EMPLEADO (DNI,NOMBRE,APELLIDOS,DOMICILIO,CP,EMAIL,FECHANAC,CARGO,PASSWORD) VALUES (?,?,?,?,?,?,?,?,ENCRYPT_PASWD.encrypt_val(?))" ;
 		
 		try (Connection con = ds.getConnection();
 
@@ -227,8 +227,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		pstmt.setDate(++pos, empleado.getFechaNac());
 		pstmt.setString(++pos, empleado.getCargo());
 		pstmt.setString(++pos, empleado.getPassword());
-		pstmt.setTimestamp(++pos, new Timestamp(System.currentTimeMillis()));
-		pstmt.setString(++pos, "Insertar empleado");
+
 		
 
 		

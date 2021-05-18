@@ -421,12 +421,12 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 					
 					if(!isCancelled()) {
 						try {
-							
+						
 							if(modelo.insertEmpleado(get()) == false) {
 								
 								JOptionPane.showMessageDialog(vista,"No se puede insertar","Error",JOptionPane.ERROR_MESSAGE);
 							} else {
-								metm.getData().add(get());
+								
 							}
 							
 						} catch (InterruptedException e) {
@@ -440,8 +440,8 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 							JOptionPane.showMessageDialog(vista, e.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 							
 						} catch (Exception e) {
-							e.printStackTrace();
-//							JOptionPane.showMessageDialog(vista,"Hay campos obligatorios que no han sido rellenados", "Error",JOptionPane.ERROR_MESSAGE);
+							metm.getData().remove(arg0.getFirstRow());
+							JOptionPane.showMessageDialog(vista,"Plese, fill all the required fields before continue", "Error",JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
