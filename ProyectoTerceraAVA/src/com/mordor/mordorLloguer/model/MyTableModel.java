@@ -76,7 +76,7 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 	
 	public void add(T empleado) {
 		
-		data.add(empleado);
+		
 		fireTableRowsInserted(data.size() -1, data.size() -1);
 		
 	}

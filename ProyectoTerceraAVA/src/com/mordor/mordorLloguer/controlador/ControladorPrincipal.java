@@ -118,7 +118,7 @@ public class ControladorPrincipal implements ActionListener {
 		
 	}
 
-	private boolean comprobarTexto(Container cont) {
+	static boolean comprobarTexto(Container cont) {
 		boolean empty = false;
 		for(Component c : cont.getComponents()) {
 			if(c instanceof JTextField) {

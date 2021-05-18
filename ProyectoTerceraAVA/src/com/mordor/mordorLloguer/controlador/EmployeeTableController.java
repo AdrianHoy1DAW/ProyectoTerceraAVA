@@ -1,5 +1,6 @@
 package com.mordor.mordorLloguer.controlador;
 
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -89,21 +91,52 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 			addEmployee();
 		} else if(comand.equals("Delete employee")) {
 			deleteEmployee();
+		} else if(comand.equals("Insert Employee")) {
+			insertEmployee();
 		}
 		
 	}
 	
+	private void insertEmployee() {
+		
+		if(addEmployee.getTextFieldFecha().getDate() != null) {
+			Empleado e = new Empleado(
+					addEmployee.getTextFieldDNI().getText(),
+					addEmployee.getTextFieldNombre().getText(),
+					addEmployee.getTextFieldApellidos().getText(),
+					addEmployee.getTextFieldCP().getText(),
+					addEmployee.getTextFieldEmail().getText(),
+					new java.sql.Date(addEmployee.getTextFieldFecha().getDate().getTime()),
+					String.valueOf(addEmployee.getComboBox().getSelectedItem())
+					,addEmployee.getTextFieldDomicilio().getText(),
+					String.valueOf(addEmployee.getPasswordField().getPassword()));
+			System.out.println(e.getPassword());
+			
+			
+			metm.add(e);
+		} else {
+			JOptionPane.showMessageDialog(vista,"Hay campos obligatorios que no han sido rellenados", "Error",JOptionPane.ERROR_MESSAGE);
+		}
+			
+
+		
+	}
+
 	private void deleteEmployee() {
 		
 		int[] seleccionadas = vista.getTable().getSelectedRows();
 		ArrayList<Empleado> empleados = new ArrayList<>();
 		for(int i = 0; i < seleccionadas.length; i++) {
-			empleados.add(metm.get(seleccionadas[i]));
 			
+			empleados.add(metm.get(seleccionadas[i]));
+					
 		}
 		
+		
 		for(int i = 0; i < empleados.size(); i ++) {
-			metm.remove(empleados.get(i).getDNI());
+			
+			metm.delete(empleados.get(i));
+
 		}
 			
 		
@@ -112,7 +145,12 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 	private void addEmployee() {
 		
 		ControladorPrincipal.addJInternalFrame(addEmployee);
+	
+		addEmployee.getBtnAddUser().addActionListener(this);
+		addEmployee.getBtnCancel().addActionListener(this);
 		
+		addEmployee.getBtnAddUser().setActionCommand("Insert Employee");
+		addEmployee.getBtnCancel().setActionCommand("Cancel");
 	}
 
 	private void ordenar() {
@@ -323,11 +361,12 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		}
 		
 		if(arg0.getType() == TableModelEvent.DELETE) {
-			SwingWorker<String,Void> task = new SwingWorker<String,Void>() {
+			SwingWorker<Empleado,Void> task = new SwingWorker<Empleado,Void>() {
 
 				@Override
-				protected String doInBackground() throws Exception {
-					String temporal = metm.get(arg0.getFirstRow()).getDNI();
+				protected Empleado doInBackground() throws Exception {
+					
+					Empleado temporal = metm.get(arg0.getFirstRow());
 					return temporal;
 				}
 				
@@ -337,15 +376,15 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 					
 					if(!isCancelled()) {
 						try {
-						
-							modelo.deleteEmpleado(get());
-							metm.getData().remove(metm.get(arg0.getLastRow()));
+							
+							modelo.deleteEmpleado(get().getDNI());
+							metm.getData().remove(get());
 							
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						} catch (ExecutionException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 					}
@@ -363,6 +402,60 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 			task.execute();
 			
 			
+		}
+		
+		if(arg0.getType() == TableModelEvent.INSERT) {
+			
+			SwingWorker<Empleado,Void> task = new SwingWorker<Empleado,Void>() {
+
+				@Override
+				protected Empleado doInBackground() throws Exception {
+					
+					Empleado temporal = metm.get(arg0.getFirstRow());
+					return temporal;
+				}
+				
+				@Override
+				protected void done() {
+					jif.dispose();
+					
+					if(!isCancelled()) {
+						try {
+							
+							if(modelo.insertEmpleado(get()) == false) {
+								
+								JOptionPane.showMessageDialog(vista,"No se puede insertar","Error",JOptionPane.ERROR_MESSAGE);
+							} else {
+								metm.getData().add(get());
+							}
+							
+						} catch (InterruptedException e) {
+							
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							
+							e.printStackTrace();
+						} catch (HeadlessException e) {
+							
+							JOptionPane.showMessageDialog(vista, e.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+//							JOptionPane.showMessageDialog(vista,"Hay campos obligatorios que no han sido rellenados", "Error",JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
+				
+			};
+			
+			if(ControladorPrincipal.estaAbierto(jif) == true) {
+				
+			} else {
+				jif = new JIFProcess(task,"Inserting Employee");
+				ControladorPrincipal.addJInternalFrame(jif);
+			}
+			
+			task.execute();
 		}
 		
 	}

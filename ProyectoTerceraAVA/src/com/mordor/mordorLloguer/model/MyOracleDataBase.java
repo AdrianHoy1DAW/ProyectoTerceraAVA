@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
@@ -35,7 +36,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 			
 			while(rs.next()) {
 				
-				empleado = new Empleado(rs.getInt("idEmpleado"),
+				empleado = new Empleado(
 										rs.getString("DNI"),
 										rs.getString("nombre"),
 										rs.getString("apellidos"),
@@ -201,6 +202,50 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		}
 		
 		return empleados;
+	}
+
+	@Override
+	public boolean insertEmpleado(Empleado empleado) throws Exception {
+		
+		boolean insertado = false;
+
+		DataSource ds = MyDataSource.getOracleDataSource();
+
+		String query = "INSERT INTO EMPLEADO (DNI,NOMBRE,APELLIDOS,DOMICILIO,CP,EMAIL,FECHANAC,CARGO,PASSWORD,CHANGEDTS,CHANGEDBY) VALUES (?,?,?,?,?,?,?,?,ENCRYPT_PASWD.encrypt_val(?),?,?)" ;
+		
+		try (Connection con = ds.getConnection();
+
+		PreparedStatement pstmt = con.prepareStatement(query);) {
+
+		int pos = 0;
+		pstmt.setString(++pos, empleado.getDNI());
+		pstmt.setString(++pos, empleado.getNombre());
+		pstmt.setString(++pos, empleado.getApellidos());
+		pstmt.setString(++pos, empleado.getDomicilio());
+		pstmt.setString(++pos, empleado.getCP());
+		pstmt.setString(++pos, empleado.getEmail());
+		pstmt.setDate(++pos, empleado.getFechaNac());
+		pstmt.setString(++pos, empleado.getCargo());
+		pstmt.setString(++pos, empleado.getPassword());
+		pstmt.setTimestamp(++pos, new Timestamp(System.currentTimeMillis()));
+		pstmt.setString(++pos, "Insertar empleado");
+		
+
+		
+		
+		
+		insertado = (pstmt.executeUpdate()==1)?true:false;
+		
+
+		} catch (SQLException e) {
+
+			throw new Exception(e.getMessage());
+			
+		}
+
+		return insertado;
+		
+		
 	}
 	
 }

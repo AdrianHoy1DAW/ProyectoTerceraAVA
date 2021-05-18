@@ -13,8 +13,10 @@ public interface AlmacenDatosDB {
 	public Empleado getEmpleadoPorDNI(String DNI);
 	public boolean updateEmpleado(Empleado empleado);
 	public boolean deleteEmpleado(String DNI);
+	public boolean insertEmpleado(Empleado empleado) throws Exception;
 	public boolean authenticate(String login ,String password);
 	public ArrayList<Empleado> getEmpleadosOrder(String order, int ad);
+	
 	
 	
 }

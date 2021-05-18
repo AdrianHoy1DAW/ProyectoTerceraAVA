@@ -15,10 +15,9 @@ public class Empleado {
 	private String domicilio;
 	private String password;
 	
-	public Empleado(int idEmpleado, String dNI, String nombre, String apellidos, String cP, String email, Date fechaNac,
+	public Empleado(String dNI, String nombre, String apellidos, String cP, String email, Date fechaNac,
 			String cargo, String domicilio, String password) {
 		super();
-		this.idEmpleado = idEmpleado;
 		DNI = dNI;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
