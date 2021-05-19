@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Empleado {
 	
-	private int idEmpleado;
+	
 	private String DNI;
 	private String nombre;
 	private String apellidos;
@@ -33,13 +33,8 @@ public class Empleado {
 		this.DNI = DNI;
 	}
 
-	public int getIdEmpleado() {
-		return idEmpleado;
-	}
 
-	public void setIdEmpleado(int idEmpleado) {
-		this.idEmpleado = idEmpleado;
-	}
+	
 
 	public String getDNI() {
 		return DNI;
@@ -124,7 +119,7 @@ public class Empleado {
 
 	@Override
 	public String toString() {
-		return "Empleado [idEmpleado=" + idEmpleado + ", DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos
+		return "Empleado [ DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos
 				+ "\n, CP=" + CP + ", email=" + email + ", fechaNac=" + fechaNac + ", cargo=" + cargo + ", domicilio="
 				+ domicilio + ", password=" + password + "]\n";
 	}

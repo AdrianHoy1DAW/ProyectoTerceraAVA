@@ -17,6 +17,8 @@ public interface AlmacenDatosDB {
 	public boolean authenticate(String login ,String password);
 	public ArrayList<Empleado> getEmpleadosOrder(String order, int ad);
 	
+	public ArrayList<Cliente> getClientes();
+	
 	
 	
 }

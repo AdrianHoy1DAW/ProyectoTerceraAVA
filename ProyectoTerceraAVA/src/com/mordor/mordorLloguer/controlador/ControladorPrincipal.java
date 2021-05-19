@@ -19,6 +19,7 @@ import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.config.Config;
 import com.mordor.mordorLloguer.model.MyOracleDataBase;
+import com.mordor.mordorLloguer.view.ClientTableView;
 import com.mordor.mordorLloguer.view.EmployeeTableView;
 import com.mordor.mordorLloguer.view.LoginView;
 import com.mordor.mordorLloguer.view.PropertiesView;
@@ -33,6 +34,8 @@ public class ControladorPrincipal implements ActionListener {
 	private EmployeeTableView employeeView;
 	private static JDesktopPane desktopPane;
 	private PropertiesView properties;
+	private CustomerTableController ctc;
+	private ClientTableView ctv;
 	
 	
 	public ControladorPrincipal(VistaPrincipal vista, MyOracleDataBase modelo) {
@@ -52,14 +55,19 @@ public class ControladorPrincipal implements ActionListener {
 		desktopPane = vista.getDesktopPane();
 		properties = new PropertiesView();
 		employeeView = new EmployeeTableView();
+		ctv = new ClientTableView();
+		
 		
 		employeeController = new EmployeeTableController(employeeView, modelo);
+		ctc = new CustomerTableController(modelo,ctv);
+	
 		
 		//Action Listener
 		vista.getButtonLogin().addActionListener(this);
 		vista.getButtonnLogout().addActionListener(this);
 		vista.getMntmPreferences().addActionListener(this);
 		vista.getButtonClient().addActionListener(this);
+		vista.getBtnCustomer().addActionListener(this);
 		
 		
 		
@@ -68,6 +76,7 @@ public class ControladorPrincipal implements ActionListener {
 		vista.getButtonnLogout().setActionCommand("Logout");
 		vista.getMntmPreferences().setActionCommand("Open preferences");
 		vista.getButtonClient().setActionCommand("Open ETable");
+		vista.getBtnCustomer().setActionCommand("Open CUstomer");
 		
 	}
 	
@@ -94,8 +103,15 @@ public class ControladorPrincipal implements ActionListener {
 			saveProperties();
 		} else if(comand.equals("Open ETable")) {
 			openETable();
+		} else if(comand.equals("Open CUstomer")) {
+			openCustomer();
 		}
-		
+		 
+	}
+
+	private void openCustomer() {
+	
+		ctc.go();
 	}
 
 	private void openETable() {
@@ -254,6 +270,7 @@ public class ControladorPrincipal implements ActionListener {
 		jif.setLocation((deskSize.width - ifSize.width)/ 2, (deskSize.height - ifSize.height)/2);
 		
 	}
+	
 	
 	
 

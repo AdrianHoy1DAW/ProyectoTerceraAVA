@@ -19,6 +19,11 @@ import com.alee.laf.table.WebTable;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
 
 public class EmployeeTableView extends JInternalFrame {
 	private JComboBox<String> comboBoxDatos;
@@ -26,6 +31,9 @@ public class EmployeeTableView extends JInternalFrame {
 	private JComboBox<String> comboBoxAsc;
 	private JButton btnAdd;
 	private JButton btnDelete;
+	private JPopupMenu popupMenu;
+	private JMenuItem mntmAdd;
+	private JMenuItem mntmDelete;
 
 
 
@@ -101,6 +109,15 @@ public class EmployeeTableView extends JInternalFrame {
         table.setOptimizeRowHeight ( true );
         table.setEditable ( true );
 		scrollPane.setViewportView(table);
+		
+		popupMenu = new JPopupMenu();
+		addPopup(table, popupMenu);
+		
+		mntmAdd = new JMenuItem("Add");
+		popupMenu.add(mntmAdd);
+		
+		mntmDelete = new JMenuItem("Delete");
+		popupMenu.add(mntmDelete);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
 		JLabel lblOrdenarPor = new JLabel("Ordenar por: ");
@@ -128,7 +145,7 @@ public class EmployeeTableView extends JInternalFrame {
 
 
 
-	public JTable getTable() {
+	public WebTable getTable() {
 		return table;
 	}
 
@@ -152,4 +169,40 @@ public class EmployeeTableView extends JInternalFrame {
 	
 	
 	
+	
+	public JPopupMenu getPopupMenu() {
+		return popupMenu;
+	}
+
+
+
+	public JMenuItem getMntmAdd() {
+		return mntmAdd;
+	}
+
+
+
+	public JMenuItem getMntmDelete() {
+		return mntmDelete;
+	}
+
+
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 }

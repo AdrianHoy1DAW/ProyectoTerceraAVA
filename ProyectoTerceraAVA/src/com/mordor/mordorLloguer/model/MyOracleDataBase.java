@@ -1,5 +1,6 @@
 package com.mordor.mordorLloguer.model;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -243,6 +244,56 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		}
 
 		return insertado;
+		
+		
+	}
+
+	@Override
+	public ArrayList<Cliente> getClientes() {
+		
+		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "SELECT * FROM CLIENTE ";
+		
+		
+		
+		
+		try(Connection con = ds.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);) {
+			
+			Cliente empleado;
+			
+			while(rs.next()) {
+				
+			
+				
+				empleado = new Cliente(
+										rs.getString("DNI"),
+										rs.getString("nombre"),
+										rs.getString("apellidos"),
+										rs.getString("domicilio"),
+										rs.getString("cp"),
+										rs.getString("email"),
+										rs.getDate("fechanac"),
+										rs.getString("carnet").charAt(0),
+										rs.getBytes("foto"));	
+		
+				clientes.add(empleado);
+			}
+			
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return clientes;
+		
 		
 		
 	}

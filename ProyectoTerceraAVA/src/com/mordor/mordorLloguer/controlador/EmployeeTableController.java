@@ -3,6 +3,8 @@ package com.mordor.mordorLloguer.controlador;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +50,35 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		vista.getComboBoxAsc().addActionListener(this);
 		vista.getBtnAdd().addActionListener(this);
 		vista.getBtnDelete().addActionListener(this);
+		vista.getMntmAdd().addActionListener(this);
+		vista.getMntmDelete().addActionListener(this);
 		
 		vista.getComboBoxDatos().setActionCommand("Ordenar por datos");
 		vista.getComboBoxAsc().setActionCommand("Ordenar asc/desc");
 		vista.getBtnAdd().setActionCommand("Add employee");
 		vista.getBtnDelete().setActionCommand("Delete employee");
+		vista.getMntmAdd().setActionCommand("Add employee");
+		vista.getMntmDelete().setActionCommand("Delete employee");
+		
+		vista.getTable().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e)  {
+				if(e.getButton() == 3) {
+					
+					int row = vista.getTable().rowAtPoint(e.getPoint());
+					if(row < 0 || row > vista.getTable().getRowCount()) {
+						vista.getTable().clearSelection();
+					} else if(vista.getTable().getSelectedRowCount() <= 1) {
+						vista.getTable().setSelectedRow(row);
+						vista.getPopupMenu().show(vista.getTable(),e.getX(),e.getY());
+						
+					} else if(vista.getTable().getSelectedRowCount() > 1) {
+						vista.getPopupMenu().show(vista.getTable(), e.getX(), e.getY());
+					}
+					
+				}
+			}
+		});
 
 
 		addEmployee = new JIFAddEmployee();
