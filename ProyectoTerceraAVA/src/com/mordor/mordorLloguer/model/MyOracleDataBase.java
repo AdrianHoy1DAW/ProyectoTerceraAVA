@@ -1,6 +1,7 @@
 package com.mordor.mordorLloguer.model;
 
 import java.sql.Blob;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
+
+import oracle.jdbc.OracleTypes;
 
 public class MyOracleDataBase implements AlmacenDatosDB {
 
@@ -253,16 +256,23 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 		
+		ResultSet rs = null;
+		
 		DataSource ds = MyDataSource.getOracleDataSource();
 		
-		String query = "SELECT * FROM CLIENTE ";
+		String query = "{ call ?:=GESTIONALQUILER.LISTARCLIENTES() }";
 		
 		
 		
 		
 		try(Connection con = ds.getConnection();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);) {
+			CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			cstmt.execute();
+			
+			rs = (ResultSet) cstmt.getObject(1);
 			
 			Cliente empleado;
 			
@@ -290,6 +300,16 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		return clientes;
