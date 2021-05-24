@@ -18,6 +18,7 @@ public interface AlmacenDatosDB {
 	public ArrayList<Empleado> getEmpleadosOrder(String order, int ad);
 	
 	public ArrayList<Cliente> getClientes();
+	public boolean deleteCustomer(String DNI);
 	
 	
 	

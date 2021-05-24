@@ -24,6 +24,7 @@ import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.Cliente;
 import com.mordor.mordorLloguer.model.Empleado;
 import com.mordor.mordorLloguer.model.MyTableModel;
+import com.mordor.mordorLloguer.view.AddModifyCustomer;
 import com.mordor.mordorLloguer.view.ClientTableView;
 import com.mordor.mordorLloguer.view.EmployeeTableView;
 import com.mordor.mordorLloguer.view.JIFAddEmployee;
@@ -52,9 +53,12 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		vista.getTextFieldName().getDocument().addDocumentListener(this);
 		vista.getTextFieldSur().getDocument().addDocumentListener(this);
 		vista.getComboBox().addActionListener(this);
+		vista.getBtnAdd().addActionListener(this);
 		
 		vista.getBtnDelete().setActionCommand("DeleteCustomer");
 		vista.getComboBox().setActionCommand("order");
+		vista.getBtnAdd().setActionCommand("Open add menu");
+		
 		
 		
 	}
@@ -149,7 +153,7 @@ public class CustomerTableController implements ActionListener,TableModelListene
 					if(!isCancelled()) {
 						try {
 							
-							modelo.deleteEmpleado(get().getDNI());
+							modelo.deleteCustomer(get().getDNI());
 							mctm.getData().remove(get());
 							
 						} catch (InterruptedException e) {
@@ -167,7 +171,7 @@ public class CustomerTableController implements ActionListener,TableModelListene
 			if(ControladorPrincipal.estaAbierto(jif) == true) {
 				
 			} else {
-				jif = new JIFProcess(task,"Deleting Employee");
+				jif = new JIFProcess(task,"Deleting Customer");
 				ControladorPrincipal.addJInternalFrame(jif);
 			}
 			
@@ -186,10 +190,18 @@ public class CustomerTableController implements ActionListener,TableModelListene
 			deleteCustomer();
 		} else if(comand.equals("order")) {
 			ordenar();
+		} else if(comand.equals("Open add menu")) {
+			addMenu();
 		}
 		
 	}
 		
+	private void addMenu() {
+		
+		ControladorPrincipal.addJInternalFrame(new AddModifyCustomer());
+		
+	}
+
 	private void deleteCustomer() {
 		
 		int[] seleccionadas = vista.getTable().getSelectedRows();

@@ -39,6 +39,7 @@ public class ClientTableView extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public ClientTableView() {
+		setClosable(true);
 		setBounds(100, 100, 780, 476);
 		
 		JPanel panel = new JPanel();
@@ -83,6 +84,7 @@ public class ClientTableView extends JInternalFrame {
 		panel_1.add(btnCancel);
 		
 		table = new WebTable();
+		table.setRowHeight(30);
 		scrollPane.setViewportView(table);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		

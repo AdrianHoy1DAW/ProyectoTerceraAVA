@@ -126,17 +126,8 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 	private void insertEmployee() {
 		
 		if(addEmployee.getTextFieldFecha().getDate() != null) {
-			Empleado e = new Empleado(
-					addEmployee.getTextFieldDNI().getText(),
-					addEmployee.getTextFieldNombre().getText(),
-					addEmployee.getTextFieldApellidos().getText(),
-					addEmployee.getTextFieldCP().getText(),
-					addEmployee.getTextFieldEmail().getText(),
-					new java.sql.Date(addEmployee.getTextFieldFecha().getDate().getTime()),
-					String.valueOf(addEmployee.getComboBox().getSelectedItem())
-					,addEmployee.getTextFieldDomicilio().getText(),
-					String.valueOf(addEmployee.getPasswordField().getPassword()));
-			System.out.println(e.getPassword());
+			Empleado e = null;
+			
 			
 			
 			metm.add(e);
@@ -437,7 +428,16 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 				@Override
 				protected Empleado doInBackground() throws Exception {
 					
-					Empleado temporal = metm.get(arg0.getFirstRow());
+					Empleado temporal = new Empleado(
+							addEmployee.getTextFieldDNI().getText(),
+							addEmployee.getTextFieldNombre().getText(),
+							addEmployee.getTextFieldApellidos().getText(),
+							addEmployee.getTextFieldCP().getText(),
+							addEmployee.getTextFieldEmail().getText(),
+							new java.sql.Date(addEmployee.getTextFieldFecha().getDate().getTime()),
+							String.valueOf(addEmployee.getComboBox().getSelectedItem())
+							,addEmployee.getTextFieldDomicilio().getText(),
+							String.valueOf(addEmployee.getPasswordField().getPassword()));;
 					return temporal;
 				}
 				
@@ -452,7 +452,8 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 								
 								JOptionPane.showMessageDialog(vista,"No se puede insertar","Error",JOptionPane.ERROR_MESSAGE);
 							} else {
-								
+								metm.getData().add(get());
+								vista.getTable().setModel(metm);
 							}
 							
 						} catch (InterruptedException e) {
@@ -466,7 +467,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 							JOptionPane.showMessageDialog(vista, e.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
 							
 						} catch (Exception e) {
-							metm.getData().remove(arg0.getFirstRow());
+							
 							JOptionPane.showMessageDialog(vista,"Plese, fill all the required fields before continue", "Error",JOptionPane.ERROR_MESSAGE);
 						}
 					}

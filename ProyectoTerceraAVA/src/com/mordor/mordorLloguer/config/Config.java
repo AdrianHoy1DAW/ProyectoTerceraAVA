@@ -205,7 +205,7 @@ public class Config {
 		
 		try(FileOutputStream fos = new FileOutputStream(new File(appFile))) {
 			
-			properties.store(fos, "Store new Access credentials");
+			properties.store(fos, "UTF-8");
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

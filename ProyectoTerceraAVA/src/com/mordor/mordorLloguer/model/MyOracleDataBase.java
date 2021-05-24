@@ -239,14 +239,11 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		insertado = (pstmt.executeUpdate()==1)?true:false;
 		
-
-		} catch (SQLException e) {
-
-			throw new Exception(e.getMessage());
-			
+		
 		}
-
+		
 		return insertado;
+		
 		
 		
 	}
@@ -317,5 +314,35 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		
 	}
+
+	@Override
+	public boolean deleteCustomer(String DNI) {
+		
+		boolean borrado = false;
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONALQUILER.BORRARCLIENTE(?) }";
+		
+		
+		
+		
+		try(Connection con = ds.getConnection();
+			CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, DNI);
+			
+			borrado = (cstmt.executeUpdate() == 1)?true:false;
+			
+		
+		
+		
+		
+	} catch (SQLException e) {
+		
+		
+		e.printStackTrace();
+	}
+		return borrado;
 	
-}
+	}
+}	
