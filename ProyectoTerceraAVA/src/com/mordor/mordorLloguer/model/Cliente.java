@@ -84,6 +84,18 @@ public class Cliente {
 	}
 
 
+	@Override
+	public boolean equals(Object o) {
+		
+		if(o instanceof Cliente) {
+			return ((Cliente)o).getDNI().compareTo(DNI) == 0;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	
 
 	@Override
 	public String toString() {

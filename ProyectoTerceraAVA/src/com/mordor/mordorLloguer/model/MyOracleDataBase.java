@@ -345,4 +345,43 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		return borrado;
 	
 	}
+
+	@Override
+	public boolean grabarCliente(Cliente cliente) {
+		
+		boolean grabado = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONALQUILER.GRABARCLIENTE(?,?,?,?,?,?,?,?,?)}";
+		
+		try(Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, cliente.getDNI());
+			cstmt.setString(2, cliente.getNombre());
+			cstmt.setString(3, cliente.getApellidos());
+			cstmt.setString(4, cliente.getDomicilio());
+			cstmt.setString(5, cliente.getCp());
+			cstmt.setString(6, cliente.getEmail());
+			cstmt.setDate(7, cliente.getFechaNac());
+			cstmt.setString(8, String.valueOf(cliente.getCarnet()));
+			cstmt.setBytes(9, cliente.getFoto());
+			
+			grabado = (cstmt.executeUpdate() == 1)?true:false;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return grabado;
+	}
+
+	@Override
+	public boolean updateCustomer(Cliente cliente) {
+		
+		return grabarCliente(cliente);
+	}
 }	

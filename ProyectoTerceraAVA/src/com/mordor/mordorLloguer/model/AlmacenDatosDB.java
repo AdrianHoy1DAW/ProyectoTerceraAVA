@@ -19,6 +19,8 @@ public interface AlmacenDatosDB {
 	
 	public ArrayList<Cliente> getClientes();
 	public boolean deleteCustomer(String DNI);
+	public boolean grabarCliente(Cliente cliente);
+	public boolean updateCustomer(Cliente cliente);
 	
 	
 	

@@ -9,32 +9,43 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import com.alee.extended.date.WebDateField;
+
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.swing.JButton;
 
 public class AddModifyCustomer extends JInternalFrame {
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JLabel label;
-	private JComboBox comboBox;
+	private JTextField txtDni;
+	private JTextField txtName;
+	private JTextField txtSurname;
+	private JTextField txtAddress;
+	private JTextField txtEmail;
+	private WebDateField txtBirthday;
+	private JTextField txtCp;
+	private JLabel labimg;
+	private JComboBox<String> comboBox;
 	private JButton btnAdd;
 	private JButton btnCancel;
+	private byte[] image;
 
 
 
 	/**
 	 * Create the frame.
 	 */
-	public AddModifyCustomer() {
+	public AddModifyCustomer(String buttonText) {
 		setClosable(true);
 		setBounds(100, 100, 541, 560);
 		
@@ -67,7 +78,7 @@ public class AddModifyCustomer extends JInternalFrame {
 		);
 		panel_2.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
-		btnAdd = new JButton("Add");
+		btnAdd = new JButton(buttonText);
 		panel_2.add(btnAdd);
 		
 		btnCancel = new JButton("Cancel");
@@ -77,61 +88,61 @@ public class AddModifyCustomer extends JInternalFrame {
 		JLabel lblDni = new JLabel("DNI");
 		panel_1.add(lblDni, "cell 0 0,alignx left");
 		
-		textField = new JTextField();
-		panel_1.add(textField, "cell 1 0,growx");
-		textField.setColumns(10);
+		txtDni = new JTextField();
+		panel_1.add(txtDni, "cell 1 0,growx");
+		txtDni.setColumns(10);
 		
 		JLabel lblEmail = new JLabel("Email");
 		panel_1.add(lblEmail, "cell 2 0,alignx left");
 		
-		textField_4 = new JTextField();
-		panel_1.add(textField_4, "cell 3 0,growx");
-		textField_4.setColumns(10);
+		txtEmail = new JTextField();
+		panel_1.add(txtEmail, "cell 3 0,growx");
+		txtEmail.setColumns(10);
 		
 		JLabel lblName = new JLabel("Name");
 		panel_1.add(lblName, "cell 0 1,alignx left");
 		
-		textField_1 = new JTextField();
-		panel_1.add(textField_1, "cell 1 1,growx");
-		textField_1.setColumns(10);
+		txtName = new JTextField();
+		panel_1.add(txtName, "cell 1 1,growx");
+		txtName.setColumns(10);
 		
 		JLabel lblBirthday = new JLabel("Birthday");
 		panel_1.add(lblBirthday, "cell 2 1,alignx left");
 		
-		textField_5 = new JTextField();
-		panel_1.add(textField_5, "cell 3 1,growx");
-		textField_5.setColumns(10);
+		txtBirthday = new WebDateField();
+		panel_1.add(txtBirthday, "cell 3 1,growx");
+		
 		
 		JLabel lblSurname = new JLabel("Surname");
 		panel_1.add(lblSurname, "cell 0 2,alignx left");
 		
-		textField_2 = new JTextField();
-		panel_1.add(textField_2, "cell 1 2,growx");
-		textField_2.setColumns(10);
+		txtSurname = new JTextField();
+		panel_1.add(txtSurname, "cell 1 2,growx");
+		txtSurname.setColumns(10);
 		
 		JLabel lblDrivingLicense = new JLabel("Driving License");
 		panel_1.add(lblDrivingLicense, "cell 2 2,alignx trailing");
 		
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"A", "B", "C", "D", "E", "F", "Z"}));
+		comboBox = new JComboBox<>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"A", "B", "C", "D", "E", "F", "Z"}));
 		panel_1.add(comboBox, "cell 3 2,growx");
 		
 		JLabel lblAddress = new JLabel("Address");
 		panel_1.add(lblAddress, "cell 0 3,alignx left");
 		
-		textField_3 = new JTextField();
-		panel_1.add(textField_3, "cell 1 3,growx");
-		textField_3.setColumns(10);
+		txtAddress = new JTextField();
+		panel_1.add(txtAddress, "cell 1 3,growx");
+		txtAddress.setColumns(10);
 		
 		JLabel lblCp = new JLabel("CP");
 		panel_1.add(lblCp, "cell 2 3,alignx left");
 		
-		textField_6 = new JTextField();
-		panel_1.add(textField_6, "cell 3 3,growx");
-		textField_6.setColumns(10);
+		txtCp = new JTextField();
+		panel_1.add(txtCp, "cell 3 3,growx");
+		txtCp.setColumns(10);
 		
-		label = new JLabel("");
-		label.setIcon(new ImageIcon(AddModifyCustomer.class.getResource("/com/mordor/mordorLloguer/assets/nophotoe.jpg")));
+		labimg = new JLabel("");
+		labimg.setIcon(new ImageIcon(AddModifyCustomer.class.getResource("/com/mordor/mordorLloguer/assets/nophotoe.jpg")));
 		
 		JLabel lblDaleClickA = new JLabel("Dale click a la imagen para cambiarla");
 		GroupLayout gl_panel = new GroupLayout(panel);
@@ -139,7 +150,7 @@ public class AddModifyCustomer extends JInternalFrame {
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(200)
-					.addComponent(label, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(labimg, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGap(207))
 				.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 					.addGap(139)
@@ -150,7 +161,7 @@ public class AddModifyCustomer extends JInternalFrame {
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGap(5)
-					.addComponent(label)
+					.addComponent(labimg)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(lblDaleClickA)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -159,4 +170,105 @@ public class AddModifyCustomer extends JInternalFrame {
 		getContentPane().setLayout(groupLayout);
 
 	}
+	
+	
+	public void setImage(byte[] image) {
+		
+		this.image = image;
+		
+		if(image != null) {
+			
+			try {
+				BufferedImage ima = null;
+				InputStream in = new ByteArrayInputStream(image);
+				
+				ima = ImageIO.read(in);
+				
+				ImageIcon icono = new ImageIcon(ima);
+				Image imageToResize = icono.getImage();
+				Image nuevaResized = imageToResize.getScaledInstance(100, 133, java.awt.Image.SCALE_SMOOTH);
+				
+				labimg.setIcon(new ImageIcon(nuevaResized));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		} else {
+			labimg.setIcon(new ImageIcon(AddModifyCustomer.class.getResource("/com/mordor/mordorLloguer/assets/nophotoe.jpg")));
+		}
+		
+	}
+
+
+	public JTextField getTxtDni() {
+		return txtDni;
+	}
+
+
+
+	public JTextField getTxtName() {
+		return txtName;
+	}
+
+
+
+	public JTextField getTxtSurname() {
+		return txtSurname;
+	}
+
+
+
+	public JTextField getTxtAddress() {
+		return txtAddress;
+	}
+
+
+
+	public JTextField getTxtEmail() {
+		return txtEmail;
+	}
+
+
+
+	public WebDateField getTxtBirthday() {
+		return txtBirthday;
+	}
+
+
+
+	public JTextField getTxtCp() {
+		return txtCp;
+	}
+
+
+
+	public JLabel getLabelImg() {
+		return labimg;
+	}
+
+
+
+	public JComboBox<String> getComboBox() {
+		return comboBox;
+	}
+
+
+
+	public JButton getBtnAdd() {
+		return btnAdd;
+	}
+
+
+
+	public JButton getBtnCancel() {
+		return btnCancel;
+	}
+
+
+
+	public byte[] getImage() {
+		return image;
+	}
+	
+	
 }
