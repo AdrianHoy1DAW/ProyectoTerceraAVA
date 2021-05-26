@@ -23,6 +23,7 @@ import com.mordor.mordorLloguer.view.ClientTableView;
 import com.mordor.mordorLloguer.view.EmployeeTableView;
 import com.mordor.mordorLloguer.view.LoginView;
 import com.mordor.mordorLloguer.view.PropertiesView;
+import com.mordor.mordorLloguer.view.VehicleView;
 import com.mordor.mordorLloguer.view.VistaPrincipal;
 
 public class ControladorPrincipal implements ActionListener {
@@ -31,11 +32,13 @@ public class ControladorPrincipal implements ActionListener {
 	private MyOracleDataBase modelo;
 	private LoginView loginView;
 	private EmployeeTableController employeeController;
+	private VehicleTableController vehicleController;
 	private EmployeeTableView employeeView;
 	private static JDesktopPane desktopPane;
 	private PropertiesView properties;
 	private CustomerTableController ctc;
 	private ClientTableView ctv;
+	private VehicleView vv;
 	
 	
 	public ControladorPrincipal(VistaPrincipal vista, MyOracleDataBase modelo) {
@@ -56,10 +59,12 @@ public class ControladorPrincipal implements ActionListener {
 		properties = new PropertiesView();
 		employeeView = new EmployeeTableView();
 		ctv = new ClientTableView();
+		vv = new VehicleView();
 		
 		
 		employeeController = new EmployeeTableController(employeeView, modelo);
 		ctc = new CustomerTableController(modelo,ctv);
+		vehicleController = new VehicleTableController(modelo,vv);
 	
 		
 		//Action Listener
@@ -68,6 +73,7 @@ public class ControladorPrincipal implements ActionListener {
 		vista.getMntmPreferences().addActionListener(this);
 		vista.getButtonClient().addActionListener(this);
 		vista.getBtnCustomer().addActionListener(this);
+		vista.getButtonVehicle().addActionListener(this);
 		
 		
 		
@@ -77,6 +83,7 @@ public class ControladorPrincipal implements ActionListener {
 		vista.getMntmPreferences().setActionCommand("Open preferences");
 		vista.getButtonClient().setActionCommand("Open ETable");
 		vista.getBtnCustomer().setActionCommand("Open CUstomer");
+		vista.getButtonVehicle().setActionCommand("Open VTable");
 		
 	}
 	
@@ -105,8 +112,16 @@ public class ControladorPrincipal implements ActionListener {
 			openETable();
 		} else if(comand.equals("Open CUstomer")) {
 			openCustomer();
+		} else if(comand.equals("Open VTable")) {
+			openVehicle();
 		}
 		 
+	}
+
+	private void openVehicle() {
+		
+		vehicleController.go();
+		
 	}
 
 	private void openCustomer() {

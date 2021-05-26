@@ -1,11 +1,16 @@
 package com.mordor.mordorLloguer.model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface AlmacenDatosDB {
 
 	public final int ASCENDENTE = 1;
 	public final int DESCENDENTE = 2;
+	public final String CAR = "COCHE";
+	public final String VAN = "FURGONETA";
+	public final String TRUCK = "CAMION";
+	public final String MINIBUS = "MICROBUS";
 	
 	public ArrayList<Empleado> getEmpleados();
 	public ArrayList<Empleado> getEmpleadoPorCP(String cp);
@@ -21,6 +26,13 @@ public interface AlmacenDatosDB {
 	public boolean deleteCustomer(String DNI);
 	public boolean grabarCliente(Cliente cliente);
 	public boolean updateCustomer(Cliente cliente);
+	
+	public ArrayList<Vehiculo> getCoche() throws SQLException;
+	public ArrayList<Vehiculo> getCamion() throws SQLException;
+	public ArrayList<Vehiculo> getFurgoneta() throws SQLException;
+	public ArrayList<Vehiculo> getMicroBus() throws SQLException;
+	
+	
 	
 	
 	

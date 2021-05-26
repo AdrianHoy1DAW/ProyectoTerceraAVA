@@ -3,6 +3,7 @@ package com.mordor.mordorLloguer.model;
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -384,4 +385,117 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return grabarCliente(cliente);
 	}
+
+	
+	private ArrayList<Vehiculo> getVehiculos(String tipo) throws SQLException {
+		
+		ArrayList<Vehiculo> vehiculos = new ArrayList<>();
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		ResultSet rs = null;
+		
+		String query = "{ call GESTIONVEHICULOS.listarvehiculos(?,?)}";
+		
+		try (Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, tipo);
+			cstmt.registerOutParameter(2, OracleTypes.CURSOR);
+			cstmt.execute();
+			
+			rs = (ResultSet) cstmt.getObject(2);
+			
+			while(rs.next()) {
+				
+				String matricula = rs.getString("c1");
+				Double preciodia = rs.getDouble("n1");
+				String marca = rs.getString("c2");
+				String descripcion = rs.getString("c3");
+				String color = rs.getString("c4");
+				String motor = rs.getString("c5");
+				Double cilindrada = rs.getDouble("n2");
+				Date fechaadq = rs.getDate("c6");
+				String estado = rs.getString("c7");
+				char carnet = rs.getString("c8").charAt(0);
+				
+				if(tipo.equals(CAR)) {
+					
+					int numplazas = rs.getInt("n3");
+					int numpuertas = rs.getInt("n4");
+					
+					vehiculos.add(new Coche(matricula, preciodia, marca, descripcion, color
+							,motor,cilindrada,fechaadq,estado,carnet,numplazas,numpuertas));
+					
+				} else if(tipo.equals(TRUCK)) {
+					
+					int numruedas = rs.getInt("n3");
+					double mma = rs.getDouble("n4");
+					
+
+					vehiculos.add(new Camion(matricula, preciodia, marca, descripcion, color
+							,motor,cilindrada,fechaadq,estado,carnet,numruedas,mma));
+					
+					
+				} else if(tipo.equals(VAN)) {
+					
+					double mma = rs.getDouble("n3");
+					
+
+					vehiculos.add(new Furgoneta(matricula, preciodia, marca, descripcion, color
+							,motor,cilindrada,fechaadq,estado,carnet,mma));
+					
+					
+				} else if(tipo.equals(MINIBUS)) {
+					
+					int numplazas = rs.getInt("n3");
+					int medida = rs.getInt("n4");
+					
+
+					vehiculos.add(new Microbus(matricula, preciodia, marca, descripcion, color
+							,motor,cilindrada,fechaadq,estado,carnet,numplazas,medida));
+					
+					
+				}
+				
+			}
+			
+		}
+		
+		if(rs != null) {
+			rs.close();
+		}
+		
+		
+		
+		return vehiculos;
+	}
+
+	@Override
+	public ArrayList<Vehiculo> getCoche() throws SQLException {
+		
+		
+		
+		return getVehiculos(CAR);
+	}
+
+	@Override
+	public ArrayList<Vehiculo> getCamion() throws SQLException {
+		
+		return getVehiculos(TRUCK);
+	}
+
+	@Override
+	public ArrayList<Vehiculo> getFurgoneta() throws SQLException {
+		
+		return getVehiculos(VAN);
+	}
+
+	@Override
+	public ArrayList<Vehiculo> getMicroBus() throws SQLException {
+		
+		return getVehiculos(MINIBUS);
+	}
+	
+	
 }	

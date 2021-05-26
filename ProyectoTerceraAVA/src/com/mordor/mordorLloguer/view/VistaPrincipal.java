@@ -25,6 +25,7 @@ public class VistaPrincipal extends JFrame {
 	private JMenuItem mntmExit;
 	private JDesktopPane desktopPane;
 	private JButton btnCustomer;
+	private JButton buttonVehicle;
 
 
 
@@ -74,6 +75,9 @@ public class VistaPrincipal extends JFrame {
 		btnCustomer = new JButton("");
 		btnCustomer.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/grupo.png")));
 		toolBar.add(btnCustomer);
+		
+		buttonVehicle = new JButton("");
+		toolBar.add(buttonVehicle);
 		
 		desktopPane = new JDesktopPane();
 		contentPane.add(desktopPane, BorderLayout.CENTER);
@@ -125,6 +129,12 @@ public class VistaPrincipal extends JFrame {
 
 	public JButton getBtnCustomer() {
 		return btnCustomer;
+	}
+
+
+
+	public JButton getButtonVehicle() {
+		return buttonVehicle;
 	}
 	
 	
