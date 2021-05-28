@@ -8,11 +8,11 @@ import javax.swing.table.AbstractTableModel;
 
 public abstract class MyTableModel<T> extends AbstractTableModel {
 
-	protected final String HEADER[];
+	protected final  List<String> HEADER;
 	
 	protected List<T> data;
 	
-	public MyTableModel(List<T> data, String[] header) {
+	public MyTableModel(List<T> data, List<String> header) {
 		this.data = data;
 		this.HEADER = header;
 	}
@@ -20,7 +20,7 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		
-		return HEADER.length;
+		return HEADER.size();
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 	@Override
 	public String getColumnName(int column) {
 		
-		return HEADER[column];
+		return HEADER.get(column);
 		
 	}
 	
@@ -90,7 +90,7 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 		
 	}
 
-	public String[] getHEADER() {
+	public List<String> getHEADER() {
 		return HEADER;
 	}
 

@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -92,7 +93,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 
 	public void rellenarTabla() {
 		
-		String[] header  =  {"DNI","NOMBRE","APELLIDOS","DOMICILIO","CP","EMAIL","FECHANAC","CARGO"};
+		ArrayList<String> header =  new ArrayList<>(Arrays.asList(new String[]{"DNI","NOMBRE","APELLIDOS","DOMICILIO","CP","EMAIL","FECHANAC","CARGO"}));
 			
 		metm = new MyEmployeeTableModel(empleados,header);
 		
@@ -234,7 +235,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		
 		
 		
-		public MyEmployeeTableModel(List<Empleado> data, String[] header) {
+		public MyEmployeeTableModel(List<Empleado> data, List<String> header) {
 			super(data, header);
 			
 			
@@ -336,9 +337,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 			
 		}
 		
-		public String[] getHeader() {
-			return super.HEADER;
-		}
+
 	
 	}
 

@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import com.alee.laf.table.WebTable;
+
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,7 +19,13 @@ import javax.swing.JButton;
 public class JPVehicle extends JPanel {
 	private JTextField txtRegistration;
 	private JTextField txtModel;
-	private JTable table;
+	private WebTable table;
+	private JComboBox comboBoxEngine;
+	private JComboBox comboBoxLicense;
+	private JButton btnAdd;
+	private JButton btnDelete;
+	private JButton btnEdit;
+	private JButton btnCancel;
 
 	/**
 	 * Create the panel.
@@ -52,23 +61,23 @@ public class JPVehicle extends JPanel {
 		);
 		panel_2.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
-		JButton btnAdd = new JButton("Add");
+		btnAdd = new JButton("Add");
 		panel_2.add(btnAdd);
 		
-		JButton btnDelete = new JButton("Delete");
+		btnDelete = new JButton("Delete");
 		panel_2.add(btnDelete);
 		
-		JButton btnEdit = new JButton("Edit");
+		btnEdit = new JButton("Edit");
 		panel_2.add(btnEdit);
 		
-		JButton btnCancel = new JButton("Cancel");
+		btnCancel = new JButton("Cancel");
 		panel_2.add(btnCancel);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 		
-		table = new JTable();
+		table = new WebTable();
 		scrollPane.setViewportView(table);
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		
@@ -89,15 +98,55 @@ public class JPVehicle extends JPanel {
 		JLabel lblEngin = new JLabel("Engine");
 		panel.add(lblEngin);
 		
-		JComboBox comboBoxEngine = new JComboBox();
+		comboBoxEngine = new JComboBox();
 		panel.add(comboBoxEngine);
 		
 		JLabel lblLicense = new JLabel("License");
 		panel.add(lblLicense);
 		
-		JComboBox comboBoxLicense = new JComboBox();
+		comboBoxLicense = new JComboBox();
 		panel.add(comboBoxLicense);
 		setLayout(groupLayout);
 
 	}
+
+	public JTextField getTxtRegistration() {
+		return txtRegistration;
+	}
+
+	public JTextField getTxtModel() {
+		return txtModel;
+	}
+
+	public WebTable getTable() {
+		return table;
+	}
+
+	public JComboBox getComboBoxEngine() {
+		return comboBoxEngine;
+	}
+
+	public JComboBox getComboBoxLicense() {
+		return comboBoxLicense;
+	}
+
+	public JButton getBtnAdd() {
+		return btnAdd;
+	}
+
+	public JButton getBtnDelete() {
+		return btnDelete;
+	}
+
+	public JButton getBtnEdit() {
+		return btnEdit;
+	}
+
+	public JButton getBtnCancel() {
+		return btnCancel;
+	}
+	
+	
+	
+	
 }

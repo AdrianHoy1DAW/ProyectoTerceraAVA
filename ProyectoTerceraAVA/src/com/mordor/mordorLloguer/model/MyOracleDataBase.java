@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
@@ -387,7 +389,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 	}
 
 	
-	private ArrayList<Vehiculo> getVehiculos(String tipo) throws SQLException {
+	private ArrayList<?> getVehiculos(String tipo) throws SQLException, ParseException {
 		
 		ArrayList<Vehiculo> vehiculos = new ArrayList<>();
 		
@@ -405,6 +407,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 			cstmt.execute();
 			
 			rs = (ResultSet) cstmt.getObject(2);
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 			
 			while(rs.next()) {
 				
@@ -415,7 +418,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 				String color = rs.getString("c4");
 				String motor = rs.getString("c5");
 				Double cilindrada = rs.getDouble("n2");
-				Date fechaadq = rs.getDate("c6");
+				Date fechaadq = new Date(format.parse(rs.getString("c6")).getTime());
 				String estado = rs.getString("c7");
 				char carnet = rs.getString("c8").charAt(0);
 				
@@ -472,29 +475,29 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 	}
 
 	@Override
-	public ArrayList<Vehiculo> getCoche() throws SQLException {
+	public ArrayList<Coche> getCoche() throws SQLException, ParseException {
 		
 		
 		
-		return getVehiculos(CAR);
+		return (ArrayList<Coche>) getVehiculos(CAR);
 	}
 
 	@Override
-	public ArrayList<Vehiculo> getCamion() throws SQLException {
+	public ArrayList<Camion> getCamion() throws SQLException, ParseException {
 		
-		return getVehiculos(TRUCK);
+		return (ArrayList<Camion>) getVehiculos(TRUCK);
 	}
 
 	@Override
-	public ArrayList<Vehiculo> getFurgoneta() throws SQLException {
+	public ArrayList<Furgoneta> getFurgoneta() throws SQLException, ParseException {
 		
-		return getVehiculos(VAN);
+		return (ArrayList<Furgoneta>) getVehiculos(VAN);
 	}
 
 	@Override
-	public ArrayList<Vehiculo> getMicroBus() throws SQLException {
+	public ArrayList<Microbus> getMicroBus() throws SQLException, ParseException {
 		
-		return getVehiculos(MINIBUS);
+		return (ArrayList<Microbus>) getVehiculos(MINIBUS);
 	}
 	
 	

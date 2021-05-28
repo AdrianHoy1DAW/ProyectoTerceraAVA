@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -73,7 +74,7 @@ public class CustomerTableController implements ActionListener,TableModelListene
 	}
 	
 	public void rellenarTabla() {
-		String[] header = {"DNI","Nombre","Apellidos","Domicilio","CP","Email","FechaNac","Carnet"};
+		ArrayList<String> header =  new ArrayList<>(Arrays.asList(new String[]{"DNI","Nombre","Apellidos","Domicilio","CP","Email","FechaNac","Carnet"}));
 		 cliente = new ArrayList<Cliente>();
 		
 		mctm = new MyCustomerTableModel(cliente,header);
@@ -402,7 +403,7 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		
 		
 		
-		public MyCustomerTableModel(List<Cliente> data, String[] header) {
+		public MyCustomerTableModel(List<Cliente> data, List<String> header) {
 			super(data, header);
 			
 		}

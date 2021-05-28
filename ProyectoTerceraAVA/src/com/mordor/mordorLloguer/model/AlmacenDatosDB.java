@@ -1,6 +1,7 @@
 package com.mordor.mordorLloguer.model;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public interface AlmacenDatosDB {
@@ -27,10 +28,10 @@ public interface AlmacenDatosDB {
 	public boolean grabarCliente(Cliente cliente);
 	public boolean updateCustomer(Cliente cliente);
 	
-	public ArrayList<Vehiculo> getCoche() throws SQLException;
-	public ArrayList<Vehiculo> getCamion() throws SQLException;
-	public ArrayList<Vehiculo> getFurgoneta() throws SQLException;
-	public ArrayList<Vehiculo> getMicroBus() throws SQLException;
+	public ArrayList<Coche> getCoche() throws SQLException, ParseException;
+	public ArrayList<Camion> getCamion() throws SQLException, ParseException;
+	public ArrayList<Furgoneta> getFurgoneta() throws SQLException, ParseException;
+	public ArrayList<Microbus> getMicroBus() throws SQLException, ParseException;
 	
 	
 	
