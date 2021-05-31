@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 
 public class VehicleView extends JInternalFrame {
 	public static final int CAR = 0;
-	public static final int TRUCK = 1;
-	public static final int VAN = 2;
+	public static final int VAN = 1;
+	public static final int TRUCK = 2;
 	public static final int MINIBUS = 3;
 	
 	

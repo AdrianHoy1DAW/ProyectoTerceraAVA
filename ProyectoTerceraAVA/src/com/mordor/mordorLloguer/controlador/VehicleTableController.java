@@ -1,5 +1,7 @@
 package com.mordor.mordorLloguer.controlador;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import com.mordor.mordorLloguer.view.JIFProcess;
 import com.mordor.mordorLloguer.view.JPVehicle;
 import com.mordor.mordorLloguer.view.VehicleView;
 
-public class VehicleTableController implements TableModelListener, DocumentListener {
+public class VehicleTableController implements TableModelListener, DocumentListener, ActionListener {
 
 	private AlmacenDatosDB modelo;
 	private VehicleView vista;
@@ -54,8 +56,33 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		
 		vista.getPanelCar().getTxtRegistration().getDocument().addDocumentListener(this);
 		vista.getPanelCar().getTxtModel().getDocument().addDocumentListener(this);
+		vista.getPanelCar().getComboBoxEngine().addActionListener(this);
+		vista.getPanelCar().getComboBoxLicense().addActionListener(this);
+		
+		vista.getPanelTruck().getTxtModel().getDocument().addDocumentListener(this);
+		vista.getPanelTruck().getTxtRegistration().getDocument().addDocumentListener(this);
+		vista.getPanelTruck().getComboBoxEngine().addActionListener(this);
+		vista.getPanelTruck().getComboBoxLicense().addActionListener(this);
+		
+		vista.getPanelVan().getTxtModel().getDocument().addDocumentListener(this);
+		vista.getPanelVan().getTxtRegistration().getDocument().addDocumentListener(this);
+		vista.getPanelVan().getComboBoxEngine().addActionListener(this);
+		vista.getPanelVan().getComboBoxLicense().addActionListener(this);
+		
+		vista.getPanelMinibus().getTxtModel().getDocument().addDocumentListener(this);
+		vista.getPanelMinibus().getTxtRegistration().getDocument().addDocumentListener(this);
+		vista.getPanelMinibus().getComboBoxEngine().addActionListener(this);
+		vista.getPanelMinibus().getComboBoxLicense().addActionListener(this);
 		
 		
+		vista.getPanelCar().getComboBoxEngine().setActionCommand("Filtrar");
+		vista.getPanelCar().getComboBoxLicense().setActionCommand("Filtrar");
+		vista.getPanelTruck().getComboBoxEngine().setActionCommand("Filtrar");
+		vista.getPanelTruck().getComboBoxLicense().setActionCommand("Filtrar");
+		vista.getPanelVan().getComboBoxEngine().setActionCommand("Filtrar");
+		vista.getPanelVan().getComboBoxLicense().setActionCommand("Filtrar");
+		vista.getPanelMinibus().getComboBoxEngine().setActionCommand("Filtrar");
+		vista.getPanelMinibus().getComboBoxLicense().setActionCommand("Filtrar");
 		
 	}
 	
@@ -122,19 +149,61 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 	}
 
 	private void ordenar() {
-		List<Coche> tmp = null; 
+		List<? extends Vehiculo> tmp = null; 
+		
 		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
-			 tmp = coches.stream().filter((e) -> e.getMatricula().toUpperCase().contains(vista.getPanelCar().getTxtRegistration().getText().toUpperCase()))
-					 		.filter((e) -> e.getMarca().toUpperCase().contains(vista.getPanelCar().getTxtModel().getText().toUpperCase()))
-							.collect(Collectors.toList());
+
+			tmp = filtrar(coches,vista.getPanelCar());
+			MyCarTableModel.mctm = new MyCarTableModel((List<Coche>) tmp);
+			vista.getPanelCar().getTable().setModel(MyCarTableModel.mctm);
+			MyCarTableModel.mctm.addTableModelListener(this);
 			 
-			 rellenarCombo(tmp, vista.getPanelCar());
+		}else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
+		
+			tmp = filtrar(camiones,vista.getPanelTruck());
+			MyTruckTableModel.mttm = new MyTruckTableModel((List<Camion>) tmp);
+			vista.getPanelTruck().getTable().setModel(MyTruckTableModel.mttm);
+			MyTruckTableModel.mttm.addTableModelListener(this);
+			
+		}else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
+			
+			tmp = filtrar(furgonetas,vista.getPanelVan());
+			MyVanTableModel.mvtm = new MyVanTableModel((List<Furgoneta>) tmp);
+			vista.getPanelVan().getTable().setModel(MyVanTableModel.mvtm );
+			MyVanTableModel.mvtm.addTableModelListener(this);
+			
+		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
+			
+			tmp = filtrar(buses,vista.getPanelMinibus());
+			MyBusTableModel.mbtm = new MyBusTableModel((List<Microbus>) tmp);
+			vista.getPanelMinibus().getTable().setModel(MyBusTableModel.mbtm );
+			MyBusTableModel.mbtm.addTableModelListener(this);
+			
 		}
 		
-		MyCarTableModel.mctm = new MyCarTableModel(tmp);
-		vista.getPanelCar().getTable().setModel(MyCarTableModel.mctm);
-		MyCarTableModel.mctm.addTableModelListener(this);
+
 		
+		
+	}
+	
+	private List<? extends Vehiculo> filtrar(List<? extends Vehiculo> lista, JPVehicle jpv) {
+		List<? extends Vehiculo> tmp = null; 
+		
+		 tmp = lista.stream().filter((e) -> e.getMatricula().toUpperCase().contains(jpv.getTxtRegistration().getText().toUpperCase()))
+			 		.filter((e) -> e.getMarca().toUpperCase().contains(jpv.getTxtModel().getText().toUpperCase()))
+			 		.filter((e) -> e.getMotor().toUpperCase().contains(String.valueOf(jpv.getComboBoxEngine().getSelectedItem()).toUpperCase()) || jpv.getComboBoxEngine().getSelectedItem().toString().equals("All"))
+					.filter((e) -> String.valueOf(e.getCarnet()).toUpperCase().contains(String.valueOf(jpv.getComboBoxLicense().getSelectedItem()).toUpperCase()) || jpv.getComboBoxLicense().getSelectedItem().toString().equals("All"))
+			 		.collect(Collectors.toList());
+	 
+	 
+	 String dato = String.valueOf(jpv.getComboBoxEngine().getSelectedItem());
+	 String datoLicense = String.valueOf(jpv.getComboBoxLicense().getSelectedItem());
+	 
+	 rellenarCombo(tmp, jpv);
+	 jpv.getComboBoxEngine().setSelectedItem(dato);
+	 jpv.getComboBoxLicense().setSelectedItem(datoLicense);
+		
+	 return tmp;
 		
 	}
 	
@@ -238,6 +307,16 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 	public void removeUpdate(DocumentEvent arg0) {
 		// TODO Auto-generated method stub
 		ordenar();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		String comand = arg0.getActionCommand();
+		
+		if(comand.equals("Filtrar")) {
+			ordenar();
+		}
+		
 	}
 	
 }
