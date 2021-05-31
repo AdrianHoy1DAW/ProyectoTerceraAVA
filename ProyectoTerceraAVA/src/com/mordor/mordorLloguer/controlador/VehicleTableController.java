@@ -27,8 +27,9 @@ import com.mordor.mordorLloguer.model.MyBusTableModel;
 import com.mordor.mordorLloguer.model.MyCarTableModel;
 import com.mordor.mordorLloguer.model.MyTruckTableModel;
 import com.mordor.mordorLloguer.model.MyVanTableModel;
-
+import com.mordor.mordorLloguer.model.Vehiculo;
 import com.mordor.mordorLloguer.view.JIFProcess;
+import com.mordor.mordorLloguer.view.JPVehicle;
 import com.mordor.mordorLloguer.view.VehicleView;
 
 public class VehicleTableController implements TableModelListener, DocumentListener {
@@ -52,6 +53,7 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 	private void inicializar() {
 		
 		vista.getPanelCar().getTxtRegistration().getDocument().addDocumentListener(this);
+		vista.getPanelCar().getTxtModel().getDocument().addDocumentListener(this);
 		
 		
 		
@@ -88,19 +90,45 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 	}
 	
 	private void rellenarComboBox() {
+
 		
-		Set<String> tmp = coches.stream().map((e) -> String.valueOf(e.getCarnet()))
-							.collect(Collectors.toSet());
-		Vector<String> tm = new Vector<>(tmp);
-		vista.getPanelCar().getComboBoxLicense().setModel(new DefaultComboBoxModel<String>(tm));
+		//coches
+		rellenarCombo(coches, vista.getPanelCar());
+		//camiones
+		rellenarCombo(camiones, vista.getPanelTruck());
+		//furgonetas
+		rellenarCombo(furgonetas, vista.getPanelVan());
+		//microbus
+		rellenarCombo(buses, vista.getPanelMinibus());
 		
+		
+	}
+	
+	private void rellenarCombo(List<? extends Vehiculo> vehiculo, JPVehicle jpv) {
+		
+		Set<String> tmp;
+		Vector<String> tm;
+		
+		tmp = vehiculo.stream().map((e) -> String.valueOf(e.getCarnet()))
+				.collect(Collectors.toSet());
+		tm = new Vector<>(tmp);
+		tm.add(0, "All");
+		jpv.getComboBoxLicense().setModel(new DefaultComboBoxModel<String>(tm));
+		tmp = vehiculo.stream().map((e) -> String.valueOf(e.getMotor()))
+			.collect(Collectors.toSet());
+		tm = new Vector<>(tmp);
+		tm.add(0,"All");
+		jpv.getComboBoxEngine().setModel(new DefaultComboBoxModel<String>(tm));
 	}
 
 	private void ordenar() {
 		List<Coche> tmp = null; 
-		if(vista.getTabbedPane().getSelectedIndex() == 0) {
+		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
 			 tmp = coches.stream().filter((e) -> e.getMatricula().toUpperCase().contains(vista.getPanelCar().getTxtRegistration().getText().toUpperCase()))
+					 		.filter((e) -> e.getMarca().toUpperCase().contains(vista.getPanelCar().getTxtModel().getText().toUpperCase()))
 							.collect(Collectors.toList());
+			 
+			 rellenarCombo(tmp, vista.getPanelCar());
 		}
 		
 		MyCarTableModel.mctm = new MyCarTableModel(tmp);
