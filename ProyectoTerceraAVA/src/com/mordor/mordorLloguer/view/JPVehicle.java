@@ -20,8 +20,8 @@ public class JPVehicle extends JPanel {
 	private JTextField txtRegistration;
 	private JTextField txtModel;
 	private WebTable table;
-	private JComboBox comboBoxEngine;
-	private JComboBox comboBoxLicense;
+	private JComboBox<String> comboBoxEngine;
+	private JComboBox<String> comboBoxLicense;
 	private JButton btnAdd;
 	private JButton btnDelete;
 	private JButton btnEdit;
@@ -122,11 +122,11 @@ public class JPVehicle extends JPanel {
 		return table;
 	}
 
-	public JComboBox getComboBoxEngine() {
+	public JComboBox<String> getComboBoxEngine() {
 		return comboBoxEngine;
 	}
 
-	public JComboBox getComboBoxLicense() {
+	public JComboBox<String> getComboBoxLicense() {
 		return comboBoxLicense;
 	}
 

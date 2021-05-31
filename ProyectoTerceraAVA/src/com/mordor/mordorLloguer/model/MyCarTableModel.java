@@ -8,8 +8,11 @@ public class MyCarTableModel extends MyVehicleTableModel<Coche> {
 
 	public static MyCarTableModel mctm;
 	
-	public MyCarTableModel(List<Coche> coches,List<String> header) {
-		super(coches, header);
+	public MyCarTableModel(List<Coche> coches) {
+		super(coches);
+		
+		HEADER.add("NumPlazas");
+		HEADER.add("NumPuertas");
 		
 		
 	}

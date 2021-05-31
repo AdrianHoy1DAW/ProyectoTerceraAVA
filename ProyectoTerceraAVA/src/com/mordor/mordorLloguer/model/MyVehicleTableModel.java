@@ -8,10 +8,10 @@ import oracle.sql.DATE;
 
 public   class MyVehicleTableModel<T extends Vehiculo> extends MyTableModel<T> {
 
-	public MyVehicleTableModel(List<T> data, List<String> header) {
+	public MyVehicleTableModel(List<T> data) {
 		super(data, new ArrayList<>(Arrays.asList(new String[]{"Matricula","Marca","Color","Motor","Cilindrada","Estado","Carnet"})));
 		
-		HEADER.addAll(header);
+		
 	}
 
 	@Override

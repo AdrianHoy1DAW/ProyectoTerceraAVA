@@ -77,6 +77,7 @@ public class VistaPrincipal extends JFrame {
 		toolBar.add(btnCustomer);
 		
 		buttonVehicle = new JButton("");
+		buttonVehicle.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
 		toolBar.add(buttonVehicle);
 		
 		desktopPane = new JDesktopPane();

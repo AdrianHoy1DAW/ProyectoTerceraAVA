@@ -6,9 +6,11 @@ public class MyTruckTableModel extends MyVehicleTableModel<Camion>{
 
 	public static MyTruckTableModel mttm;
 	
-	public MyTruckTableModel(List<Camion> data, List<String> header) {
-		super(data, header);
-		// TODO Auto-generated constructor stub
+	public MyTruckTableModel(List<Camion> data) {
+		super(data);
+		
+		HEADER.add("NumRuedas");
+		HEADER.add("MMA");
 	}
 
 	@Override

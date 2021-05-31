@@ -6,8 +6,10 @@ public class MyVanTableModel extends MyVehicleTableModel<Furgoneta> {
 
 	public static MyVanTableModel mvtm;
 	
-	public MyVanTableModel(List<Furgoneta> data, List<String> header) {
-		super(data, header);
+	public MyVanTableModel(List<Furgoneta> data) {
+		super(data);
+		
+		HEADER.add("MMA");
 		
 	}
 

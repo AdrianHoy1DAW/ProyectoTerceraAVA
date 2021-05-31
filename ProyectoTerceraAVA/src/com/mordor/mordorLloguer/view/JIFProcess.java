@@ -18,6 +18,8 @@ import javax.swing.ImageIcon;
 
 public class JIFProcess extends JInternalFrame {
 	private JProgressBar progressBar;
+	private JLabel lblTexto;
+	private JLabel label;
 
 
 
@@ -26,7 +28,7 @@ public class JIFProcess extends JInternalFrame {
 	 */
 	public JIFProcess(SwingWorker task,String msg) {
 		setFrameIcon(new ImageIcon(JIFProcess.class.getResource("/com/mordor/mordorLloguer/assets/load.png")));
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 453, 296);
 		
 		JPanel panel = new JPanel();
 		
@@ -38,35 +40,42 @@ public class JIFProcess extends JInternalFrame {
 			}
 		});
 		
-		JLabel label = new JLabel(msg);
+		JPanel panel_1 = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(166)
-							.addComponent(label)))
-					.addContainerGap())
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap(189, Short.MAX_VALUE)
-					.addComponent(btnCancel)
-					.addGap(170))
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(panel, GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+								.addContainerGap())
+							.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 412, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap()))
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addComponent(btnCancel)
+							.addGap(176))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(43)
-					.addComponent(label)
-					.addGap(41)
+					.addGap(29)
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+					.addGap(18)
 					.addComponent(btnCancel)
-					.addGap(37))
+					.addContainerGap(43, Short.MAX_VALUE))
 		);
+		panel_1.setLayout(new MigLayout("", "[grow,center]", "[][]"));
+		
+		label = new JLabel(msg);
+		panel_1.add(label, "cell 0 0");
+		
+		lblTexto = new JLabel("");
+		panel_1.add(lblTexto, "cell 0 1");
 		panel.setLayout(new MigLayout("", "[grow,fill]", "[grow,fill][grow,fill]"));
 		
 		progressBar = new JProgressBar();
@@ -80,5 +89,17 @@ public class JIFProcess extends JInternalFrame {
 
 	public JProgressBar getProgressBar() {
 		return progressBar;
+	}
+
+
+
+	public JLabel getLblTexto() {
+		return lblTexto;
+	}
+
+
+
+	public JLabel getLabel() {
+		return label;
 	}
 }

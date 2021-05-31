@@ -6,9 +6,11 @@ public class MyBusTableModel extends MyVehicleTableModel<Microbus> {
 	
 	public static MyBusTableModel mbtm;
 
-	public MyBusTableModel(List<Microbus> data, List<String> header) {
-		super(data, header);
-		// TODO Auto-generated constructor stub
+	public MyBusTableModel(List<Microbus> data) {
+		super(data);
+		
+		HEADER.add("Plazas");
+		HEADER.add("Medida");
 	}
 
 	

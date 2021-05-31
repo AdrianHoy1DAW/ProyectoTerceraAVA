@@ -25,7 +25,7 @@ public class VehicleView extends JInternalFrame {
 	 */
 	public VehicleView() {
 		setClosable(true);
-		setBounds(100, 100, 645, 529);
+		setBounds(100, 100, 744, 609);
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
