@@ -13,20 +13,25 @@ public class MyCarTableModel extends MyVehicleTableModel<Coche> {
 		
 		
 	}
+	
 
 	
 	@Override
 	public Object getValueAt(int row, int col) {
 		switch(col) {
-			
+		
 		case 7:
-			return ((Coche) data.get(row)).getNumplazas();
+			return data.get(row).getNumplazas();
 		case 8:
 			return data.get(row).getNumpuertas();
-		default: super.getValueAt(row, col);
+		default: return super.getValueAt(row, col);
 		
 		}
-		return null;
+	}
+	
+	@Override
+	public void newData(List<Coche> data) {
+		super.newData(data);
 	}
 
 	

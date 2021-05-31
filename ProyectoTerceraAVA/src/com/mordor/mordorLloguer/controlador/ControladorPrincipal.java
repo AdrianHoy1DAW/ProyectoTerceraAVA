@@ -120,6 +120,7 @@ public class ControladorPrincipal implements ActionListener {
 
 	private void openVehicle() {
 		
+		
 		vehicleController.go();
 		
 	}

@@ -22,24 +22,22 @@ public   class MyVehicleTableModel<T extends Vehiculo> extends MyTableModel<T> {
 			return data.get(row).getMatricula();
 			
 		case 1:
-			return data.get(row).getPreciodia();
+			return data.get(row).getMarca();
 			
 		case 2:
-			return data.get(row).getMarca();
-		case 3:
-			return data.get(row).getDescripcion();
-		case 4:
 			return data.get(row).getColor();
-		case 5:
+		case 3:
 			return data.get(row).getMotor();
-		case 6:
+		case 4:
 			return data.get(row).getCilindrada();
-		case 7:
-			return data.get(row).getFechaadq();
-		case 8:
+		case 5:
 			return data.get(row).getEstado();
-		case 9:
+			
+		case 6:
 			return data.get(row).getCarnet();
+		
+			
+			
 		
 		}
 		
@@ -49,6 +47,7 @@ public   class MyVehicleTableModel<T extends Vehiculo> extends MyTableModel<T> {
 	
 	public void newData(List<T> data) {
 		this.data = data;
+		
 	}
 	
 
