@@ -557,6 +557,132 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return deleteVehicle(MINIBUS,matricula);
 	}
+
+	@Override
+	public boolean updateCar(Coche c) throws SQLException {
+		
+		boolean update = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONVEHICULOS.actualizarCoche(?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		try (Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, c.getMatricula());
+			cstmt.setDouble(2, c.getPreciodia());
+			cstmt.setString(3, c.getMarca());
+			cstmt.setString(4, c.getDescripcion());
+			cstmt.setString(5, c.getColor());
+			cstmt.setString(6, c.getMotor());
+			cstmt.setDouble(7, c.getCilindrada());
+			cstmt.setDate(8, c.getFechaadq());
+			cstmt.setString(9, c.getEstado());
+			cstmt.setString(10, String.valueOf(c.getCarnet()));
+			cstmt.setInt(11, c.getNumplazas());
+			cstmt.setInt(12, c.getNumpuertas());
+			
+			update = (cstmt.executeUpdate() == 1)? true:false;
+		} 
+		
+		return update;
+	}
+
+	@Override
+	public boolean updateTruck(Camion c) throws SQLException {
+		
+		boolean update = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONVEHICULOS.actualizarCamion(?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		try (Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, c.getMatricula());
+			cstmt.setDouble(2, c.getPreciodia());
+			cstmt.setString(3, c.getMarca());
+			cstmt.setString(4, c.getDescripcion());
+			cstmt.setString(5, c.getColor());
+			cstmt.setString(6, c.getMotor());
+			cstmt.setDouble(7, c.getCilindrada());
+			cstmt.setDate(8, c.getFechaadq());
+			cstmt.setString(9, c.getEstado());
+			cstmt.setString(10, String.valueOf(c.getCarnet()));
+			cstmt.setInt(11, c.getNumruedas());
+			cstmt.setDouble(12, c.getMma());
+			
+			update = (cstmt.executeUpdate() == 1)? true:false;
+		} 
+		
+		return update;
+		
+		
+		
+	}
+
+	@Override
+	public boolean updateVan(Furgoneta f) throws SQLException {
+		
+		boolean update = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONVEHICULOS.actualizarFurgoneta(?,?,?,?,?,?,?,?,?,?,?)";
+		
+		try (Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, f.getMatricula());
+			cstmt.setDouble(2, f.getPreciodia());
+			cstmt.setString(3, f.getMarca());
+			cstmt.setString(4, f.getDescripcion());
+			cstmt.setString(5, f.getColor());
+			cstmt.setString(6, f.getMotor());
+			cstmt.setDouble(7, f.getCilindrada());
+			cstmt.setDate(8, f.getFechaadq());
+			cstmt.setString(9, f.getEstado());
+			cstmt.setString(10, String.valueOf(f.getCarnet()));
+			cstmt.setDouble(11, f.getMma());
+			
+			
+			update = (cstmt.executeUpdate() == 1)? true:false;
+		} 
+		
+		return update;
+	}
+
+	@Override
+	public boolean updateMinibus(Microbus m) throws SQLException {
+		boolean update = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONVEHICULOS.actualizarMicrobus(?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		try (Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, m.getMatricula());
+			cstmt.setDouble(2, m.getPreciodia());
+			cstmt.setString(3, m.getMarca());
+			cstmt.setString(4, m.getDescripcion());
+			cstmt.setString(5, m.getColor());
+			cstmt.setString(6, m.getMotor());
+			cstmt.setDouble(7, m.getCilindrada());
+			cstmt.setDate(8, m.getFechaadq());
+			cstmt.setString(9, m.getEstado());
+			cstmt.setString(10, String.valueOf(m.getCarnet()));
+			cstmt.setInt(11, m.getNumplazas());
+			cstmt.setDouble(12, m.getMedida());
+			
+			update = (cstmt.executeUpdate() == 1)? true:false;
+		} 
+		
+		return update;
+	}
 	
 	
 	

@@ -38,6 +38,11 @@ public interface AlmacenDatosDB {
 	public boolean deleteVan(String matricula) throws SQLException;
 	public boolean deleteMinibus(String matricula) throws SQLException;
 	
+	public boolean updateCar(Coche c) throws SQLException;
+	public boolean updateTruck(Camion c) throws SQLException;
+	public boolean updateVan(Furgoneta f) throws SQLException;
+	public boolean updateMinibus(Microbus m) throws SQLException;
+	
 	
 	
 	

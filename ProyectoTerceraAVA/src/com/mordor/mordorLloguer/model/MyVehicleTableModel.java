@@ -39,11 +39,12 @@ public   class MyVehicleTableModel<T extends Vehiculo> extends MyTableModel<T> {
 			
 			
 		
-		}
-		
+		}		
 		
 		return null;
 	}
+	
+	
 	
 	public void newData(List<T> data) {
 		this.data = data;
