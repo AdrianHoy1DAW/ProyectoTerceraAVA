@@ -33,6 +33,11 @@ public interface AlmacenDatosDB {
 	public ArrayList<Furgoneta> getFurgoneta() throws SQLException, ParseException;
 	public ArrayList<Microbus> getMicroBus() throws SQLException, ParseException;
 	
+	public boolean deleteCar(String matricula) throws SQLException;
+	public boolean deleteTruck(String matricula) throws SQLException;
+	public boolean deleteVan(String matricula) throws SQLException;
+	public boolean deleteMinibus(String matricula) throws SQLException;
+	
 	
 	
 	

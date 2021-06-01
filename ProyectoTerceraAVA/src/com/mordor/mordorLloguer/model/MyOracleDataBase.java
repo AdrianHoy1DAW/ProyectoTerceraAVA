@@ -500,5 +500,65 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		return (ArrayList<Microbus>) getVehiculos(MINIBUS);
 	}
 	
+	private boolean deleteVehicle(String tipo, String matricula) throws SQLException {
+		
+		boolean borrado = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "";
+		
+		if(tipo.equals(CAR)) {
+			 query = "{ call GESTIONVEHICULOS.borrarCoche(?)}";
+		} else if(tipo.equals(VAN)) {
+			 query = "{ call GESTIONVEHICULOS.borrarFurgoneta(?)}";
+		} else if(tipo.equals(TRUCK)) {
+			 query = "{ call GESTIONVEHICULOS.borrarCamion(?)}";
+		} else if(tipo.equals(MINIBUS)) {
+			 query = "{ call GESTIONVEHICULOS.borrarMicrobus(?)}";
+		}
+		
+		
+		try (Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, matricula);
+			
+			borrado = (cstmt.executeUpdate() == 1)? true:false;
+			
+		}
+		
+		
+		return borrado;
+		
+	}
+
+	@Override
+	public boolean deleteCar(String matricula) throws SQLException {
+		
+		return deleteVehicle(CAR,matricula);
+		
+	}
+
+	@Override
+	public boolean deleteTruck(String matricula) throws SQLException {
+		
+		return deleteVehicle(TRUCK,matricula);
+	}
+
+	@Override
+	public boolean deleteVan(String matricula) throws SQLException {
+		
+		return deleteVehicle(VAN,matricula);
+	}
+
+	@Override
+	public boolean deleteMinibus(String matricula) throws SQLException {
+		
+		return deleteVehicle(MINIBUS,matricula);
+	}
+	
+	
+	
 	
 }	
