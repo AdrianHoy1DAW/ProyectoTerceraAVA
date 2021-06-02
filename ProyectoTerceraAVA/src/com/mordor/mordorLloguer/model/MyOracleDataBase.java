@@ -683,6 +683,57 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return update;
 	}
+
+	@Override
+	public boolean addCar(Coche c) throws SQLException {
+		boolean insertado = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONVEHICULOS.insertarCoche(?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		try (Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setString(1, c.getMatricula());
+			cstmt.setDouble(2, c.getPreciodia());
+			cstmt.setString(3, c.getMarca());
+			cstmt.setString(4, c.getDescripcion());
+			cstmt.setString(5, c.getColor());
+			cstmt.setString(6, c.getMotor());
+			cstmt.setDouble(7, c.getCilindrada());
+			cstmt.setDate(8, c.getFechaadq());
+			cstmt.setString(9, c.getEstado());
+			cstmt.setString(10, String.valueOf(c.getCarnet()));
+			cstmt.setInt(11, c.getNumplazas());
+			cstmt.setInt(12, c.getNumpuertas());
+			
+			insertado = (cstmt.executeUpdate() == 1)? true:false;
+		} 
+		
+		return insertado;
+		
+		
+		
+	}
+
+	@Override
+	public boolean addTruck(Camion c) throws SQLException {
+		
+		return false;
+	}
+
+	@Override
+	public boolean addVan(Furgoneta f) throws SQLException {
+		
+		return false;
+	}
+
+	@Override
+	public boolean addMinibus(Microbus m) throws SQLException {
+
+		return false;
+	}
 	
 	
 	

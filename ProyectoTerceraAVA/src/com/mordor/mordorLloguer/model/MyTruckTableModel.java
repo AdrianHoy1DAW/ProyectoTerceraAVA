@@ -28,6 +28,23 @@ public class MyTruckTableModel extends MyVehicleTableModel<Camion>{
 	}
 	
 	@Override
+	public void setValueAt(Object value, int row, int col) {
+		
+		switch(col) {
+		
+		case 7:
+			data.get(row).setNumruedas(Integer.parseInt(value.toString()));
+			break;
+		case 8:
+			data.get(row).setMma(Double.parseDouble(value.toString()));
+			break;
+		default: super.setValueAt(value, row, col);
+		
+		}
+		fireTableCellUpdated(row, col);
+	}
+	
+	@Override
 	public void newData(List<Camion> data) {
 		super.newData(data);
 	}	

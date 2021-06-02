@@ -31,6 +31,7 @@ import com.mordor.mordorLloguer.model.MyCarTableModel;
 import com.mordor.mordorLloguer.model.MyTruckTableModel;
 import com.mordor.mordorLloguer.model.MyVanTableModel;
 import com.mordor.mordorLloguer.model.Vehiculo;
+import com.mordor.mordorLloguer.view.AddVehicle;
 import com.mordor.mordorLloguer.view.JIFProcess;
 import com.mordor.mordorLloguer.view.JPVehicle;
 import com.mordor.mordorLloguer.view.VehicleView;
@@ -44,6 +45,7 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 	private List<Camion> camiones;
 	private List<Microbus> buses;
 	private JIFProcess jif;
+	private AddVehicle av;
 	
 	public VehicleTableController(AlmacenDatosDB modelo, VehicleView vista) {
 		super();
@@ -60,24 +62,28 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		vista.getPanelCar().getComboBoxEngine().addActionListener(this);
 		vista.getPanelCar().getComboBoxLicense().addActionListener(this);
 		vista.getPanelCar().getBtnDelete().addActionListener(this);
+		vista.getPanelCar().getBtnAdd().addActionListener(this);
 		
 		vista.getPanelTruck().getTxtModel().getDocument().addDocumentListener(this);
 		vista.getPanelTruck().getTxtRegistration().getDocument().addDocumentListener(this);
 		vista.getPanelTruck().getComboBoxEngine().addActionListener(this);
 		vista.getPanelTruck().getComboBoxLicense().addActionListener(this);
 		vista.getPanelTruck().getBtnDelete().addActionListener(this);
+		vista.getPanelTruck().getBtnAdd().addActionListener(this);
 		
 		vista.getPanelVan().getTxtModel().getDocument().addDocumentListener(this);
 		vista.getPanelVan().getTxtRegistration().getDocument().addDocumentListener(this);
 		vista.getPanelVan().getComboBoxEngine().addActionListener(this);
 		vista.getPanelVan().getComboBoxLicense().addActionListener(this);
 		vista.getPanelVan().getBtnDelete().addActionListener(this);
+		vista.getPanelVan().getBtnAdd().addActionListener(this);
 		
 		vista.getPanelMinibus().getTxtModel().getDocument().addDocumentListener(this);
 		vista.getPanelMinibus().getTxtRegistration().getDocument().addDocumentListener(this);
 		vista.getPanelMinibus().getComboBoxEngine().addActionListener(this);
 		vista.getPanelMinibus().getComboBoxLicense().addActionListener(this);
 		vista.getPanelMinibus().getBtnDelete().addActionListener(this);
+		vista.getPanelMinibus().getBtnAdd().addActionListener(this);
 		
 		
 		vista.getPanelCar().getComboBoxEngine().setActionCommand("Filtrar");
@@ -92,6 +98,10 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		vista.getPanelMinibus().getComboBoxEngine().setActionCommand("Filtrar");
 		vista.getPanelMinibus().getComboBoxLicense().setActionCommand("Filtrar");
 		vista.getPanelMinibus().getBtnDelete().setActionCommand("Delete");
+		vista.getPanelCar().getBtnAdd().setActionCommand("addVehicle");
+		vista.getPanelTruck().getBtnAdd().setActionCommand("addVehicle");
+		vista.getPanelVan().getBtnAdd().setActionCommand("addVehicle");
+		vista.getPanelMinibus().getBtnAdd().setActionCommand("addVehicle");
 		
 	}
 	
@@ -364,6 +374,61 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 			}
 			
 			task.execute();
+			
+		} else if(e.getType() == TableModelEvent.UPDATE) {
+			
+			SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
+
+				@Override
+				protected Void doInBackground() {
+					
+					try {
+						if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
+							
+							modelo.updateCar(MyCarTableModel.mctm.get(e.getFirstRow()));
+							
+						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
+							
+							modelo.updateTruck(MyTruckTableModel.mttm.get(e.getFirstRow()));
+							
+						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
+							
+							modelo.updateVan(MyVanTableModel.mvtm.get(e.getFirstRow()));
+							
+						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
+							
+							modelo.updateMinibus(MyBusTableModel.mbtm.get(e.getFirstRow()));
+							
+						}
+					} catch(SQLException e) {
+						JOptionPane.showMessageDialog(vista, e.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
+					}
+					
+					return null;
+				}
+				
+				@Override
+				protected void done() {
+					jif.dispose();
+					
+					if(!isCancelled()) {
+					
+						
+						
+					}
+				}
+				
+			};
+			
+			if(ControladorPrincipal.estaAbierto(jif) == true) {
+				
+			} else {
+				jif = new JIFProcess(task,"Updating Vehicle");
+				ControladorPrincipal.addJInternalFrame(jif);
+			}
+			
+			task.execute();
+			
 		}
 		
 	}
@@ -394,7 +459,100 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 			ordenar();
 		} else if(comand.equals("Delete")) {
 			delete();
+		} else if(comand.equals("addVehicle")) {
+			addVehicle();
+		} else if(comand.equals("add")) {
+			add();
 		}
+		 
+	}
+
+	private void add() {
+		
+		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
+			
+			MyCarTableModel.mctm.add(new Coche(av.getTxtMatricula().getText(),
+					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
+					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
+					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
+					Double.parseDouble(av.getTxtCilindrada().getText()),
+					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
+					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
+					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
+					,Integer.parseInt(av.getTxtArriba().getText()),
+					Integer.parseInt(av.getTxtAbajo().getText())));
+			
+			
+			
+			
+		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
+			
+			MyTruckTableModel.mttm.add(new Camion(av.getTxtMatricula().getText(),
+					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
+					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
+					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
+					Double.parseDouble(av.getTxtCilindrada().getText()),
+					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
+					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
+					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
+					,Integer.parseInt(av.getTxtArriba().getText()),
+					Double.parseDouble(av.getTxtAbajo().getText())));
+			
+			
+		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
+			
+			MyVanTableModel.mvtm.add(new Furgoneta(av.getTxtMatricula().getText(),
+					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
+					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
+					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
+					Double.parseDouble(av.getTxtCilindrada().getText()),
+					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
+					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
+					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
+					,Double.parseDouble(av.getTxtArriba().getText())));
+			
+		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
+			
+			MyTruckTableModel.mttm.add(new Camion(av.getTxtMatricula().getText(),
+					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
+					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
+					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
+					Double.parseDouble(av.getTxtCilindrada().getText()),
+					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
+					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
+					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
+					,Integer.parseInt(av.getTxtArriba().getText()),
+					Double.parseDouble(av.getTxtAbajo().getText())));
+			
+		}
+		
+	}
+
+	private void addVehicle() {
+		
+		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
+			
+			av = new AddVehicle("Añadir Coche", "Numplazas","Numpuertas",VehicleView.CAR);
+			
+			
+		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
+			
+			av = new AddVehicle("Añadir Camion", "Numruedas","MMA",VehicleView.TRUCK);
+			
+			
+		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
+			
+			av = new AddVehicle("Añadir Furgoneta", "MMA",null,VehicleView.VAN);
+			
+		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
+			
+			av = new AddVehicle("Añadir MiniBus", "Numplazas","Medida",VehicleView.MINIBUS);
+			
+		}
+		
+		ControladorPrincipal.addJInternalFrame(av);
+		av.getBtnAdd().addActionListener(this);
+		av.getBtnAdd().setActionCommand("add");
 		
 	}
 

@@ -5,18 +5,18 @@ import java.sql.Date;
 public class Vehiculo {
 	
 	private String matricula;
-	private double preciodia;
+	private Double preciodia;
 	private String marca;
 	private String descripcion;
 	private String color;
 	private String motor;
-	private double cilindrada;
+	private Double cilindrada;
 	private Date fechaadq;
 	private String estado;
 	private char carnet;
 	
-	public Vehiculo(String matricula, double preciodia, String marca, String descripcion, String color, String motor,
-			double cilindrada, Date fechaadq, String estado, char carnet) {
+	public Vehiculo(String matricula,Double preciodia, String marca, String descripcion, String color, String motor,
+			Double cilindrada, Date fechaadq, String estado, char carnet) {
 		super();
 		this.matricula = matricula;
 		this.preciodia = preciodia;
@@ -60,6 +60,47 @@ public class Vehiculo {
 	public char getCarnet() {
 		return carnet;
 	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+	public void setPreciodia(double preciodia) {
+		this.preciodia = preciodia;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public void setMotor(String motor) {
+		this.motor = motor;
+	}
+
+	public void setCilindrada(double cilindrada) {
+		this.cilindrada = cilindrada;
+	}
+
+	public void setFechaadq(Date fechaadq) {
+		this.fechaadq = fechaadq;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public void setCarnet(char carnet) {
+		this.carnet = carnet;
+	}
+	
 	
 	
 	

@@ -24,7 +24,6 @@ public class JPVehicle extends JPanel {
 	private JComboBox<String> comboBoxLicense;
 	private JButton btnAdd;
 	private JButton btnDelete;
-	private JButton btnEdit;
 	private JButton btnCancel;
 
 	/**
@@ -66,9 +65,6 @@ public class JPVehicle extends JPanel {
 		
 		btnDelete = new JButton("Delete");
 		panel_2.add(btnDelete);
-		
-		btnEdit = new JButton("Edit");
-		panel_2.add(btnEdit);
 		
 		btnCancel = new JButton("Cancel");
 		panel_2.add(btnCancel);
@@ -138,9 +134,7 @@ public class JPVehicle extends JPanel {
 		return btnDelete;
 	}
 
-	public JButton getBtnEdit() {
-		return btnEdit;
-	}
+
 
 	public JButton getBtnCancel() {
 		return btnCancel;

@@ -15,6 +15,10 @@ public class Furgoneta extends Vehiculo{
 	public double getMma() {
 		return mma;
 	}
+
+	public void setMma(double mma) {
+		this.mma = mma;
+	}
 	
 	
 	

@@ -21,6 +21,14 @@ public class Camion extends Vehiculo{
 	public double getMma() {
 		return mma;
 	}
+
+	public void setNumruedas(int numruedas) {
+		this.numruedas = numruedas;
+	}
+
+	public void setMma(double mma) {
+		this.mma = mma;
+	}
 	
 	
 	

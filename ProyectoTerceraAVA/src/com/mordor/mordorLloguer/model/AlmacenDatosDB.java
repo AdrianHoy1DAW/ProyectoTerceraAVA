@@ -43,6 +43,10 @@ public interface AlmacenDatosDB {
 	public boolean updateVan(Furgoneta f) throws SQLException;
 	public boolean updateMinibus(Microbus m) throws SQLException;
 	
+	public boolean addCar(Coche c) throws SQLException;
+	public boolean addTruck(Camion c) throws SQLException;
+	public boolean addVan(Furgoneta f) throws SQLException;
+	public boolean addMinibus(Microbus m) throws SQLException;
 	
 	
 	

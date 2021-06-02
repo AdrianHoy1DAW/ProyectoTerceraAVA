@@ -44,7 +44,33 @@ public   class MyVehicleTableModel<T extends Vehiculo> extends MyTableModel<T> {
 		return null;
 	}
 	
-	
+	@Override
+	public void setValueAt(Object value, int row, int col) {
+		
+		switch(col) {
+		
+		case 1:
+			data.get(row).setMarca(value.toString());
+			break;
+		case 2:
+			data.get(row).setColor(value.toString());
+			break;
+		case 3:
+			data.get(row).setMotor(value.toString());
+			break;
+		case 4:
+			data.get(row).setCilindrada(Double.parseDouble(value.toString()));
+			break;
+		case 5:
+			data.get(row).setEstado(value.toString());
+			break;
+		case 6:
+			data.get(row).setCarnet(value.toString().charAt(0));
+			break;
+		
+		}
+		fireTableCellUpdated(row, col);
+	}
 	
 	public void newData(List<T> data) {
 		this.data = data;

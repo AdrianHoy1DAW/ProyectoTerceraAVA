@@ -21,6 +21,14 @@ public class Microbus extends Vehiculo {
 	public double getMedida() {
 		return medida;
 	}
+
+	public void setNumplazas(int numplazas) {
+		this.numplazas = numplazas;
+	}
+
+	public void setMedida(double medida) {
+		this.medida = medida;
+	}
 	
 	
 	
