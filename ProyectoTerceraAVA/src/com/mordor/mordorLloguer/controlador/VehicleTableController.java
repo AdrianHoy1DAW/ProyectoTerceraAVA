@@ -429,6 +429,88 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 			
 			task.execute();
 			
+		} else if(e.getType() == TableModelEvent.INSERT) {
+			
+			SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
+
+				@Override
+				protected Void doInBackground() {
+					
+					try {
+						if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
+							
+							if(modelo.addCar(MyCarTableModel.mctm.get(e.getFirstRow())) == true) {
+								
+								MyCarTableModel.mctm.newData(coches);
+								vista.getPanelCar().getTable().setModel(MyCarTableModel.mctm);
+								
+							} else {
+								coches.remove(e.getFirstRow());
+							}
+							
+						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
+							
+							if(modelo.updateTruck(MyTruckTableModel.mttm.get(e.getFirstRow()))==true) {
+								
+								MyTruckTableModel.mttm.newData(camiones);
+								vista.getPanelTruck().getTable().setModel(MyTruckTableModel.mttm);
+								
+							} else {
+								camiones.remove(e.getFirstRow());	
+							}
+							
+						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
+							
+							if(modelo.updateVan(MyVanTableModel.mvtm.get(e.getFirstRow()))==true) {
+								
+								MyVanTableModel.mvtm.newData(furgonetas);
+								vista.getPanelVan().getTable().setModel(MyVanTableModel.mvtm);
+								
+							} else {
+								furgonetas.remove(e.getFirstRow());
+							}
+							
+						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
+							
+							if(modelo.updateMinibus(MyBusTableModel.mbtm.get(e.getFirstRow()))==true) {
+								
+								MyBusTableModel.mbtm.newData(buses);
+								vista.getPanelMinibus().getTable().setModel(MyBusTableModel.mbtm);
+								
+							} else {
+								buses.remove(e.getFirstRow());
+							}
+							
+						}
+					} catch(SQLException e) {
+						JOptionPane.showMessageDialog(vista, e.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
+					}
+					
+					return null;
+				}
+				
+				@Override
+				protected void done() {
+					jif.dispose();
+					
+					if(!isCancelled()) {
+					
+						
+						
+					}
+				}
+				
+			};
+			
+			if(ControladorPrincipal.estaAbierto(jif) == true) {
+				
+			} else {
+				jif = new JIFProcess(task,"Updating Vehicle");
+				ControladorPrincipal.addJInternalFrame(jif);
+			}
+			
+			task.execute();
+			
 		}
 		
 	}
@@ -471,58 +553,71 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		
 		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
 			
-			MyCarTableModel.mctm.add(new Coche(av.getTxtMatricula().getText(),
+			Coche c = new Coche(av.getTxtMatricula().getText(),
 					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
 					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
 					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
-					Double.parseDouble(av.getTxtCilindrada().getText()),
+					(av.getTxtCilindrada().getText() != null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
 					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
 					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
 					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
 					,Integer.parseInt(av.getTxtArriba().getText()),
-					Integer.parseInt(av.getTxtAbajo().getText())));
+					Integer.parseInt(av.getTxtAbajo().getText()));
+			
+			coches.add(c);
+			MyCarTableModel.mctm.add(c);
 			
 			
 			
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
 			
-			MyTruckTableModel.mttm.add(new Camion(av.getTxtMatricula().getText(),
+			Camion c = new Camion(av.getTxtMatricula().getText(),
 					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
 					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
 					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
-					Double.parseDouble(av.getTxtCilindrada().getText()),
+					(av.getTxtCilindrada().getText() == null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
 					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
 					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
 					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
 					,Integer.parseInt(av.getTxtArriba().getText()),
-					Double.parseDouble(av.getTxtAbajo().getText())));
+					Double.parseDouble(av.getTxtAbajo().getText()));
+			
+					camiones.add(c);
+			MyTruckTableModel.mttm.add(c);
 			
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
 			
-			MyVanTableModel.mvtm.add(new Furgoneta(av.getTxtMatricula().getText(),
+			Furgoneta f = new Furgoneta(av.getTxtMatricula().getText(),
 					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
 					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
 					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
-					Double.parseDouble(av.getTxtCilindrada().getText()),
+					(av.getTxtCilindrada().getText() == null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
 					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
 					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
 					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
-					,Double.parseDouble(av.getTxtArriba().getText())));
+					,Double.parseDouble(av.getTxtArriba().getText()));
+			
+					furgonetas.add(f);
+			MyVanTableModel.mvtm.add(f);
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
 			
-			MyTruckTableModel.mttm.add(new Camion(av.getTxtMatricula().getText(),
+			Microbus t = new Microbus(av.getTxtMatricula().getText(),
 					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
 					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
 					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
-					Double.parseDouble(av.getTxtCilindrada().getText()),
+					(av.getTxtCilindrada().getText() == null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
 					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
 					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
 					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
 					,Integer.parseInt(av.getTxtArriba().getText()),
-					Double.parseDouble(av.getTxtAbajo().getText())));
+					Double.parseDouble(av.getTxtAbajo().getText()));
+			
+			buses.add(t);
+			
+			MyBusTableModel.mbtm.add(t);
 			
 		}
 		
