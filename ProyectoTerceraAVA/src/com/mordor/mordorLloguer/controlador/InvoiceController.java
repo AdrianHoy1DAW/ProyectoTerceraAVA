@@ -9,8 +9,10 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
+import com.mordor.mordorLloguer.model.Alquiler;
 import com.mordor.mordorLloguer.model.Cliente;
 import com.mordor.mordorLloguer.model.Factura;
+import com.mordor.mordorLloguer.model.MyInvoiceTableModel;
 import com.mordor.mordorLloguer.view.JIFInvoice;
 import com.mordor.mordorLloguer.view.JIFProcess;
 
@@ -20,6 +22,7 @@ public class InvoiceController implements ActionListener {
 	private JIFInvoice vista;
 	private ArrayList<Factura> facturas;
 	private ArrayList<Cliente> clientes;
+	private ArrayList<Alquiler> alquileres;
 	private JIFProcess jif;
 	private int indice;
 	
@@ -64,6 +67,7 @@ public class InvoiceController implements ActionListener {
 					try {
 						facturas = modelo.getFacturas();
 						clientes = modelo.getClientes();
+						alquileres = modelo.getAlquiler();
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -84,6 +88,7 @@ public class InvoiceController implements ActionListener {
 					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
 					colocarClientes();
+					colocarAlquiler();
 					vista.getBtnPreviousInvoice().setEnabled(false);
 					if(indice == facturas.size()) {
 						vista.getBtnNextInvoice().setEnabled(false);
@@ -130,6 +135,7 @@ public class InvoiceController implements ActionListener {
 		vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(++indice).getIdfactura()));
 		vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(indice).getFecha().getTime()));
 		colocarClientes();
+		colocarAlquiler();
 		 if(indice == facturas.size() -1) {
 			 vista.getBtnNextInvoice().setEnabled(false);
 		 }
@@ -143,6 +149,7 @@ public class InvoiceController implements ActionListener {
 		vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(--indice).getIdfactura()));
 		vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(indice).getFecha().getTime()));
 		colocarClientes();
+		colocarAlquiler();
 		 if(indice == 0) {
 			 vista.getBtnPreviousInvoice().setEnabled(false);
 		 }
@@ -162,6 +169,23 @@ public class InvoiceController implements ActionListener {
 			
 		}
 		
+	}
+	
+	private void colocarAlquiler() {
+		
+		ArrayList<Alquiler> tmp = new ArrayList<>();
+		for(Alquiler a : alquileres) {
+			
+			if(a.getIdfactura() == facturas.get(indice).getIdfactura()) {
+				
+				tmp.add(a);
+				
+			}
+			
+		}
+		
+		MyInvoiceTableModel.mitm = new MyInvoiceTableModel(tmp);
+		vista.getTableDetalles().setModel(MyInvoiceTableModel.mitm);
 	}
 	
 
