@@ -281,6 +281,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 			
 				
 				empleado = new Cliente(
+										rs.getInt("idcliente"),
 										rs.getString("DNI"),
 										rs.getString("nombre"),
 										rs.getString("apellidos"),
@@ -733,6 +734,127 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 	public boolean addMinibus(Microbus m) throws SQLException {
 
 		return false;
+	}
+
+	@Override
+	public ArrayList<Factura> getFacturas() throws SQLException {
+		
+		ArrayList<Factura> facturas = new ArrayList<Factura>();
+		
+		ResultSet rs = null;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call ?:=GESTIONALQUILER.LISTARFACTURAS() }";
+		
+		
+		
+		
+		try(Connection con = ds.getConnection();
+			CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			cstmt.execute();
+			
+			rs = (ResultSet) cstmt.getObject(1);
+			
+			Factura empleado;
+			
+			while(rs.next()) {
+				
+			
+				
+				empleado = new Factura(
+										rs.getInt("idfactura"),
+										rs.getDate("fecha"),
+										rs.getDouble("importebase"),
+										rs.getDouble("importeiva"),
+										rs.getInt("clienteid"));
+		
+				facturas.add(empleado);
+			}
+			
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return facturas;
+		
+	}
+
+	@Override
+	public ArrayList<Alquiler> getAlquiler() throws SQLException {
+		ArrayList<Alquiler> facturas = new ArrayList<Alquiler>();
+		
+		ResultSet rs = null;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call ?:=GESTIONALQUILER.LISTARALQUILERES() }";
+		
+		
+		
+		
+		try(Connection con = ds.getConnection();
+			CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			cstmt.execute();
+			
+			rs = (ResultSet) cstmt.getObject(1);
+			
+			Alquiler empleado;
+			
+			while(rs.next()) {
+				
+			
+				
+				empleado = new Alquiler(
+										rs.getInt("idalquiler"),
+										rs.getInt("idfactura"),
+										rs.getString("matricula"),
+										rs.getDate("fechainicio"),
+										rs.getDate("fechafin"),
+										rs.getDouble("precio"));
+		
+				facturas.add(empleado);
+			}
+			
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return facturas;
 	}
 	
 	

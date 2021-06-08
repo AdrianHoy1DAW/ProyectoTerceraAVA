@@ -21,6 +21,7 @@ import com.mordor.mordorLloguer.config.Config;
 import com.mordor.mordorLloguer.model.MyOracleDataBase;
 import com.mordor.mordorLloguer.view.ClientTableView;
 import com.mordor.mordorLloguer.view.EmployeeTableView;
+import com.mordor.mordorLloguer.view.JIFInvoice;
 import com.mordor.mordorLloguer.view.LoginView;
 import com.mordor.mordorLloguer.view.PropertiesView;
 import com.mordor.mordorLloguer.view.VehicleView;
@@ -33,12 +34,14 @@ public class ControladorPrincipal implements ActionListener {
 	private LoginView loginView;
 	private EmployeeTableController employeeController;
 	private VehicleTableController vehicleController;
+	private InvoiceController inc;
 	private EmployeeTableView employeeView;
 	private static JDesktopPane desktopPane;
 	private PropertiesView properties;
 	private CustomerTableController ctc;
 	private ClientTableView ctv;
 	private VehicleView vv;
+	private JIFInvoice in;
 	
 	
 	public ControladorPrincipal(VistaPrincipal vista, MyOracleDataBase modelo) {
@@ -60,11 +63,13 @@ public class ControladorPrincipal implements ActionListener {
 		employeeView = new EmployeeTableView();
 		ctv = new ClientTableView();
 		vv = new VehicleView();
+		in = new JIFInvoice();
 		
 		
 		employeeController = new EmployeeTableController(employeeView, modelo);
 		ctc = new CustomerTableController(modelo,ctv);
 		vehicleController = new VehicleTableController(modelo,vv);
+		inc = new InvoiceController(modelo, in);
 	
 		
 		//Action Listener
@@ -74,6 +79,8 @@ public class ControladorPrincipal implements ActionListener {
 		vista.getButtonClient().addActionListener(this);
 		vista.getBtnCustomer().addActionListener(this);
 		vista.getButtonVehicle().addActionListener(this);
+		vista.getBtnFactura().addActionListener(this);
+		
 		
 		
 		
@@ -84,6 +91,7 @@ public class ControladorPrincipal implements ActionListener {
 		vista.getButtonClient().setActionCommand("Open ETable");
 		vista.getBtnCustomer().setActionCommand("Open CUstomer");
 		vista.getButtonVehicle().setActionCommand("Open VTable");
+		vista.getBtnFactura().setActionCommand("Open Invoice");
 		
 	}
 	
@@ -114,8 +122,16 @@ public class ControladorPrincipal implements ActionListener {
 			openCustomer();
 		} else if(comand.equals("Open VTable")) {
 			openVehicle();
+		} else if(comand.equals("Open Invoice")) {
+			openInvoice();
 		}
 		 
+	}
+
+	private void openInvoice() {
+		
+		inc.go();
+		
 	}
 
 	private void openVehicle() {

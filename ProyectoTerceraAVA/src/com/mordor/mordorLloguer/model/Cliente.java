@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 public class Cliente {
 
+	private int idcliente;
 	private String DNI;
 	private String nombre;
 	private String apellidos;
@@ -27,6 +28,21 @@ public class Cliente {
 		this.fechaNac = fechaNac;
 		this.carnet = carnet;
 		this.foto = foto;
+	}
+	
+	public Cliente(int idcliente,String dNI, String nombre, String apellidos, String domicilio, String cp, String email,
+			Date fechaNac, char carnet, byte[] foto) {
+		super();
+		DNI = dNI;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.domicilio = domicilio;
+		this.cp = cp;
+		this.email = email;
+		this.fechaNac = fechaNac;
+		this.carnet = carnet;
+		this.foto = foto;
+		this.idcliente = idcliente;
 	}
 
 
@@ -102,6 +118,10 @@ public class Cliente {
 		return "Cliente [DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", domicilio=" + domicilio
 				+ ", cp=" + cp + ", email=" + email + ", fechaNac=" + fechaNac + ", carnet=" + carnet + ", foto="
 				+ Arrays.toString(foto) + "]";
+	}
+
+	public int getIdcliente() {
+		return idcliente;
 	}
 	
 	

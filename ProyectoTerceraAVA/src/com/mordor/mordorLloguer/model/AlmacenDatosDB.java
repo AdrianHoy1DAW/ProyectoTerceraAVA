@@ -48,6 +48,9 @@ public interface AlmacenDatosDB {
 	public boolean addVan(Furgoneta f) throws SQLException;
 	public boolean addMinibus(Microbus m) throws SQLException;
 	
+	public ArrayList<Factura> getFacturas() throws SQLException;
+	public ArrayList<Alquiler> getAlquiler() throws SQLException;
+	
 	
 	
 	

@@ -26,6 +26,7 @@ public class VistaPrincipal extends JFrame {
 	private JDesktopPane desktopPane;
 	private JButton btnCustomer;
 	private JButton buttonVehicle;
+	private JButton btnFactura;
 
 
 
@@ -34,7 +35,7 @@ public class VistaPrincipal extends JFrame {
 	 */
 	public VistaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 954, 741);
+		setBounds(100, 100, 1300, 1000);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -79,6 +80,9 @@ public class VistaPrincipal extends JFrame {
 		buttonVehicle = new JButton("");
 		buttonVehicle.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
 		toolBar.add(buttonVehicle);
+		
+		btnFactura = new JButton("");
+		toolBar.add(btnFactura);
 		
 		desktopPane = new JDesktopPane();
 		contentPane.add(desktopPane, BorderLayout.CENTER);
@@ -137,6 +141,14 @@ public class VistaPrincipal extends JFrame {
 	public JButton getButtonVehicle() {
 		return buttonVehicle;
 	}
+
+
+
+	public JButton getBtnFactura() {
+		return btnFactura;
+	}
+	
+	
 	
 	
 }
