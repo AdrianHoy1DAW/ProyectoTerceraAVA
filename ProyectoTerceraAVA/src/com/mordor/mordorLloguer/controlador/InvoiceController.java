@@ -57,6 +57,7 @@ public class InvoiceController implements ActionListener {
 		vista.getBtnNextInvoice().addActionListener(this);
 		vista.getBtnNewInvoce().addActionListener(this);
 		vista.getBtnAddDetail().addActionListener(this);
+		vista.getBtnRemoveDetail().addActionListener(this);
 		
 		
 		
@@ -64,7 +65,7 @@ public class InvoiceController implements ActionListener {
 		vista.getBtnNextInvoice().setActionCommand("Next invoice");
 		vista.getBtnNewInvoce().setActionCommand("Open Invoice");
 		vista.getBtnAddDetail().setActionCommand("Open Rental");
-		
+		vista.getBtnRemoveDetail().setActionCommand("Delete Retail");
 	}
 	
 	public void go() {
@@ -160,6 +161,77 @@ public class InvoiceController implements ActionListener {
 			openRental();
 		} else if(comand.equals("Add Rental")) {
 			addRental();
+		} else if(comand.equals("Delete Retail")) {
+			deleteRetail();
+		}
+		
+	}
+
+
+	private void deleteRetail() {
+		
+		if(vista.getTableDetalles().getSelectedRowCount() == 0) {
+			JOptionPane.showMessageDialog(vista, "Not select Retail","Error",JOptionPane.ERROR_MESSAGE);
+		} else if(vista.getTableDetalles().getSelectedRowCount() > 1) {
+			JOptionPane.showMessageDialog(vista, "Select 1 Retail","Error",JOptionPane.ERROR_MESSAGE);
+		} else {
+			SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
+
+				@Override
+				protected Void doInBackground() {
+					
+					
+					
+					
+						try {
+							
+							modelo.borrarAlquiler(mitm.get(vista.getTableDetalles().getSelectedRow()).getIdalquiler());
+							
+							facturas = modelo.getFacturas();
+							alquileres = modelo.getAlquiler();
+							
+						} catch (SQLException e) {
+							
+							JOptionPane.showMessageDialog(vista, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+							
+						}
+						
+					
+					
+					return null;
+				
+				}
+				@Override
+				protected void done() {
+					jif.dispose();
+					
+					if(!isCancelled() ) {
+						
+						
+						vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
+						vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
+						colocarClientes();
+						colocarAlquiler();
+						vista.getBtnPreviousInvoice().setEnabled(false);
+						if(indice == facturas.size()) {
+							vista.getBtnNextInvoice().setEnabled(false);
+						}
+						
+						if(ControladorPrincipal.estaAbierto(vista)) {
+							
+						} else 
+							ControladorPrincipal.addJInternalFrame(vista);
+						
+						
+					}
+				}
+				
+				
+			};
+			
+			jif = new JIFProcess(task,"Deleting from Table");
+			ControladorPrincipal.addJInternalFrame(jif);
+			task.execute();
 		}
 		
 	}
@@ -222,7 +294,7 @@ public class InvoiceController implements ActionListener {
 			
 		};
 		
-		jif = new JIFProcess(task,"Creating Table");
+		jif = new JIFProcess(task,"Adding Rental");
 		ControladorPrincipal.addJInternalFrame(jif);
 		task.execute();
 		

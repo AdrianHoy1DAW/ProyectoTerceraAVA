@@ -887,7 +887,7 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 	@Override
 	public boolean insertarFactura(String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException {
 		
-		boolean insertado = true;
+		boolean insertado = false;
 		
 		DataSource ds = MyDataSource.getOracleDataSource();
 		
@@ -909,6 +909,27 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		}
 		
 		return insertado;
+	}
+
+	@Override
+	public boolean borrarAlquiler(Integer idfactura) throws SQLException {
+		
+		boolean borrado = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONALQUILER.BORRARALQUILER(?)}";
+		
+		try(Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setInt(1, idfactura);
+
+			
+			borrado = (cstmt.executeUpdate() == 1)? true:false;
+			
+		}
+		return borrado;
 	}
 	
 	

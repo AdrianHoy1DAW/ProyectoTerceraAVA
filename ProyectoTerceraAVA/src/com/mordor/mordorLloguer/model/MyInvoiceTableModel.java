@@ -33,5 +33,21 @@ public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 		}
 		return null;
 	}
+	
+	@Override
+	public boolean isCellEditable(int row, int column) {
+		
+		switch(column) {
+		case 0:
+			return false;
+		case 1:
+			return false;
+		case 2:
+			return false;
+			default : return true;
+		}
+		
+		
+	}
 
 }
