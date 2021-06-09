@@ -1,5 +1,6 @@
 package com.mordor.mordorLloguer.model;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -50,7 +51,8 @@ public interface AlmacenDatosDB {
 	
 	public ArrayList<Factura> getFacturas() throws SQLException;
 	public ArrayList<Alquiler> getAlquiler() throws SQLException;
-	
+	public boolean insertarAlquiler(Integer idfactura, String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException;
+	public boolean insertarFactura(String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException;
 	
 	
 	

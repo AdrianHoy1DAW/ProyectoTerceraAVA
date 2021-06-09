@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 
-	public static MyInvoiceTableModel mitm;
+	
 	private List<Vehiculo> datas;
 	
 	public MyInvoiceTableModel(List<Alquiler> data,List<Vehiculo> datas) {

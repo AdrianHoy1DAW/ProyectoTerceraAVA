@@ -856,6 +856,62 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return facturas;
 	}
+
+	@Override
+	public boolean insertarAlquiler(Integer idfactura, String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException {
+		
+		boolean insertado = true;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call ?:=GESTIONALQUILER.INSERTARALQUILER(?,?,?,?,?,?)}";
+		
+		try(Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setInt(1, idfactura);
+			cstmt.setInt(2, idfactura);
+			cstmt.setString(3, DNI);
+			cstmt.setString(4, matricula);
+			cstmt.setDate(5, fechainicio);
+			cstmt.setDate(6, fechafinal);
+			cstmt.registerOutParameter(7, OracleTypes.INTEGER);
+			
+			insertado = (cstmt.executeUpdate() == 1)? true:false;
+			
+		}
+		
+		return insertado;
+	}
+
+	@Override
+	public boolean insertarFactura(String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException {
+		
+		boolean insertado = true;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call ?:=GESTIONALQUILER.INSERTARALQUILER(?,?,?,?,?,?)}";
+		
+		try(Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.registerOutParameter(1, OracleTypes.INTEGER);
+			cstmt.setObject(2, null);
+			cstmt.setString(3, DNI);
+			cstmt.setString(4, matricula);
+			cstmt.setDate(5, fechainicio);
+			cstmt.setDate(6, fechafinal);
+			cstmt.setObject(7, null);
+			
+			insertado = (cstmt.executeUpdate() == 1)? true:false;
+			
+		}
+		
+		return insertado;
+	}
+	
+	
 	
 	
 	

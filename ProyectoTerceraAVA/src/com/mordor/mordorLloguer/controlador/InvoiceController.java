@@ -20,6 +20,8 @@ import com.mordor.mordorLloguer.model.Furgoneta;
 import com.mordor.mordorLloguer.model.Microbus;
 import com.mordor.mordorLloguer.model.MyInvoiceTableModel;
 import com.mordor.mordorLloguer.model.Vehiculo;
+import com.mordor.mordorLloguer.view.AddInvoice;
+import com.mordor.mordorLloguer.view.JIFAddRental;
 import com.mordor.mordorLloguer.view.JIFInvoice;
 import com.mordor.mordorLloguer.view.JIFProcess;
 
@@ -27,6 +29,8 @@ public class InvoiceController implements ActionListener {
 	
 	private AlmacenDatosDB modelo;
 	private JIFInvoice vista;
+	private AddInvoice JIFai;
+	private JIFAddRental JIFar;
 	private ArrayList<Factura> facturas;
 	private ArrayList<Cliente> clientes;
 	private ArrayList<Alquiler> alquileres;
@@ -34,6 +38,7 @@ public class InvoiceController implements ActionListener {
 	private ArrayList<Camion> camiones;
 	private ArrayList<Furgoneta> furgonetas;
 	private ArrayList<Microbus> buses;
+	private MyInvoiceTableModel mitm;
 	private JIFProcess jif;
 	private int indice;
 	
@@ -50,11 +55,15 @@ public class InvoiceController implements ActionListener {
 		
 		vista.getBtnPreviousInvoice().addActionListener(this);
 		vista.getBtnNextInvoice().addActionListener(this);
+		vista.getBtnNewInvoce().addActionListener(this);
+		vista.getBtnAddDetail().addActionListener(this);
+		
+		
 		
 		vista.getBtnPreviousInvoice().setActionCommand("Previous invoice");
 		vista.getBtnNextInvoice().setActionCommand("Next invoice");
-		
-		
+		vista.getBtnNewInvoce().setActionCommand("Open Invoice");
+		vista.getBtnAddDetail().setActionCommand("Open Rental");
 		
 	}
 	
@@ -143,7 +152,169 @@ public class InvoiceController implements ActionListener {
 			
 			nextinvoice();
 			
+		} else if(comand.equals("Open Invoice")) {
+			openInvoice();
+		} else if(comand.equals("Add Invoice")) {
+			addInvoice();
+		} else if(comand.equals("Open Rental")) {
+			openRental();
+		} else if(comand.equals("Add Rental")) {
+			addRental();
 		}
+		
+	}
+
+
+	private void addRental() {
+		
+		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
+
+			@Override
+			protected Void doInBackground() {
+				
+				
+				
+				
+					try {
+						
+						modelo.insertarAlquiler(Integer.parseInt(JIFar.getTxtFactura().getText()),JIFar.getTxtDni().getText(), JIFar.getTxtMatricula().getText(), 
+								new java.sql.Date(JIFar.getTxtInicio().getDate().getTime()),new java.sql.Date(JIFar.getTxtFinal().getDate().getTime()));
+						
+						facturas = modelo.getFacturas();
+						alquileres = modelo.getAlquiler();
+						
+					} catch (SQLException e) {
+						
+						JOptionPane.showMessageDialog(vista, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+						
+					}
+					
+				
+				
+				return null;
+			
+			}
+			@Override
+			protected void done() {
+				jif.dispose();
+				
+				if(!isCancelled() ) {
+					
+					
+					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
+					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
+					colocarClientes();
+					colocarAlquiler();
+					vista.getBtnPreviousInvoice().setEnabled(false);
+					if(indice == facturas.size()) {
+						vista.getBtnNextInvoice().setEnabled(false);
+					}
+					
+					if(ControladorPrincipal.estaAbierto(vista)) {
+						
+					} else 
+						ControladorPrincipal.addJInternalFrame(vista);
+					
+					
+				}
+			}
+			
+			
+		};
+		
+		jif = new JIFProcess(task,"Creating Table");
+		ControladorPrincipal.addJInternalFrame(jif);
+		task.execute();
+		
+		
+		
+	}
+
+
+	private void openRental() {
+		
+		JIFar = new JIFAddRental();
+		ControladorPrincipal.addJInternalFrame(JIFar);
+		JIFar.getBtnInsertar().addActionListener(this);
+		JIFar.getBtnInsertar().setActionCommand("Add Rental");
+		JIFar.getTxtFactura().setText(String.valueOf(facturas.get(indice).getIdfactura()));
+		JIFar.getTxtDni().setText(vista.getTxtFieldDNI().getText());
+		JIFar.getTxtFactura().setEnabled(false);
+		JIFar.getTxtDni().setEnabled(false);
+		
+	}
+
+
+	private void addInvoice() {
+		
+		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
+
+			@Override
+			protected Void doInBackground() {
+				
+				
+				
+				
+					try {
+						
+						modelo.insertarFactura(JIFai.getTxtDni().getText(), JIFai.getTxtMatricula().getText(), 
+								new java.sql.Date(JIFai.getTxtInicio().getDate().getTime()),new java.sql.Date(JIFai.getTxtFinal().getDate().getTime()));
+						
+						facturas = modelo.getFacturas();
+						alquileres = modelo.getAlquiler();
+						
+					} catch (SQLException e) {
+						
+						JOptionPane.showMessageDialog(vista, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+						
+					}
+					
+				
+				
+				return null;
+			
+			}
+			@Override
+			protected void done() {
+				jif.dispose();
+				
+				if(!isCancelled() ) {
+					
+					
+					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
+					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
+					colocarClientes();
+					colocarAlquiler();
+					vista.getBtnPreviousInvoice().setEnabled(false);
+					if(indice == facturas.size()) {
+						vista.getBtnNextInvoice().setEnabled(false);
+					}
+					
+					if(ControladorPrincipal.estaAbierto(vista)) {
+						
+					} else 
+						ControladorPrincipal.addJInternalFrame(vista);
+					
+					
+				}
+			}
+			
+			
+		};
+		
+		jif = new JIFProcess(task,"Creating Table");
+		ControladorPrincipal.addJInternalFrame(jif);
+		task.execute();
+		
+	}
+
+
+	private void openInvoice() {
+		
+		JIFai = new AddInvoice();
+		ControladorPrincipal.addJInternalFrame(JIFai);
+		JIFai.getBtnInsertar().addActionListener(this);
+		JIFai.getBtnInsertar().setActionCommand("Add Invoice");
 		
 	}
 
@@ -219,8 +390,8 @@ public class InvoiceController implements ActionListener {
 		}
 
 		
-		MyInvoiceTableModel.mitm = new MyInvoiceTableModel(tmp,tmpvehi);
-		vista.getTableDetalles().setModel(MyInvoiceTableModel.mitm);
+		mitm = new MyInvoiceTableModel(tmp,tmpvehi);
+		vista.getTableDetalles().setModel(mitm);
 	}
 	
 
