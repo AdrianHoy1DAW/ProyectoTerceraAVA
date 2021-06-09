@@ -7,10 +7,12 @@ import java.util.List;
 public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 
 	public static MyInvoiceTableModel mitm;
+	private List<Vehiculo> datas;
 	
-	public MyInvoiceTableModel(List<Alquiler> data) {
-		super(data, new ArrayList<String>(Arrays.asList(new String[]{"Importe","FechaInicio","FechaFin"})));
+	public MyInvoiceTableModel(List<Alquiler> data,List<Vehiculo> datas) {
+		super(data, new ArrayList<String>(Arrays.asList(new String[]{"Modelo","Matricula","Importe","FechaInicio","FechaFin"})));
 		
+		this.datas = datas;
 	}
 
 	@Override
@@ -18,10 +20,14 @@ public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 		switch(col) {
 		
 		case 0:
-			return data.get(row).getPrecio();
+			return datas.get(row).getMarca();
 		case 1:
-			return data.get(row).getFechaInicio();
+			return datas.get(row).getMatricula();
 		case 2:
+			return data.get(row).getPrecio();
+		case 3:
+			return data.get(row).getFechaInicio();
+		case 4:
 			return data.get(row).getFechaFin();
 		
 		}

@@ -3,16 +3,23 @@ package com.mordor.mordorLloguer.controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.Alquiler;
+import com.mordor.mordorLloguer.model.Camion;
 import com.mordor.mordorLloguer.model.Cliente;
+import com.mordor.mordorLloguer.model.Coche;
 import com.mordor.mordorLloguer.model.Factura;
+import com.mordor.mordorLloguer.model.Furgoneta;
+import com.mordor.mordorLloguer.model.Microbus;
 import com.mordor.mordorLloguer.model.MyInvoiceTableModel;
+import com.mordor.mordorLloguer.model.Vehiculo;
 import com.mordor.mordorLloguer.view.JIFInvoice;
 import com.mordor.mordorLloguer.view.JIFProcess;
 
@@ -23,6 +30,10 @@ public class InvoiceController implements ActionListener {
 	private ArrayList<Factura> facturas;
 	private ArrayList<Cliente> clientes;
 	private ArrayList<Alquiler> alquileres;
+	private ArrayList<Coche> coches;
+	private ArrayList<Camion> camiones;
+	private ArrayList<Furgoneta> furgonetas;
+	private ArrayList<Microbus> buses;
 	private JIFProcess jif;
 	private int indice;
 	
@@ -65,12 +76,19 @@ public class InvoiceController implements ActionListener {
 				
 				
 					try {
+						
 						facturas = modelo.getFacturas();
 						clientes = modelo.getClientes();
 						alquileres = modelo.getAlquiler();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						coches = modelo.getCoche();
+						camiones = modelo.getCamion();
+						furgonetas = modelo.getFurgoneta();
+						buses = modelo.getMicroBus();
+						
+					} catch (SQLException | ParseException e) {
+						
+						JOptionPane.showMessageDialog(vista, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+						
 					}
 					
 				
@@ -174,6 +192,12 @@ public class InvoiceController implements ActionListener {
 	private void colocarAlquiler() {
 		
 		ArrayList<Alquiler> tmp = new ArrayList<>();
+		ArrayList<Vehiculo> tv = new ArrayList<>(coches);
+		ArrayList<Vehiculo> tmpvehi = new ArrayList<>();
+		tv.addAll(camiones);
+		tv.addAll(furgonetas);
+		tv.addAll(buses);
+		
 		for(Alquiler a : alquileres) {
 			
 			if(a.getIdfactura() == facturas.get(indice).getIdfactura()) {
@@ -184,7 +208,18 @@ public class InvoiceController implements ActionListener {
 			
 		}
 		
-		MyInvoiceTableModel.mitm = new MyInvoiceTableModel(tmp);
+		for(int i = 0;i < tmp.size(); i++ ) {
+			for(Vehiculo v : tv) {
+				
+				if(v.getMatricula().equals(tmp.get(i).getMatricula())) {
+					tmpvehi.add(v);
+				}
+				
+			}
+		}
+
+		
+		MyInvoiceTableModel.mitm = new MyInvoiceTableModel(tmp,tmpvehi);
 		vista.getTableDetalles().setModel(MyInvoiceTableModel.mitm);
 	}
 	
