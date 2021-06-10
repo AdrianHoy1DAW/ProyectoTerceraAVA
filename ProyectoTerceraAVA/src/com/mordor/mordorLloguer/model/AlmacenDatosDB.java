@@ -54,6 +54,7 @@ public interface AlmacenDatosDB {
 	public boolean insertarAlquiler(Integer idfactura, String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException;
 	public boolean insertarFactura(String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException;
 	public boolean borrarAlquiler(Integer idfactura) throws SQLException;
+	public boolean updateAlquiler(Integer idfactura,Date fechainicio, Date fechafinal) throws SQLException;
 	
 	
 	

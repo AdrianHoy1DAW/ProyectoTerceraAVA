@@ -10,6 +10,8 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.Alquiler;
@@ -26,7 +28,7 @@ import com.mordor.mordorLloguer.view.JIFAddRental;
 import com.mordor.mordorLloguer.view.JIFInvoice;
 import com.mordor.mordorLloguer.view.JIFProcess;
 
-public class InvoiceController implements ActionListener {
+public class InvoiceController implements ActionListener, TableModelListener {
 	
 	private AlmacenDatosDB modelo;
 	private JIFInvoice vista;
@@ -117,6 +119,7 @@ public class InvoiceController implements ActionListener {
 					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
 					calcularFactura();
+					indice = 0;
 					vista.getBtnPreviousInvoice().setEnabled(false);
 					if(indice == facturas.size()) {
 						vista.getBtnNextInvoice().setEnabled(false);
@@ -211,6 +214,7 @@ public class InvoiceController implements ActionListener {
 						vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 						vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
 						calcularFactura();
+						indice = 0;
 						vista.getBtnPreviousInvoice().setEnabled(false);
 						if(indice == facturas.size()) {
 							vista.getBtnNextInvoice().setEnabled(false);
@@ -275,6 +279,7 @@ public class InvoiceController implements ActionListener {
 					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
 					calcularFactura();
+					indice = 0;
 					vista.getBtnPreviousInvoice().setEnabled(false);
 					if(indice == facturas.size()) {
 						vista.getBtnNextInvoice().setEnabled(false);
@@ -354,6 +359,7 @@ public class InvoiceController implements ActionListener {
 					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
 					calcularFactura();
+					indice = 0;
 					vista.getBtnPreviousInvoice().setEnabled(false);
 					if(indice == facturas.size()) {
 						vista.getBtnNextInvoice().setEnabled(false);
@@ -459,6 +465,7 @@ public class InvoiceController implements ActionListener {
 		
 		mitm = new MyInvoiceTableModel(tmp,tmpvehi);
 		vista.getTableDetalles().setModel(mitm);
+		mitm.addTableModelListener(this);
 	}
 	
 	private void colocarPrecio() {
@@ -479,6 +486,75 @@ public class InvoiceController implements ActionListener {
 		colocarPrecio();
 		colocarAlquiler();
 		colocarClientes();
+		
+	}
+
+
+	@Override
+	public void tableChanged(TableModelEvent e) {
+		
+		if(e.getType() == TableModelEvent.UPDATE) {
+			SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
+
+				@Override
+				protected Void doInBackground() {
+					
+					
+					
+					
+						try {
+							
+							modelo.updateAlquiler(mitm.get(e.getFirstRow()).getIdalquiler(),mitm.get(e.getFirstRow()).getFechaInicio(), mitm.get(e.getFirstRow()).getFechaFin());
+							
+							facturas = modelo.getFacturas();
+							alquileres = modelo.getAlquiler();
+							
+						} catch (SQLException e) {
+							
+							JOptionPane.showMessageDialog(vista, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+							
+						}
+						
+					
+					
+					return null;
+				
+				}
+				@Override
+				protected void done() {
+					jif.dispose();
+					
+					if(!isCancelled() ) {
+						
+						
+						vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
+						vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
+						indice = 0;
+						calcularFactura();
+						vista.getBtnPreviousInvoice().setEnabled(false);
+						if(indice == facturas.size()) {
+							vista.getBtnNextInvoice().setEnabled(false);
+						}
+						
+						if(ControladorPrincipal.estaAbierto(vista)) {
+							
+						} else 
+							ControladorPrincipal.addJInternalFrame(vista);
+						
+						
+					}
+				}
+				
+				
+			};
+			
+			jif = new JIFProcess(task,"Adding Rental");
+			ControladorPrincipal.addJInternalFrame(jif);
+			task.execute();
+			
+			
+		}
+		
 		
 	}
 	

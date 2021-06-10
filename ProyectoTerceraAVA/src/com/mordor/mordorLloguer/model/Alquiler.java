@@ -52,6 +52,38 @@ public class Alquiler {
 	public Double getPrecio() {
 		return precio;
 	}
+
+
+	public void setIdalquiler(Integer idalquiler) {
+		this.idalquiler = idalquiler;
+	}
+
+
+	public void setIdfactura(Integer idfactura) {
+		this.idfactura = idfactura;
+	}
+
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+
+
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
+
+	public void setPrecio(Double precio) {
+		this.precio = precio;
+	}
+	
+	
 	
 	
 	 

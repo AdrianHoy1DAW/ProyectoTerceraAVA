@@ -931,6 +931,29 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		}
 		return borrado;
 	}
+
+	@Override
+	public boolean updateAlquiler(Integer idfactura, Date fechainicio, Date fechafinal) throws SQLException {
+		
+		boolean update = false;
+		
+		DataSource ds = MyDataSource.getOracleDataSource();
+		
+		String query = "{ call GESTIONALQUILER.MODIFICARALQUILER(?,?,?)}";
+		
+		try(Connection con = ds.getConnection();
+				CallableStatement cstmt = con.prepareCall(query);) {
+			
+			cstmt.setInt(1, idfactura);
+			cstmt.setDate(2, fechainicio);
+			cstmt.setDate(3, fechafinal);
+	
+			
+			update = (cstmt.executeUpdate() == 1)? true:false;
+		}
+		
+		return update;
+	}
 	
 	
 	

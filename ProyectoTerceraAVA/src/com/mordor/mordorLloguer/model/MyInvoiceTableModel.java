@@ -1,5 +1,6 @@
 package com.mordor.mordorLloguer.model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +49,33 @@ public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 		}
 		
 		
+	}
+	
+	@Override
+	public Class<?> getColumnClass(int column) {
+		switch(column) {
+		case 2:
+			return Double.class;
+		case 3:
+			return Date.class;
+		case 4:
+			return Date.class;
+			default :
+				return String.class;
+		}
+		
+	}
+	
+	@Override
+	public void setValueAt(Object Value, int row, int col) {
+		switch(col) {
+		case 3:
+			data.get(row).setFechaInicio(new java.sql.Date(((java.util.Date)Value).getTime()));
+			break;
+		case 4:
+			data.get(row).setFechaFin(new java.sql.Date(((java.util.Date)Value).getTime()));
+		}
+		fireTableCellUpdated(row, col);
 	}
 
 }
