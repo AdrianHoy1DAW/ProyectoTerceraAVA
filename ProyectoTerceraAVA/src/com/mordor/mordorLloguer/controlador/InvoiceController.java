@@ -3,6 +3,7 @@ package com.mordor.mordorLloguer.controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -115,8 +116,7 @@ public class InvoiceController implements ActionListener {
 					
 					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
-					colocarClientes();
-					colocarAlquiler();
+					calcularFactura();
 					vista.getBtnPreviousInvoice().setEnabled(false);
 					if(indice == facturas.size()) {
 						vista.getBtnNextInvoice().setEnabled(false);
@@ -210,8 +210,7 @@ public class InvoiceController implements ActionListener {
 						
 						vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 						vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
-						colocarClientes();
-						colocarAlquiler();
+						calcularFactura();
 						vista.getBtnPreviousInvoice().setEnabled(false);
 						if(indice == facturas.size()) {
 							vista.getBtnNextInvoice().setEnabled(false);
@@ -275,8 +274,7 @@ public class InvoiceController implements ActionListener {
 					
 					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
-					colocarClientes();
-					colocarAlquiler();
+					calcularFactura();
 					vista.getBtnPreviousInvoice().setEnabled(false);
 					if(indice == facturas.size()) {
 						vista.getBtnNextInvoice().setEnabled(false);
@@ -355,8 +353,7 @@ public class InvoiceController implements ActionListener {
 					
 					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
-					colocarClientes();
-					colocarAlquiler();
+					calcularFactura();
 					vista.getBtnPreviousInvoice().setEnabled(false);
 					if(indice == facturas.size()) {
 						vista.getBtnNextInvoice().setEnabled(false);
@@ -395,8 +392,7 @@ public class InvoiceController implements ActionListener {
 		
 		vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(++indice).getIdfactura()));
 		vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(indice).getFecha().getTime()));
-		colocarClientes();
-		colocarAlquiler();
+		calcularFactura();
 		 if(indice == facturas.size() -1) {
 			 vista.getBtnNextInvoice().setEnabled(false);
 		 }
@@ -409,8 +405,7 @@ public class InvoiceController implements ActionListener {
 		
 		vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(--indice).getIdfactura()));
 		vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(indice).getFecha().getTime()));
-		colocarClientes();
-		colocarAlquiler();
+		calcularFactura();
 		 if(indice == 0) {
 			 vista.getBtnPreviousInvoice().setEnabled(false);
 		 }
@@ -464,6 +459,27 @@ public class InvoiceController implements ActionListener {
 		
 		mitm = new MyInvoiceTableModel(tmp,tmpvehi);
 		vista.getTableDetalles().setModel(mitm);
+	}
+	
+	private void colocarPrecio() {
+		
+		Double importeBase = facturas.get(indice).getImportebase();
+		DecimalFormat df = new DecimalFormat("#.00");
+		Double importeIva = importeBase * 0.21;
+		
+		Double total = facturas.get(indice).getImporteiva();
+		vista.getTxtFieldSuma().setText(String.valueOf(importeBase));
+		vista.getTxtFieldImpuestos().setText(String.valueOf(df.format(importeIva)));
+		vista.getTxtFieldTotal().setText(String.valueOf(total));
+		
+	}
+	
+	private void calcularFactura() {
+		
+		colocarPrecio();
+		colocarAlquiler();
+		colocarClientes();
+		
 	}
 	
 
