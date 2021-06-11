@@ -4,7 +4,7 @@ import java.util.List;
 
 public class MyBusTableModel extends MyVehicleTableModel<Microbus> {
 	
-	public static MyBusTableModel mbtm;
+	
 
 	public MyBusTableModel(List<Microbus> data) {
 		super(data);

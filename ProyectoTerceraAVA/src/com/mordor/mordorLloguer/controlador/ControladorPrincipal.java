@@ -199,7 +199,7 @@ public class ControladorPrincipal implements ActionListener {
 	private void logout() {
 		
 		vista.getButtonLogin().setEnabled(true);
-		vista.getButtonnLogout().setEnabled(false);
+		switchButtons(false);
 		
 	}
 
@@ -220,8 +220,8 @@ public class ControladorPrincipal implements ActionListener {
 					if(validado == true) {
 						JOptionPane.showMessageDialog(vista, "Login correcto","Información",JOptionPane.INFORMATION_MESSAGE);
 						vista.getButtonLogin().setEnabled(false);
-						vista.getButtonnLogout().setEnabled(true);
-						loginView.doDefaultCloseAction();
+						switchButtons(true);
+						loginView.dispose();
 					} else {
 						JOptionPane.showMessageDialog(vista, "Login incorrecto","Información",JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -241,6 +241,16 @@ public class ControladorPrincipal implements ActionListener {
 		};
 		
 		task.execute();
+		
+	}
+	
+	private void switchButtons(boolean change) {
+		
+		vista.getButtonnLogout().setEnabled(change);
+		vista.getButtonClient().setEnabled(change);
+		vista.getButtonVehicle().setEnabled(change);
+		vista.getBtnCustomer().setEnabled(change);
+		vista.getBtnFactura().setEnabled(change);
 		
 	}
 

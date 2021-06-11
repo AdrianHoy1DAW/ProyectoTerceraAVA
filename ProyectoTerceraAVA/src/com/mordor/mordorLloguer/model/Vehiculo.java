@@ -48,7 +48,7 @@ public class Vehiculo {
 	public String getMotor() {
 		return motor;
 	}
-	public double getCilindrada() {
+	public Double getCilindrada() {
 		return cilindrada;
 	}
 	public Date getFechaadq() {

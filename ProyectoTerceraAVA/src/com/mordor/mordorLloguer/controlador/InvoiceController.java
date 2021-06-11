@@ -61,6 +61,8 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		vista.getBtnNewInvoce().addActionListener(this);
 		vista.getBtnAddDetail().addActionListener(this);
 		vista.getBtnRemoveDetail().addActionListener(this);
+		vista.getBtnRemoveInvoice().addActionListener(this);
+		vista.getBtnCheck().addActionListener(this);
 		
 		
 		
@@ -69,6 +71,8 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		vista.getBtnNewInvoce().setActionCommand("Open Invoice");
 		vista.getBtnAddDetail().setActionCommand("Open Rental");
 		vista.getBtnRemoveDetail().setActionCommand("Delete Retail");
+		vista.getBtnRemoveInvoice().setActionCommand("Delete Invoice");
+		vista.getBtnCheck().setActionCommand("Check vehicles");
 	}
 	
 	public void go() {
@@ -121,7 +125,7 @@ public class InvoiceController implements ActionListener, TableModelListener {
 					calcularFactura();
 					indice = 0;
 					vista.getBtnPreviousInvoice().setEnabled(false);
-					if(indice == facturas.size()) {
+					if(indice == facturas.size() -1) {
 						vista.getBtnNextInvoice().setEnabled(false);
 					}
 					
@@ -166,7 +170,143 @@ public class InvoiceController implements ActionListener, TableModelListener {
 			addRental();
 		} else if(comand.equals("Delete Retail")) {
 			deleteRetail();
+		} else if(comand.equals("Delete Invoice")) {
+			deleteInvoice();
+		} else if(comand.equals("Check vehicles")) {
+			checkVehicle();
 		}
+		
+	}
+
+
+	private void checkVehicle() {
+		
+		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
+
+			@Override
+			protected Void doInBackground() {
+				
+				
+				
+				
+					try {
+						
+						modelo.checkVehicle(facturas.get(indice).getIdfactura());
+						
+						
+						
+					} catch (SQLException e) {
+						
+						JOptionPane.showMessageDialog(vista, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+						
+					}
+					
+				
+				
+				return null;
+			
+			}
+			@Override
+			protected void done() {
+				jif.dispose();
+				
+				if(!isCancelled() ) {
+					
+					
+				
+					
+					
+					
+					if(ControladorPrincipal.estaAbierto(vista)) {
+						
+					} else 
+						ControladorPrincipal.addJInternalFrame(vista);
+					
+					
+				}
+			}
+			
+			
+		};
+		
+		jif = new JIFProcess(task,"Checking date");
+		ControladorPrincipal.addJInternalFrame(jif);
+		task.execute();
+		
+	}
+
+
+	private void deleteInvoice() {
+		
+		for(int i = 0; i < mitm.getRowCount(); i++) {
+			delInvoice(mitm.get(i).getIdalquiler());
+		}
+		
+	}
+	
+	private void delInvoice(int idalquiler) {
+		
+		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
+
+			@Override
+			protected Void doInBackground() {
+				
+				
+				
+				
+					try {
+						
+						modelo.borrarAlquiler(idalquiler);
+						
+						facturas = modelo.getFacturas();
+						alquileres = modelo.getAlquiler();
+						
+					} catch (SQLException e) {
+						
+						JOptionPane.showMessageDialog(vista, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+						
+					}
+					
+				
+				
+				return null;
+			
+			}
+			@Override
+			protected void done() {
+				jif.dispose();
+				
+				if(!isCancelled() ) {
+					
+					
+					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
+					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
+					indice = 0;
+					calcularFactura();
+					vista.getBtnPreviousInvoice().setEnabled(false);
+					if(indice == facturas.size() -1) {
+						vista.getBtnNextInvoice().setEnabled(false);
+					}
+					
+					if(ControladorPrincipal.estaAbierto(vista)) {
+						
+					} else 
+						ControladorPrincipal.addJInternalFrame(vista);
+					
+					
+				}
+			}
+			
+			
+		};
+		if(ControladorPrincipal.estaAbierto(jif) == true) {
+			
+		} else {
+			jif = new JIFProcess(task,"Deleting from Table");
+			ControladorPrincipal.addJInternalFrame(jif);
+		}
+	
+		task.execute();
 		
 	}
 
@@ -174,9 +314,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 	private void deleteRetail() {
 		
 		if(vista.getTableDetalles().getSelectedRowCount() == 0) {
-			JOptionPane.showMessageDialog(vista, "Not select Retail","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(vista, "Not selected Retail","Error",JOptionPane.ERROR_MESSAGE);
 		} else if(vista.getTableDetalles().getSelectedRowCount() > 1) {
-			JOptionPane.showMessageDialog(vista, "Select 1 Retail","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(vista, "Selected 1 Retail","Error",JOptionPane.ERROR_MESSAGE);
 		} else {
 			SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
 
@@ -213,10 +353,11 @@ public class InvoiceController implements ActionListener, TableModelListener {
 						
 						vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
 						vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
-						calcularFactura();
 						indice = 0;
+						calcularFactura();
+						
 						vista.getBtnPreviousInvoice().setEnabled(false);
-						if(indice == facturas.size()) {
+						if(indice == facturas.size() -1) {
 							vista.getBtnNextInvoice().setEnabled(false);
 						}
 						
@@ -281,7 +422,7 @@ public class InvoiceController implements ActionListener, TableModelListener {
 					calcularFactura();
 					indice = 0;
 					vista.getBtnPreviousInvoice().setEnabled(false);
-					if(indice == facturas.size()) {
+					if(indice == facturas.size() -1) {
 						vista.getBtnNextInvoice().setEnabled(false);
 					}
 					
@@ -356,14 +497,10 @@ public class InvoiceController implements ActionListener, TableModelListener {
 				if(!isCancelled() ) {
 					
 					
-					vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
-					vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
+					
 					calcularFactura();
-					indice = 0;
-					vista.getBtnPreviousInvoice().setEnabled(false);
-					if(indice == facturas.size()) {
-						vista.getBtnNextInvoice().setEnabled(false);
-					}
+					
+				
 					
 					if(ControladorPrincipal.estaAbierto(vista)) {
 						
@@ -474,10 +611,10 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		DecimalFormat df = new DecimalFormat("#.00");
 		Double importeIva = importeBase * 0.21;
 		
-		Double total = facturas.get(indice).getImporteiva();
+		Double total = importeBase + importeIva;
 		vista.getTxtFieldSuma().setText(String.valueOf(importeBase));
 		vista.getTxtFieldImpuestos().setText(String.valueOf(df.format(importeIva)));
-		vista.getTxtFieldTotal().setText(String.valueOf(total));
+		vista.getTxtFieldTotal().setText(String.valueOf(df.format(total)));
 		
 	}
 	
@@ -527,14 +664,8 @@ public class InvoiceController implements ActionListener, TableModelListener {
 					if(!isCancelled() ) {
 						
 						
-						vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(0).getIdfactura()));
-						vista.getWebDateFieldFechaFactura().setDate(new java.util.Date(facturas.get(0).getFecha().getTime()));
-						indice = 0;
+					
 						calcularFactura();
-						vista.getBtnPreviousInvoice().setEnabled(false);
-						if(indice == facturas.size()) {
-							vista.getBtnNextInvoice().setEnabled(false);
-						}
 						
 						if(ControladorPrincipal.estaAbierto(vista)) {
 							

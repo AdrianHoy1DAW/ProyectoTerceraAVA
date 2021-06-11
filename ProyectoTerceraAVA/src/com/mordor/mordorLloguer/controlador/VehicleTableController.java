@@ -46,6 +46,10 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 	private List<Microbus> buses;
 	private JIFProcess jif;
 	private AddVehicle av;
+	private MyCarTableModel mctm;
+	private MyTruckTableModel mttm;
+	private MyVanTableModel mvtm;
+	private MyBusTableModel mbtm;
 	
 	public VehicleTableController(AlmacenDatosDB modelo, VehicleView vista) {
 		super();
@@ -116,20 +120,20 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		
 		
 		
-		MyCarTableModel.mctm = new MyCarTableModel(coches);
-		MyVanTableModel.mvtm = new MyVanTableModel(furgonetas);
-		MyTruckTableModel.mttm = new MyTruckTableModel(camiones);
-		MyBusTableModel.mbtm = new MyBusTableModel(buses);
+		mctm = new MyCarTableModel(coches);
+		mvtm = new MyVanTableModel(furgonetas);
+		mttm = new MyTruckTableModel(camiones);
+		mbtm = new MyBusTableModel(buses);
 		
 		
 		swingFillTable();
 			
 		
 		
-		MyCarTableModel.mctm.addTableModelListener(this);
-		MyVanTableModel.mvtm.addTableModelListener(this);
-		MyTruckTableModel.mttm.addTableModelListener(this);
-		MyBusTableModel.mbtm.addTableModelListener(this); 
+		mctm.addTableModelListener(this);
+		mvtm.addTableModelListener(this);
+		mttm.addTableModelListener(this);
+		mbtm.addTableModelListener(this); 
 	
 		
 		
@@ -175,30 +179,30 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
 
 			tmp = filtrar(coches,vista.getPanelCar());
-			MyCarTableModel.mctm = new MyCarTableModel((List<Coche>) tmp);
-			vista.getPanelCar().getTable().setModel(MyCarTableModel.mctm);
-			MyCarTableModel.mctm.addTableModelListener(this);
+			mctm = new MyCarTableModel((List<Coche>) tmp);
+			vista.getPanelCar().getTable().setModel(mctm);
+			mctm.addTableModelListener(this);
 			 
 		}else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
 		
 			tmp = filtrar(camiones,vista.getPanelTruck());
-			MyTruckTableModel.mttm = new MyTruckTableModel((List<Camion>) tmp);
-			vista.getPanelTruck().getTable().setModel(MyTruckTableModel.mttm);
-			MyTruckTableModel.mttm.addTableModelListener(this);
+			mttm = new MyTruckTableModel((List<Camion>) tmp);
+			vista.getPanelTruck().getTable().setModel(mttm);
+			mttm.addTableModelListener(this);
 			
 		}else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
 			
 			tmp = filtrar(furgonetas,vista.getPanelVan());
-			MyVanTableModel.mvtm = new MyVanTableModel((List<Furgoneta>) tmp);
-			vista.getPanelVan().getTable().setModel(MyVanTableModel.mvtm );
-			MyVanTableModel.mvtm.addTableModelListener(this);
+			mvtm = new MyVanTableModel((List<Furgoneta>) tmp);
+			vista.getPanelVan().getTable().setModel(mvtm );
+			mvtm.addTableModelListener(this);
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
 			
 			tmp = filtrar(buses,vista.getPanelMinibus());
-			MyBusTableModel.mbtm = new MyBusTableModel((List<Microbus>) tmp);
-			vista.getPanelMinibus().getTable().setModel(MyBusTableModel.mbtm );
-			MyBusTableModel.mbtm.addTableModelListener(this);
+			mbtm = new MyBusTableModel((List<Microbus>) tmp);
+			vista.getPanelMinibus().getTable().setModel(mbtm );
+			mbtm.addTableModelListener(this);
 			
 		}
 		
@@ -271,16 +275,16 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 					try {
 						
 						
-						MyCarTableModel.mctm.newData(coches);
-						MyVanTableModel.mvtm.newData(furgonetas);
-						MyTruckTableModel.mttm.newData(camiones);
-						MyBusTableModel.mbtm.newData(buses); 
+						mctm.newData(coches);
+						mvtm.newData(furgonetas);
+						mttm.newData(camiones);
+						mbtm.newData(buses); 
 						
 						
-						vista.getPanelCar().getTable().setModel(MyCarTableModel.mctm);
-						vista.getPanelVan().getTable().setModel(MyVanTableModel.mvtm);
-						vista.getPanelTruck().getTable().setModel(MyTruckTableModel.mttm);
-						vista.getPanelMinibus().getTable().setModel(MyBusTableModel.mbtm);
+						vista.getPanelCar().getTable().setModel(mctm);
+						vista.getPanelVan().getTable().setModel(mvtm);
+						vista.getPanelTruck().getTable().setModel(mttm);
+						vista.getPanelMinibus().getTable().setModel(mbtm);
 						
 						rellenarComboBox();	
 						
@@ -322,27 +326,27 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 							
 							Coche c = coches.get(e.getFirstRow());
 							if(modelo.deleteCar(c.getMatricula()) == true ) {
-								MyCarTableModel.mctm.getData().remove(c);
+								mctm.getData().remove(c);
 							} 
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
 							
 							Camion t = camiones.get(e.getFirstRow());
 							if(modelo.deleteTruck(t.getMatricula()) == true) {
-								MyTruckTableModel.mttm.getData().remove(t);
+								mttm.getData().remove(t);
 							}
 							
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
 							
 							Furgoneta f = furgonetas.get(e.getFirstRow());
 							if(modelo.deleteVan(f.getMatricula()) == true) {
-								MyVanTableModel.mvtm.getData().remove(f);
+								mvtm.getData().remove(f);
 							}
 							
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
 							
 							Microbus m = buses.get(e.getFirstRow());
 							if(modelo.deleteMinibus(m.getMatricula()) == true) {
-								MyBusTableModel.mbtm.getData().remove(m);
+								mbtm.getData().remove(m);
 							}
 							
 						}
@@ -385,19 +389,19 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 					try {
 						if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
 							
-							modelo.updateCar(MyCarTableModel.mctm.get(e.getFirstRow()));
+							modelo.updateCar(mctm.get(e.getFirstRow()));
 							
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
 							
-							modelo.updateTruck(MyTruckTableModel.mttm.get(e.getFirstRow()));
+							modelo.updateTruck(mttm.get(e.getFirstRow()));
 							
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
 							
-							modelo.updateVan(MyVanTableModel.mvtm.get(e.getFirstRow()));
+							modelo.updateVan(mvtm.get(e.getFirstRow()));
 							
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
 							
-							modelo.updateMinibus(MyBusTableModel.mbtm.get(e.getFirstRow()));
+							modelo.updateMinibus(mbtm.get(e.getFirstRow()));
 							
 						}
 					} catch(SQLException e) {
@@ -439,10 +443,10 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 					try {
 						if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
 							
-							if(modelo.addCar(MyCarTableModel.mctm.get(e.getFirstRow())) == true) {
+							if(modelo.addCar(mctm.get(e.getFirstRow())) == true) {
 								
-								MyCarTableModel.mctm.newData(coches);
-								vista.getPanelCar().getTable().setModel(MyCarTableModel.mctm);
+								mctm.newData(coches);
+								vista.getPanelCar().getTable().setModel(mctm);
 								
 							} else {
 								coches.remove(e.getFirstRow());
@@ -450,10 +454,10 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 							
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
 							
-							if(modelo.updateTruck(MyTruckTableModel.mttm.get(e.getFirstRow()))==true) {
+							if(modelo.updateTruck(mttm.get(e.getFirstRow()))==true) {
 								
-								MyTruckTableModel.mttm.newData(camiones);
-								vista.getPanelTruck().getTable().setModel(MyTruckTableModel.mttm);
+								mttm.newData(camiones);
+								vista.getPanelTruck().getTable().setModel(mttm);
 								
 							} else {
 								camiones.remove(e.getFirstRow());	
@@ -461,10 +465,10 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 							
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
 							
-							if(modelo.updateVan(MyVanTableModel.mvtm.get(e.getFirstRow()))==true) {
+							if(modelo.updateVan(mvtm.get(e.getFirstRow()))==true) {
 								
-								MyVanTableModel.mvtm.newData(furgonetas);
-								vista.getPanelVan().getTable().setModel(MyVanTableModel.mvtm);
+								mvtm.newData(furgonetas);
+								vista.getPanelVan().getTable().setModel(mvtm);
 								
 							} else {
 								furgonetas.remove(e.getFirstRow());
@@ -472,10 +476,10 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 							
 						} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
 							
-							if(modelo.updateMinibus(MyBusTableModel.mbtm.get(e.getFirstRow()))==true) {
+							if(modelo.updateMinibus(mbtm.get(e.getFirstRow()))==true) {
 								
-								MyBusTableModel.mbtm.newData(buses);
-								vista.getPanelMinibus().getTable().setModel(MyBusTableModel.mbtm);
+								mbtm.newData(buses);
+								vista.getPanelMinibus().getTable().setModel(mbtm);
 								
 							} else {
 								buses.remove(e.getFirstRow());
@@ -565,7 +569,7 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 					Integer.parseInt(av.getTxtAbajo().getText()));
 			
 			coches.add(c);
-			MyCarTableModel.mctm.add(c);
+			mctm.add(c);
 			
 			
 			
@@ -576,7 +580,7 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
 					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
 					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
-					(av.getTxtCilindrada().getText() == null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
+					(av.getTxtCilindrada().getText() != null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
 					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
 					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
 					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
@@ -584,7 +588,7 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 					Double.parseDouble(av.getTxtAbajo().getText()));
 			
 					camiones.add(c);
-			MyTruckTableModel.mttm.add(c);
+			mttm.add(c);
 			
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
@@ -593,14 +597,14 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
 					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
 					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
-					(av.getTxtCilindrada().getText() == null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
+					(av.getTxtCilindrada().getText() != null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
 					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
 					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
 					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
 					,Double.parseDouble(av.getTxtArriba().getText()));
 			
 					furgonetas.add(f);
-			MyVanTableModel.mvtm.add(f);
+		mvtm.add(f);
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
 			
@@ -608,7 +612,7 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 					Double.parseDouble(av.getTxtPrecio().getText()),av.getTxtMarca().getText(),
 					av.getTxtDescripcion().getText(),av.getTxtColor().getText(),
 					String.valueOf(av.getComboBoxMotor().getSelectedItem()),
-					(av.getTxtCilindrada().getText() == null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
+					(av.getTxtCilindrada().getText() != null)? null:Double.parseDouble(av.getTxtCilindrada().getText()),
 					new java.sql.Date(av.getTxtFecha().getDate().getTime()),
 					String.valueOf(av.getComboBoxEstado().getSelectedItem()),
 					String.valueOf(av.getComboBoxCarnet().getSelectedItem()).charAt(0)
@@ -617,7 +621,7 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 			
 			buses.add(t);
 			
-			MyBusTableModel.mbtm.add(t);
+			mbtm.add(t);
 			
 		}
 		
@@ -659,14 +663,14 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 			ArrayList<Coche> coches = new ArrayList<>();
 			for(int i = 0; i < seleccionadas.length; i++) {
 				
-				coches.add(MyCarTableModel.mctm.get(seleccionadas[i]));
+				coches.add(mctm.get(seleccionadas[i]));
 						
 			}
 			
 			
 			for(int i = 0; i < coches.size(); i ++) {
 				
-				MyCarTableModel.mctm.delete(coches.get(i));
+				mctm.delete(coches.get(i));
 
 			}
 			
@@ -676,14 +680,14 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 			ArrayList<Camion> coches = new ArrayList<>();
 			for(int i = 0; i < seleccionadas.length; i++) {
 				
-				coches.add(MyTruckTableModel.mttm.get(seleccionadas[i]));
+				coches.add(mttm.get(seleccionadas[i]));
 						
 			}
 			
 			
 			for(int i = 0; i < coches.size(); i ++) {
 				
-				MyTruckTableModel.mttm.delete(coches.get(i));
+				mttm.delete(coches.get(i));
 
 			}
 			
@@ -693,14 +697,14 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 			ArrayList<Furgoneta> coches = new ArrayList<>();
 			for(int i = 0; i < seleccionadas.length; i++) {
 				
-				coches.add(MyVanTableModel.mvtm.get(seleccionadas[i]));
+				coches.add(mvtm.get(seleccionadas[i]));
 						
 			}
 			
 			
 			for(int i = 0; i < coches.size(); i ++) {
 				
-				MyVanTableModel.mvtm.delete(coches.get(i));
+				mvtm.delete(coches.get(i));
 
 			}
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
@@ -709,14 +713,14 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 			ArrayList<Microbus> coches = new ArrayList<>();
 			for(int i = 0; i < seleccionadas.length; i++) {
 				
-				coches.add(MyBusTableModel.mbtm.get(seleccionadas[i]));
+				coches.add(mbtm.get(seleccionadas[i]));
 						
 			}
 			
 			
 			for(int i = 0; i < coches.size(); i ++) {
 				
-				MyBusTableModel.mbtm.delete(coches.get(i));
+				mbtm.delete(coches.get(i));
 
 			}
 			

@@ -8,7 +8,7 @@ public class Camion extends Vehiculo{
 	private double mma;
 	
 	public Camion(String matricula, double preciodia, String marca, String descripcion, String color, String motor,
-			double cilindrada, Date fechaadq, String estado, char carnet, int numruedas, double mma) {
+			Double cilindrada, Date fechaadq, String estado, char carnet, int numruedas, double mma) {
 		super(matricula, preciodia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet);
 		this.numruedas = numruedas;
 		this.mma = mma;

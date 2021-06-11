@@ -70,18 +70,23 @@ public class VistaPrincipal extends JFrame {
 		toolBar.add(buttonnLogout);
 		
 		buttonClient = new JButton("");
+		buttonClient.setEnabled(false);
 		buttonClient.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/badge.png")));
 		toolBar.add(buttonClient);
 		
 		btnCustomer = new JButton("");
+		btnCustomer.setEnabled(false);
 		btnCustomer.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/grupo.png")));
 		toolBar.add(btnCustomer);
 		
 		buttonVehicle = new JButton("");
+		buttonVehicle.setEnabled(false);
 		buttonVehicle.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
 		toolBar.add(buttonVehicle);
 		
 		btnFactura = new JButton("");
+		btnFactura.setIcon(new ImageIcon(VistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/invoice.png")));
+		btnFactura.setEnabled(false);
 		toolBar.add(btnFactura);
 		
 		desktopPane = new JDesktopPane();
