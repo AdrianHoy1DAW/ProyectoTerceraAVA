@@ -112,9 +112,10 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 			return null;
 		
 	}
-	
+	/**
+	 * Devuelve verdadero o falso si el empleado se ha actualizado correctamente
+	 */
 	@Override
-
 	public boolean updateEmpleado(Empleado empleado) {
 
 	boolean actualizado = false;
@@ -148,7 +149,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 	return actualizado;
 
 	}
-
+	/**
+	 * Devuelve verdadero o falso si el empleado se ha borrado correctamente
+	 */
 	@Override
 	public boolean deleteEmpleado(String DNI) {
 		
@@ -179,7 +182,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return actualizado;
 	}
-
+	/**
+	 * Método que devuelve verdadero o falso si el usuario a conseguido registrarse
+	 */
 	@Override
 	public boolean authenticate(String login, String password) {
 		
@@ -210,7 +215,10 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return registrado;
 	}
-
+	/**
+	 * Método que devuelve los empleados un orden concreto
+	 * @param ad el orden por el que ordenaremos la tabla
+	 */
 	@Override
 	public ArrayList<Empleado> getEmpleadosOrder(String order, int ad) {
 		ArrayList<Empleado> empleados = new ArrayList<>();
@@ -223,7 +231,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return empleados;
 	}
-
+	/**
+	 * Método que devuelve verdadero o falso según si el empleado se ha insertado correctamente
+	 */
 	@Override
 	public boolean insertEmpleado(Empleado empleado) throws Exception {
 		
@@ -263,7 +273,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		
 	}
-
+	/**
+	 * Método que devuelve una lista con todos los clientes
+	 */
 	@Override
 	public ArrayList<Cliente> getClientes() {
 		
@@ -331,7 +343,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		
 	}
-
+	/**
+	 * Método que devuelve verdadero o falso según si se borra correctamente el cliente
+	 */
 	@Override
 	public boolean deleteCustomer(String DNI) {
 		
@@ -362,7 +376,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		return borrado;
 	
 	}
-
+	/**
+	 * Método que devuelve verdadero o falso según si el cliente se ha grabado correctamente
+	 */
 	@Override
 	public boolean grabarCliente(Cliente cliente) {
 		
@@ -402,7 +418,13 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		return grabarCliente(cliente);
 	}
 
-	
+	/**
+	 * Método que recoge todos los vehículos
+	 * @param tipo Parámetro que indica el tipo de vehículo
+	 * @return Devuelve un array de vehículos
+	 * @throws SQLException
+	 * @throws ParseException
+	 */
 	private ArrayList<?> getVehiculos(String tipo) throws SQLException, ParseException {
 		
 		ArrayList<Vehiculo> vehiculos = new ArrayList<>();
@@ -487,7 +509,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return vehiculos;
 	}
-
+	/**
+	 * Método que rellena el array de coches
+	 */
 	@Override
 	public ArrayList<Coche> getCoche() throws SQLException, ParseException {
 		
@@ -495,25 +519,37 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return (ArrayList<Coche>) getVehiculos(CAR);
 	}
-
+	/**
+	 * Método que rellena el array de camiones
+	 */
 	@Override
 	public ArrayList<Camion> getCamion() throws SQLException, ParseException {
 		
 		return (ArrayList<Camion>) getVehiculos(TRUCK);
 	}
-
+	/**
+	 * Método que rellena el array de furgoneta
+	 */
 	@Override
 	public ArrayList<Furgoneta> getFurgoneta() throws SQLException, ParseException {
 		
 		return (ArrayList<Furgoneta>) getVehiculos(VAN);
 	}
-
+	/**
+	 * Método que rellena el array de micro buses
+	 */
 	@Override
 	public ArrayList<Microbus> getMicroBus() throws SQLException, ParseException {
 		
 		return (ArrayList<Microbus>) getVehiculos(MINIBUS);
 	}
-	
+	/**
+	 * Método que borra los vehículos
+	 * @param tipo Parámetro que indica el tipo de vehículo a borrar
+	 * @param matricula matrícula del vehículo a borrar
+	 * @return
+	 * @throws SQLException
+	 */
 	private boolean deleteVehicle(String tipo, String matricula) throws SQLException {
 		
 		boolean borrado = false;
@@ -571,7 +607,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return deleteVehicle(MINIBUS,matricula);
 	}
-
+	/**
+	 * Método que se encarga de actualizar el coche
+	 */
 	@Override
 	public boolean updateCar(Coche c) throws SQLException {
 		
@@ -602,7 +640,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return update;
 	}
-
+	/**
+	 * Método que se encarga de actualizar el camión
+	 */
 	@Override
 	public boolean updateTruck(Camion c) throws SQLException {
 		
@@ -636,7 +676,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		
 	}
-
+	/**
+	 * Método que se encarga de actualiza la furgoneta
+	 */
 	@Override
 	public boolean updateVan(Furgoneta f) throws SQLException {
 		
@@ -667,7 +709,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return update;
 	}
-
+	/**
+	 * Método que se encarga de actualizar el microbus
+	 */
 	@Override
 	public boolean updateMinibus(Microbus m) throws SQLException {
 		boolean update = false;
@@ -697,7 +741,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return update;
 	}
-
+	/**
+	 * Método que anyade un coche
+	 */
 	@Override
 	public boolean addCar(Coche c) throws SQLException {
 		boolean insertado = false;
@@ -735,7 +781,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		
 	}
-
+	/**
+	 * Método que anyade un camión
+	 */
 	@Override
 	public boolean addTruck(Camion c) throws SQLException {
 	boolean insertado = false;
@@ -769,7 +817,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return insertado;
 	}
-
+	/**
+	 * Método que anyade una furgoneta
+	 */
 	@Override
 	public boolean addVan(Furgoneta f) throws SQLException {
 	boolean insertado = false;
@@ -804,7 +854,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return insertado;
 	}
-
+	/**
+	 * Método que anyade un microbus
+	 */
 	@Override
 	public boolean addMinibus(Microbus m) throws SQLException {
 	boolean insertado = false;
@@ -839,7 +891,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return insertado;
 	}
-
+	/**
+	 * Método que recoge todas las facturas
+	 */
 	@Override
 	public ArrayList<Factura> getFacturas() throws SQLException {
 		
@@ -900,7 +954,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		return facturas;
 		
 	}
-
+	/**
+	 * Método que devuelve todos los alquileres
+	 */
 	@Override
 	public ArrayList<Alquiler> getAlquiler() throws SQLException {
 		ArrayList<Alquiler> facturas = new ArrayList<Alquiler>();
@@ -960,7 +1016,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return facturas;
 	}
-
+	/**
+	 * Método que inserta alquileres
+	 */
 	@Override
 	public boolean insertarAlquiler(Integer idfactura, String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException {
 		
@@ -987,7 +1045,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return insertado;
 	}
-
+	/**
+	 * Método que inserta una factura
+	 */
 	@Override
 	public boolean insertarFactura(String DNI, String matricula, Date fechainicio, Date fechafinal) throws SQLException {
 		
@@ -1014,7 +1074,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return insertado;
 	}
-
+	/**
+	 * Método que borra un alquiler
+	 */
 	@Override
 	public boolean borrarAlquiler(Integer idfactura) throws SQLException {
 		
@@ -1035,7 +1097,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		}
 		return borrado;
 	}
-
+	/**
+	 * Método que actualiza un alquiler
+	 */
 	@Override
 	public boolean updateAlquiler(Integer idfactura, Date fechainicio, Date fechafinal) throws SQLException {
 		
@@ -1058,7 +1122,9 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		return update;
 	}
-
+	/**
+	 * Método que comprueba si la factura ha acabado
+	 */
 	@Override
 	public boolean checkVehicle(Integer idfactura) throws SQLException {
 		
