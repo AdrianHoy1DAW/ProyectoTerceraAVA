@@ -50,7 +50,11 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 	private MyTruckTableModel mttm;
 	private MyVanTableModel mvtm;
 	private MyBusTableModel mbtm;
-	
+	/**
+	 * Constructor del controlador de vehículos
+	 * @param modelo
+	 * @param vista
+	 */
 	public VehicleTableController(AlmacenDatosDB modelo, VehicleView vista) {
 		super();
 		this.modelo = modelo;
@@ -58,7 +62,9 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		
 		inicializar();
 	}
-	
+	/**
+	 * Método que inicializa los componentes
+	 */
 	private void inicializar() {
 		
 		vista.getPanelCar().getTxtRegistration().getDocument().addDocumentListener(this);
@@ -108,11 +114,15 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		vista.getPanelMinibus().getBtnAdd().setActionCommand("addVehicle");
 		
 	}
-	
+	/**
+	 * Método que se llamará para iniciar la tabla
+	 */
 	public void go() {
 		rellenarTabla();
 	}
-
+	/**
+	 * Método que rellena todas las tablas de la vista
+	 */
 	private void rellenarTabla() {
 		
 
@@ -138,7 +148,9 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		
 		
 	}
-	
+	/**
+	 * Método que se encarga de rellenar cada combobox dinámicamente
+	 */
 	private void rellenarComboBox() {
 
 		
@@ -153,7 +165,11 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		
 		
 	}
-	
+	/**
+	 * Método que rellena los combobox
+	 * @param vehiculo lista de la cual se sacarán los datos para rellenar los combobox
+	 * @param jpv la vista en la cual se modificarán los combobox
+	 */
 	private void rellenarCombo(List<? extends Vehiculo> vehiculo, JPVehicle jpv) {
 		
 		Set<String> tmp;
@@ -172,7 +188,9 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		tm.add(0,"All");
 		jpv.getComboBoxEngine().setModel(new DefaultComboBoxModel<String>(tm));
 	}
-
+	/**
+	 * Método que ordena las tablas según los datos de los combobox y los textfield
+	 */
 	private void ordenar() {
 		List<? extends Vehiculo> tmp = null; 
 		
@@ -210,7 +228,12 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		
 		
 	}
-	
+	/**
+	 * Método que filtra la lista que pasamos por parámetros
+	 * @param lista lista que vamos a filtrar
+	 * @param jpv vista donde los vamos a cambiar
+	 * @return devuelve la lista ya filtrada
+	 */
 	private List<? extends Vehiculo> filtrar(List<? extends Vehiculo> lista, JPVehicle jpv) {
 		List<? extends Vehiculo> tmp = null; 
 		
@@ -231,7 +254,9 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 	 return tmp;
 		
 	}
-	
+	/**
+	 * Método que rellena la tabla 
+	 */
 	private void swingFillTable() {
 		SwingWorker<Void,Integer> task = new SwingWorker<Void,Integer>() {
 
@@ -309,7 +334,9 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		ControladorPrincipal.addJInternalFrame(jif);
 		task.execute();
 	}
-
+	/**
+	 * Método que recoge los eventos que suceden en la tabla y realiza varias cosas según el cambio
+	 */
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		
@@ -552,7 +579,9 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		}
 		 
 	}
-
+	/**
+	 * Anyade un vehículo a la tabla
+	 */
 	private void add() {
 		
 		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
@@ -626,7 +655,9 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		}
 		
 	}
-
+	/**
+	 * Abre la ventana de anyadir vehículo
+	 */
 	private void addVehicle() {
 		
 		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
@@ -654,7 +685,9 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		av.getBtnAdd().setActionCommand("add");
 		
 	}
-
+	/**
+	 * Método que se encarga de borrar un vehículo
+	 */
 	private void delete() {
 		
 		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {

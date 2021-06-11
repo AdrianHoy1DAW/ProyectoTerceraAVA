@@ -18,7 +18,12 @@ import javax.sql.DataSource;
 import oracle.jdbc.OracleTypes;
 
 public class MyOracleDataBase implements AlmacenDatosDB {
-
+	/**
+	 * Método que recoge a los empleados de la base de datos
+	 * @param where condición que se le pone a esta recogida de datos
+	 * @param order el orden de la recogida de datos
+	 * @return devuelve los empleados
+	 */
 	private ArrayList<Empleado> getCustomEmpleados(String where, String order) {
 		
 		ArrayList<Empleado> empleados = new ArrayList<Empleado>();
@@ -69,26 +74,34 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 		
 		
 	}
-	
+	/**
+	 * Devuelve a los empleados por defecto
+	 */
 	@Override
 	public ArrayList<Empleado> getEmpleados() {
 		
 		return getCustomEmpleados(null,null);
 
 	}
-
+	/**
+	 * Devuelve los empleados ordenados por código postal
+	 */
 	@Override
 	public ArrayList<Empleado> getEmpleadoPorCP(String cp) {
 	
 		return getCustomEmpleados("CP=" + cp,null);
 	}
-
+	/**
+	 * Devuelve los empleados ordenados por cargo
+	 */
 	@Override
 	public ArrayList<Empleado> getEmpleadoPorCargo(String cargo) {
 		
 		return getCustomEmpleados("cargo='" +cargo + "'",null);
 	}
-	
+	/**
+	 * Devuelve los empleados ordenador por dni
+	 */
 	@Override
 	public Empleado getEmpleadoPorDNI(String DNI) {
 		

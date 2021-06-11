@@ -15,7 +15,18 @@ public class Cliente {
 	private Date fechaNac;
 	private char carnet;
 	private byte[] foto;
-	
+	/**
+	 * Constructor de cliente al que no se le pasa el id
+	 * @param dNI
+	 * @param nombre
+	 * @param apellidos
+	 * @param domicilio
+	 * @param cp
+	 * @param email
+	 * @param fechaNac
+	 * @param carnet
+	 * @param foto
+	 */
 	public Cliente(String dNI, String nombre, String apellidos, String domicilio, String cp, String email,
 			Date fechaNac, char carnet, byte[] foto) {
 		super();
@@ -29,7 +40,19 @@ public class Cliente {
 		this.carnet = carnet;
 		this.foto = foto;
 	}
-	
+	/**
+	 *  Constructor de cliente al que  se le pasa el id
+	 * @param idcliente
+	 * @param dNI
+	 * @param nombre
+	 * @param apellidos
+	 * @param domicilio
+	 * @param cp
+	 * @param email
+	 * @param fechaNac
+	 * @param carnet
+	 * @param foto
+	 */
 	public Cliente(int idcliente,String dNI, String nombre, String apellidos, String domicilio, String cp, String email,
 			Date fechaNac, char carnet, byte[] foto) {
 		super();

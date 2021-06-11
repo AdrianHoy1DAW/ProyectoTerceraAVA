@@ -11,7 +11,15 @@ public class Alquiler {
 	private Date fechaFin;
 	private Double precio;
 	
-	
+	/**
+	 * Constructor del alquiler por el cual que pasan todos los parámetros
+	 * @param idalquiler
+	 * @param idfactura
+	 * @param matricula
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @param precio
+	 */
 	public Alquiler(Integer idalquiler, Integer idfactura, String matricula, Date fechaInicio, Date fechaFin,
 			Double precio) {
 		super();

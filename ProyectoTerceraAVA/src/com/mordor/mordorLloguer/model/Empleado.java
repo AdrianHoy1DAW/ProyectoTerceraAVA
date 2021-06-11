@@ -14,7 +14,18 @@ public class Empleado {
 	private String cargo;
 	private String domicilio;
 	private String password;
-	
+	/**
+	 * Constructor del empleado con todos sus campos
+	 * @param dNI
+	 * @param nombre
+	 * @param apellidos
+	 * @param cP
+	 * @param email
+	 * @param fechaNac
+	 * @param cargo
+	 * @param domicilio
+	 * @param password
+	 */
 	public Empleado(String dNI, String nombre, String apellidos, String cP, String email, Date fechaNac,
 			String cargo, String domicilio, String password) {
 		super();

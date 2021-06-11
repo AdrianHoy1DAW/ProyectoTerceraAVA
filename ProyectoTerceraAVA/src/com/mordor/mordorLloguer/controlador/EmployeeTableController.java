@@ -35,7 +35,11 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 	
 	JInternalFrame jif;
 	
-	
+	/**
+	 * Constructor del controlador
+	 * @param vista Vista que utilizará el controlador
+	 * @param modelo Modelo que utilizará el controlador
+	 */
 	public EmployeeTableController(EmployeeTableView vista, AlmacenDatosDB modelo) {
 		
 		this.vista = vista;
@@ -44,7 +48,9 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		inicializar();
 		
 	}
-	
+	/**
+	 * Método que inicializa los componentes y añade el Pop UP Menú
+	 */
 	private void inicializar() {
 		
 		vista.getComboBoxDatos().addActionListener(this);
@@ -86,7 +92,9 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		
 		
 	}
-	
+	/**
+	 * Método que se llama desde fuera para rellenar la tabla
+	 */
 	public void go() {
 		rellenarTabla();
 	}
@@ -106,7 +114,9 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 
 		
 	}
-
+	/**
+	 * Método que recibe los eventos de los componentes y les añade  métodos
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
@@ -123,7 +133,9 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		}
 		
 	}
-	
+	/**
+	 * Método que anyade empleados a la tabla
+	 */
 	private void insertEmployee() {
 		
 		if(addEmployee.getTextFieldFecha().getDate() != null) {
@@ -139,7 +151,9 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 
 		
 	}
-
+	/**
+	 * Método que borra empleados de la tabla
+	 */
 	private void deleteEmployee() {
 		
 		int[] seleccionadas = vista.getTable().getSelectedRows();
@@ -159,7 +173,9 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 			
 		
 	}
-
+	/**
+	 * Método que abre la ventana de anyadir empleados
+	 */
 	private void addEmployee() {
 		
 		ControladorPrincipal.addJInternalFrame(addEmployee);
@@ -170,14 +186,19 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		addEmployee.getBtnAddUser().setActionCommand("Insert Employee");
 		addEmployee.getBtnCancel().setActionCommand("Cancel");
 	}
-
+	/**
+	 * Método que se encarga de ordenar la tabla
+	 */
 	private void ordenar() {
 		
 		swingWorkerOrder("Ordering Table");
 		
 		
 	}
-
+	/**
+	 * Swing Worker que se encarga de ordenar la tabla según los seleccionado en los combobox
+	 * @param msg mensaje que se mostrará mientras se ordena la tabla
+	 */
 	private void swingWorkerOrder(String msg) {
 		SwingWorker<ArrayList<Empleado>,Void> task = new SwingWorker<ArrayList<Empleado>,Void>() {
 

@@ -7,7 +7,10 @@ import java.util.List;
 public class MyCarTableModel extends MyVehicleTableModel<Coche> {
 
 	
-	
+	/**
+	 * Constructor del modelo de tabla de coches al que se le pasa por parámetro la lista de coches y añade los dos encabezados extras
+	 * @param coches
+	 */
 	public MyCarTableModel(List<Coche> coches) {
 		super(coches);
 		
@@ -18,7 +21,9 @@ public class MyCarTableModel extends MyVehicleTableModel<Coche> {
 	}
 	
 
-	
+	/**
+	 * Método que coge los valores con los que se va a rellenar la tabla llamando al método del padre que rellena el resto
+	 */
 	@Override
 	public Object getValueAt(int row, int col) {
 		switch(col) {
@@ -31,7 +36,9 @@ public class MyCarTableModel extends MyVehicleTableModel<Coche> {
 		
 		}
 	}
-	
+	/**
+	 * Método que se encarga de modificar los campos que se modifican en la tabla llamando al método del padre
+	 */
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		

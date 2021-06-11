@@ -43,7 +43,11 @@ public class ControladorPrincipal implements ActionListener {
 	private VehicleView vv;
 	private JIFInvoice in;
 	
-	
+	/**
+	 * Constructor del controlador
+	 * @param vista la vista que va a controlar el controlador
+	 * @param modelo modelo al que va a acceder el controlador
+	 */
 	public ControladorPrincipal(VistaPrincipal vista, MyOracleDataBase modelo) {
 		
 		
@@ -54,22 +58,27 @@ public class ControladorPrincipal implements ActionListener {
 		
 	}
 	
+	/**
+	 * 
+	 * Método que inicializa los botones 
+	 * 
+	 */
 	private void inicializar() {
 		
 		loginView = new LoginView();
 		
 		desktopPane = vista.getDesktopPane();
 		properties = new PropertiesView();
-		employeeView = new EmployeeTableView();
-		ctv = new ClientTableView();
-		vv = new VehicleView();
-		in = new JIFInvoice();
 		
 		
-		employeeController = new EmployeeTableController(employeeView, modelo);
-		ctc = new CustomerTableController(modelo,ctv);
-		vehicleController = new VehicleTableController(modelo,vv);
-		inc = new InvoiceController(modelo, in);
+		
+		
+		
+		
+		
+		
+		
+		
 	
 		
 		//Action Listener
@@ -99,6 +108,11 @@ public class ControladorPrincipal implements ActionListener {
 		vista.setVisible(true);
 	}
 
+	/**
+	 * 
+	 * Recoge los eventos al presionar los botones
+	 *
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
@@ -128,31 +142,60 @@ public class ControladorPrincipal implements ActionListener {
 		 
 	}
 
+	/**
+	 * 
+	 * Inicializa el Frame interno de la factura y los asigna a su controlador junto al modelo de datos
+	 * 
+	 */
 	private void openInvoice() {
-		
+		in = new JIFInvoice();
+		inc = new InvoiceController(modelo, in);
 		inc.go();
 		
 	}
 
+	/**
+	 * 
+	 * Inicializa el Frame interno de los vehículos y los asigna a su contralador junto al modelo de datos
+	 * 
+	 */
 	private void openVehicle() {
-		
-		
+		vv = new VehicleView();
+		vehicleController = new VehicleTableController(modelo,vv);
 		vehicleController.go();
 		
 	}
 
+	/**
+	 * 
+	 * Inicializa el Frame interno de los clientes y los asigna a su contralador junto al modelo de datos
+	 * 
+	 */
 	private void openCustomer() {
-	
+		
+		ctv = new ClientTableView();
+		ctc = new CustomerTableController(modelo,ctv);
 		ctc.go();
 	}
 
+	/**
+	 * 
+	 * Inicializa el Frame interno de los empleados y lo asigna a su controlador junto al modelo de datos 
+	 * 
+	 */
 	private void openETable() {
-		
+		employeeView = new EmployeeTableView();
+		employeeController = new EmployeeTableController(employeeView, modelo);
 		employeeController.go();
 		
 		
 	}
 
+	/**
+	 * 
+	 * Método que sirve para guardar las nuevas propiedades que ha insertado el usuario a través de la ventana de propiedades
+	 * 
+	 */
 	private void saveProperties() {
 		
 		if(comprobarTexto(properties.getContentPane()) == true) {
@@ -165,7 +208,12 @@ public class ControladorPrincipal implements ActionListener {
 		}
 		
 	}
-
+	/**
+	 * 
+	 * Método que dado un contenedro comprueba si hay algún campo vacío
+	 * @param cont el contenedor del cual se va a comprobar si esta vacío
+	 * @return devuelve un booleano según si en el panel hay un campo de texto vacío
+	 */
 	static boolean comprobarTexto(Container cont) {
 		boolean empty = false;
 		for(Component c : cont.getComponents()) {
@@ -183,6 +231,11 @@ public class ControladorPrincipal implements ActionListener {
 		return empty;
 	}
 
+	/**
+	 * 
+	 * Método que se encarga de abrir la ventana de propiedades
+	 * 
+	 */
 	private void openPreferences() {
 		
 		if(estaAbierto(properties) == false) {
@@ -196,13 +249,22 @@ public class ControladorPrincipal implements ActionListener {
 		
 	}
 
+	/**
+	 * 
+	 * Método que una vez dado al botón de cerrar sesión habilita el botón de iniciar sesión y deshabilita el resto de botones del menú
+	 * 
+	 */
 	private void logout() {
 		
 		vista.getButtonLogin().setEnabled(true);
 		switchButtons(false);
 		
 	}
-
+	/**
+	 * 
+	 * Una vez introducido el usuario y la contrasea las comprueba y inicia la sesión si las dos comprobaciones son correctas
+	 * 
+	 */
 	private void login() {
 		SwingWorker<Boolean,Void> task = new SwingWorker<Boolean,Void>() {
 
@@ -244,6 +306,11 @@ public class ControladorPrincipal implements ActionListener {
 		
 	}
 	
+	/**
+	 * 
+	 * Método que sirve para cambiar el estado de todos los botones del menú
+	 * @param change Es el parámetro al que cambiará la acessibilidad de los botones
+	 */
 	private void switchButtons(boolean change) {
 		
 		vista.getButtonnLogout().setEnabled(change);
@@ -254,6 +321,12 @@ public class ControladorPrincipal implements ActionListener {
 		
 	}
 
+	
+	/**
+	 * 
+	 * Método que sirve para abrir la ventana del login
+	 * 
+	 */
 	private void OpenLogin() {
 		
 		
@@ -278,6 +351,12 @@ public class ControladorPrincipal implements ActionListener {
 		
 	}
 	
+	/**
+	 * 
+	 * Método al que se le pide un JInternalFrame y lo anyade a la vista
+	 * 
+	 * @param jif el JInternalFrame que se anyadira a la vista
+	 */
 	static void addJInternalFrame(JInternalFrame jif) {
 		
 		desktopPane.add(jif);
@@ -291,6 +370,11 @@ public class ControladorPrincipal implements ActionListener {
 		
 	}
 	
+	/**
+	 * Comprueba si el JInternalFrame esta abierto
+	 * @param internal El JInternalFrame que se comprueba si esta abierto
+	 * @return Devuelve un booleano según si esta abierto el JInternalFrame o no
+	 */
 	static boolean estaAbierto(JInternalFrame internal) {
 		
 		boolean encontrado = false;
@@ -305,6 +389,11 @@ public class ControladorPrincipal implements ActionListener {
 		return encontrado;
 	}
 	
+	/**
+	 * 
+	 * Método que sirve para centrar el JInternalFrame que anyade al desktop
+	 * @param jif JInternalFrame que se quiere centrar
+	 */
 	static void centrar(JInternalFrame jif) {
 		
 		Dimension deskSize = desktopPane.getSize();

@@ -165,13 +165,13 @@ public class Config {
 	
 	public void setUser(String user) {
 		properties.setProperty("ORACLE_DB_USERNAME", encrypt(user));
-		properties.put("IS_ORACLE_DB_USERNAME_ENCRYPTED",true);
+		properties.put("IS_ORACLE_DB_USERNAME_ENCRYPTED","true");
 		save();
 	}
 	
 	public void setPassword(String password) {
 		properties.setProperty("ORACLE_DB_PASSWORD", encrypt(password));
-		properties.put("IS_ORACLE_DB_PASSWORD_ENCRYPTED",true);
+		properties.put("IS_ORACLE_DB_PASSWORD_ENCRYPTED","true");
 		save();
 	}
 	

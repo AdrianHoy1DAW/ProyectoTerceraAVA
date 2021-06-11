@@ -9,13 +9,19 @@ public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 
 	
 	private List<Vehiculo> datas;
-	
+	/**
+	 * Constructor del modelo de tabla de factura al que se le pasa los alquileres y los coches correspondientes a ese alquiler
+	 * @param data
+	 * @param datas
+	 */
 	public MyInvoiceTableModel(List<Alquiler> data,List<Vehiculo> datas) {
 		super(data, new ArrayList<String>(Arrays.asList(new String[]{"Modelo","Matricula","Importe","FechaInicio","FechaFin"})));
 		
 		this.datas = datas;
 	}
-
+	/**
+	 * Método que rellena la tabla 
+	 */
 	@Override
 	public Object getValueAt(int row, int col) {
 		switch(col) {
@@ -34,7 +40,9 @@ public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 		}
 		return null;
 	}
-	
+	/**
+	 * Método que dice que celdas son editables por el usuario
+	 */
 	@Override
 	public boolean isCellEditable(int row, int column) {
 		
@@ -50,7 +58,9 @@ public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 		
 		
 	}
-	
+	/**
+	 *  Método que indica el tipo de columna que hay en la tabla
+	 */
 	@Override
 	public Class<?> getColumnClass(int column) {
 		switch(column) {
@@ -65,7 +75,9 @@ public class MyInvoiceTableModel extends MyTableModel<Alquiler>{
 		}
 		
 	}
-	
+	/**
+	 * Método que modifca el contenido de la tabla
+	 */
 	@Override
 	public void setValueAt(Object Value, int row, int col) {
 		switch(col) {

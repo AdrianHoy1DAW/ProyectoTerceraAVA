@@ -44,7 +44,11 @@ public class InvoiceController implements ActionListener, TableModelListener {
 	private MyInvoiceTableModel mitm;
 	private JIFProcess jif;
 	private int indice;
-	
+	/**
+	 * Constructor del controlador
+	 * @param modelo modelo que utilizará el controlador
+	 * @param vista vista que utilizará el controlador
+	 */
 	public InvoiceController(AlmacenDatosDB modelo, JIFInvoice vista) {
 		super();
 		this.modelo = modelo;
@@ -53,7 +57,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		inicializar();
 	}
 	
-	
+	/**
+	 * Método que inicializa los componentes
+	 */
 	private void inicializar() {
 		
 		vista.getBtnPreviousInvoice().addActionListener(this);
@@ -74,14 +80,18 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		vista.getBtnRemoveInvoice().setActionCommand("Delete Invoice");
 		vista.getBtnCheck().setActionCommand("Check vehicles");
 	}
-	
+	/**
+	 * Método que se llamará para iniciar la tabla
+	 */
 	public void go() {
 		
 		rellenarFactura();
 		
 	}
 
-
+	/**
+	 * Método de que rellenar toda la vista de la factura
+	 */
 	private void rellenarFactura() {
 		
 		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
@@ -147,7 +157,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método donde llegan los eventos de los componentes y les asigna métodos
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String comand = e.getActionCommand();
@@ -178,7 +190,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que se encarga de comprobar si ha pasado la fecha tope del alquiler
+	 */
 	private void checkVehicle() {
 		
 		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
@@ -235,7 +249,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que borra las facturas de las tabla
+	 */
 	private void deleteInvoice() {
 		
 		for(int i = 0; i < mitm.getRowCount(); i++) {
@@ -243,7 +259,10 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		}
 		
 	}
-	
+	/**
+	 * Método que llama a la base de datos para borrar una factura
+	 * @param idalquiler el alquiler que vamos a borrar
+	 */
 	private void delInvoice(int idalquiler) {
 		
 		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
@@ -310,7 +329,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que elimina un alquiler
+	 */
 	private void deleteRetail() {
 		
 		if(vista.getTableDetalles().getSelectedRowCount() == 0) {
@@ -380,7 +401,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que anyade un alquiler a la factura seleccionada
+	 */
 	private void addRental() {
 		
 		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
@@ -446,7 +469,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que abre la vista de abrir alquiler
+	 */
 	private void openRental() {
 		
 		JIFar = new JIFAddRental();
@@ -460,7 +485,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que se encarga de anyadir una factura
+	 */
 	private void addInvoice() {
 		
 		SwingWorker<Void,Void> task = new SwingWorker<Void,Void>() {
@@ -520,7 +547,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que abre la vista de anyadir una factura
+	 */
 	private void openInvoice() {
 		
 		JIFai = new AddInvoice();
@@ -530,7 +559,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que se encarga pasar a la siguiente factura
+	 */
 	private void nextinvoice() {
 		
 		vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(++indice).getIdfactura()));
@@ -543,7 +574,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		
 	}
 
-
+	/**
+	 * Método que se encarga de pasar a la anterior factura
+	 */
 	private void previousinvoice() {
 		
 		vista.getTxtFieldNumeroFactura().setText(String.valueOf(facturas.get(--indice).getIdfactura()));
@@ -555,7 +588,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		 vista.getBtnNextInvoice().setEnabled(true);
 		
 	}
-	
+	/**
+	 * Método que coloca a los clientes según la factura seleccionada
+	 */
 	private void colocarClientes() {
 		
 		for(Cliente c : clientes) {
@@ -569,7 +604,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		}
 		
 	}
-	
+	/**
+	 * Método que rellena la tabla según la factura seleccionada
+	 */
 	private void colocarAlquiler() {
 		
 		ArrayList<Alquiler> tmp = new ArrayList<>();
@@ -604,7 +641,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		vista.getTableDetalles().setModel(mitm);
 		mitm.addTableModelListener(this);
 	}
-	
+	/**
+	 * Método que calcula los precios de la factura seleccionada
+	 */
 	private void colocarPrecio() {
 		
 		Double importeBase = facturas.get(indice).getImportebase();
@@ -617,7 +656,9 @@ public class InvoiceController implements ActionListener, TableModelListener {
 		vista.getTxtFieldTotal().setText(String.valueOf(df.format(total)));
 		
 	}
-	
+	/**
+	 * Método que reune los tres métodos que rellenan la vista
+	 */
 	private void calcularFactura() {
 		
 		colocarPrecio();

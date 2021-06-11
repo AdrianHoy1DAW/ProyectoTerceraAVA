@@ -9,7 +9,14 @@ public class Factura {
 	private Double importebase;
 	private Double importeiva;
 	private int clienteid;
-	
+	/**
+	 * Constructor de la factura con todos sus campos
+	 * @param idfactura
+	 * @param fecha
+	 * @param importebase
+	 * @param importeiva
+	 * @param clienteid
+	 */
 	public Factura(int idfactura, Date fecha, Double importebase, Double importeiva, int clienteid) {
 		super();
 		this.idfactura = idfactura;

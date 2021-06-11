@@ -46,6 +46,11 @@ public class CustomerTableController implements ActionListener,TableModelListene
 	JInternalFrame jif;
 	AddModifyCustomer amc;
 	
+	/**
+	 * Constructor de la tabla de clientes
+	 * @param modelo Modelo de datos que utilizará el controlador
+	 * @param vista Vista que utilizará el controlador
+	 */
 	public CustomerTableController(AlmacenDatosDB modelo, ClientTableView vista) {
 		
 		this.modelo = modelo;
@@ -53,7 +58,11 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		
 		inicializar();
 	}
-	
+	/**
+	 * 
+	 * Inicializa los componentes de la vista
+	 * 
+	 */
 	private void inicializar() {
 		
 		vista.getBtnDelete().addActionListener(this);
@@ -72,7 +81,11 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		
 		
 	}
-	
+	/**
+	 * 
+	 * Método que se encarga de rellenar la tabla 
+	 * 
+	 */
 	public void rellenarTabla() {
 		ArrayList<String> header =  new ArrayList<>(Arrays.asList(new String[]{"DNI","Nombre","Apellidos","Domicilio","CP","Email","FechaNac","Carnet"}));
 		 cliente = new ArrayList<Cliente>();
@@ -85,7 +98,11 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		
 		
 	}
-	
+	/**
+	 * 
+	 * Método que se encarga de buscar la imagen que vamos a insertar al cliente
+	 * 
+	 */
 	private void buscarFichero() {
 		
 		JFileChooser file = new JFileChooser();
@@ -106,13 +123,21 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		}
 		
 	}
-	
+	/**
+	 * 
+	 * Método que llamamos para rellenar la tabla
+	 * 
+	 */
 	public void go() {
 		
 		rellenarTabla();
 		
 	}
-
+	/**
+	 * 
+	 * Método con un SwingWorker que rellena el array de clientes
+	 * @param msg Mensaje que se mostrará a la hora de rellenar la tabla
+	 */
 	private void swingFillTable(String msg) {
 		SwingWorker<ArrayList<Cliente>,Void> task = new SwingWorker<ArrayList<Cliente>,Void>() {
 
@@ -163,7 +188,11 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		task.execute();
 	}
 	
-	
+	/**
+	 * 
+	 * Método que se encarga de efectuar cambios una vez hay un cambio en la tabla
+	 * 
+	 */
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
 		
@@ -288,7 +317,9 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		
 		
 	}
-
+	/**
+	 * Método que recoge los eventos que se registran en los componentes 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String comand = arg0.getActionCommand();
@@ -306,7 +337,9 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		}
 		 
 	}
-		
+	/**
+	 * Método que abre la ventana de modificación de clientes
+	 */
 	private void editMenu() {
 		
 		amc = new AddModifyCustomer("Edit");
@@ -336,7 +369,9 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		
 		
 	}
-
+	/**
+	 * Método que se utiliza para anyadir un cliente a la tabla
+	 */
 	private void addCustomer() {
 		
 		if(amc.getTxtBirthday().getDate() != null) {
@@ -349,7 +384,9 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		}
 		
 	}
-
+	/**
+	 * Método que abre el menú de anyadir 
+	 */
 	private void addMenu() {
 		
 		amc = new AddModifyCustomer("Add");
@@ -364,7 +401,9 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		
 		
 	}
-
+	/**
+	 * Método que elimina los clientes de la tabla
+	 */
 	private void deleteCustomer() {
 		
 		int[] seleccionadas = vista.getTable().getSelectedRows();
@@ -383,7 +422,9 @@ public class CustomerTableController implements ActionListener,TableModelListene
 		}
 		
 	}
-	
+	/**
+	 * Método de filtrado de la tabla
+	 */
 	private void ordenar() {
 		
 		List<Cliente> tmp = cliente.stream().filter((e) -> e.getDNI().toUpperCase().contains(vista.getTextFieldDni().getText().toUpperCase()))
