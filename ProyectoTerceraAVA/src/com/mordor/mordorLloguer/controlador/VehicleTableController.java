@@ -662,21 +662,21 @@ public class VehicleTableController implements TableModelListener, DocumentListe
 		
 		if(vista.getTabbedPane().getSelectedIndex() == VehicleView.CAR) {
 			
-			av = new AddVehicle("Añadir Coche", "Numplazas","Numpuertas",VehicleView.CAR);
+			av = new AddVehicle("Anyadir Coche", "Numplazas","Numpuertas",VehicleView.CAR);
 			
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.TRUCK) {
 			
-			av = new AddVehicle("Añadir Camion", "Numruedas","MMA",VehicleView.TRUCK);
+			av = new AddVehicle("Anyadir Camion", "Numruedas","MMA",VehicleView.TRUCK);
 			
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.VAN) {
 			
-			av = new AddVehicle("Añadir Furgoneta", "MMA",null,VehicleView.VAN);
+			av = new AddVehicle("Anyadir Furgoneta", "MMA",null,VehicleView.VAN);
 			
 		} else if(vista.getTabbedPane().getSelectedIndex() == VehicleView.MINIBUS) {
 			
-			av = new AddVehicle("Añadir MiniBus", "Numplazas","Medida",VehicleView.MINIBUS);
+			av = new AddVehicle("Anyadir MiniBus", "Numplazas","Medida",VehicleView.MINIBUS);
 			
 		}
 		

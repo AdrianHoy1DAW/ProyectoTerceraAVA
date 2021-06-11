@@ -49,7 +49,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		
 	}
 	/**
-	 * Método que inicializa los componentes y añade el Pop UP Menú
+	 * Método que inicializa los componentes y anyade el Pop UP Menú
 	 */
 	private void inicializar() {
 		
@@ -115,7 +115,7 @@ public class EmployeeTableController implements ActionListener,TableModelListene
 		
 	}
 	/**
-	 * Método que recibe los eventos de los componentes y les añade  métodos
+	 * Método que recibe los eventos de los componentes y les anyade  métodos
 	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

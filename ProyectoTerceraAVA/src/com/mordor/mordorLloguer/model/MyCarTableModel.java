@@ -8,7 +8,7 @@ public class MyCarTableModel extends MyVehicleTableModel<Coche> {
 
 	
 	/**
-	 * Constructor del modelo de tabla de coches al que se le pasa por parámetro la lista de coches y añade los dos encabezados extras
+	 * Constructor del modelo de tabla de coches al que se le pasa por parámetro la lista de coches y anyade los dos encabezados extras
 	 * @param coches
 	 */
 	public MyCarTableModel(List<Coche> coches) {

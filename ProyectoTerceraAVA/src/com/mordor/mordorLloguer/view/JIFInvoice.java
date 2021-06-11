@@ -268,7 +268,7 @@ toolBar.setOrientation(SwingConstants.VERTICAL);
 
 btnNewInvoce = new JButton("");
 
-btnNewInvoce.setToolTipText("Añadir factura");
+btnNewInvoce.setToolTipText("Anyadir factura");
 
 btnNewInvoce.setIcon(new ImageIcon(JIFInvoice.class.getResource("/com/mordor/mordorLloguer/assets/Add.png")));
 
@@ -298,7 +298,7 @@ toolBar.addSeparator(new Dimension(20,10));
 
 btnAddDetail = new JButton("");
 
-btnAddDetail.setToolTipText("Añadir detalle");
+btnAddDetail.setToolTipText("Anyadir detalle");
 
 btnAddDetail.setIcon(new ImageIcon(JIFInvoice.class.getResource("/com/mordor/mordorLloguer/assets/invoiceAdd.png")));
 
